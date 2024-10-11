@@ -1,6 +1,7 @@
 import { formatTrackData } from "@/utils/formatTrackData";
 import PlayButton from "./PlayButton";
 import { getYoutubeID } from "@/utils/getYoutubeID";
+import { OriginalTrack } from "@/type/track";
 
 type playerProps = {
   id: string;
@@ -16,7 +17,7 @@ const Player = async ({ id, token, youtubeURL }: playerProps) => {
       Authorization: "Bearer " + token
     }
   });
-  const data = await res.json();
+  const data: OriginalTrack = await res.json();
 
   // 포맷팅 함수로 필요한 데이터만 받아옴
   const music = formatTrackData(data);
