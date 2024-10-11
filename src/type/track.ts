@@ -15,6 +15,7 @@ export type Track = {
   artists: Artists;
   id: string;
   name: string;
+  duration_ms: number;
 };
 
 export type OriginalTrack = {

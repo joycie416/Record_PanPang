@@ -13,7 +13,8 @@ export const formatTrackData = (data: OriginalTrack) => {
       name: data.artists[0].name
     },
     id: data.id,
-    name: data.name
+    name: data.name,
+    duration_ms: data.duration_ms
   };
   return newTrack;
 };

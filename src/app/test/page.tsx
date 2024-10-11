@@ -48,7 +48,7 @@ const page = async () => {
     return (
       <div>
         {posts.map((post) => (
-          <Player key={post.post_id} id={post.music_id} token={token} />
+          <Player key={post.post_id} id={post.music_id} token={token} youtubeURL={post.youtube_url} />
         ))}
       </div>
     );
