@@ -29,13 +29,17 @@ export async function updateSession(request: NextRequest) {
     data: { user }
   } = await supabase.auth.getUser();
 
-  console.log("current user :", user);
+  console.log("current user :", user?.id);
 
   if (!!user && (request.nextUrl.pathname.startsWith("/sign-in") || request.nextUrl.pathname.startsWith("/sign-up"))) {
-    // no user, potentially respond by redirecting the user to the login page
-    console.log("here");
+    // 사용자 정보가 있는데, 로그인, 회원가입에 접근하려는 경우 메인페이지로 이동
     const url = request.nextUrl.clone();
     url.pathname = "/";
+    return NextResponse.redirect(url);
+  } else if (!user && request.nextUrl.pathname.startsWith("/mypage")) {
+    // 사용자 정보가 없는데, 마이페이지에 접근하려는 경우 로그인 페이지로 이동
+    const url = request.nextUrl.clone();
+    url.pathname = "/sign-in";
     return NextResponse.redirect(url);
   }
 

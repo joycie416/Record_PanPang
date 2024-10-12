@@ -41,9 +41,9 @@ const AuthForm = () => {
   });
 
   const onSubmit = (data: FieldValues) => {
-    console.log({email:data.email, password:data.password})
+    console.log('onSubmit :', data)
     if (path === '/sign-up') {
-      signup({email:data.email, password:data.password})
+      signup({email:data.email, password:data.password, options: { 'data' : {nickname: data.nickname, profile_img: 'default'}}})
     } else {
       signin({email:data.email, password:data.password})
     }
