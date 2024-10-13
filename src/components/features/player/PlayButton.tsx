@@ -2,7 +2,7 @@
 
 import { Track } from "@/type/track";
 import Image from "next/image";
-import YouTube, { YouTubeEvent } from "react-youtube";
+import YouTube, { YouTubeEvent, YouTubePlayer } from "react-youtube";
 import PlayIcon from "./PlayIcon";
 import { useRef, useState } from "react";
 
@@ -13,7 +13,7 @@ type Props = {
 
 const PlayButton = ({ music, id }: Props) => {
   const [isPlay, setIsPlay] = useState<boolean>(false);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YouTubePlayer | null>(null);
   const onReady = (e: YouTubeEvent) => {
     playerRef.current = e.target;
   };
@@ -27,6 +27,8 @@ const PlayButton = ({ music, id }: Props) => {
       setIsPlay(!isPlay);
     }
   };
+
+  console.log(isPlay);
   return (
     <>
       <div className="hidden">
