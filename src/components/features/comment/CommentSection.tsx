@@ -7,6 +7,8 @@ import React, { useEffect, useState } from "react";
 const CommentSection = ({ postId }: { postId: string }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState<string>("");
 
   useEffect(() => {
     async function loadComments() {
@@ -34,10 +36,23 @@ const CommentSection = ({ postId }: { postId: string }) => {
   };
 
   // 댓글 수정
-  const handleUpdateComment = async (commentId: string, content: string) => {
-    await updateComment(commentId, content);
+  const handleUpdateComment = async (commentId: string) => {
+    if (!editContent) return;
+    await updateComment(commentId, editContent);
+    setEditingCommentId(null);
     const updatedComments = await fetchComment(postId);
     setComments(updatedComments);
+  };
+
+  // 수정 모드
+  const startEditing = (commentId: string, currentContent: string) => {
+    setEditingCommentId(commentId);
+    setEditContent(currentContent);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCommentId(null);
+    setEditContent("");
   };
 
   return (
@@ -48,9 +63,19 @@ const CommentSection = ({ postId }: { postId: string }) => {
         {comments.map((comment) => {
           return (
             <li key={comment.comment_id}>
-              <p>{comment.content}</p>
-              <button onClick={() => handleUpdateComment(comment.comment_id, "새로운 내용")}> 수정</button>
+              {editingCommentId === comment.comment_id ? (
+                <div>
+                  <textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} />
+                  <button onClick={() => handleUpdateComment(comment.comment_id)}>완료</button>
+                  <button onClick={handleCancelEdit}>취소</button>
+                </div>
+              ) : (
+                <span onClick={() => startEditing(comment.comment_id, comment.content)} style={{ cursor: "pointer" }}>
+                  수정
+                </span>
+              )}
               <button onClick={() => handleDeleteComment(comment.comment_id)}>삭제</button>
+              <p>{comment.content}</p>
             </li>
           );
         })}
