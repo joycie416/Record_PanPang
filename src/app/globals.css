@@ -2,21 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  color: var(--foreground);
-  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -29,8 +15,21 @@ body {
   .auth-input {
     @apply text-gray-300 bg-transparent border border-gray-300 border-solid rounded-lg p-2 outline-none focus:border-sky-300;
   }
+  .modal {
+    /* 화면 정 가운데 위치 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 * {
   box-sizing: border-box;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
 }
