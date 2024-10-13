@@ -28,7 +28,6 @@ const PlayButton = ({ music, id }: Props) => {
     }
   };
 
-  console.log(isPlay);
   return (
     <>
       <div className="hidden">
