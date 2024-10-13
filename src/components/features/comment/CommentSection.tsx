@@ -1,3 +1,5 @@
+"use client";
+
 import { Comment } from "@/types/comment";
 import { addComment, deleteComment, fetchComment, updateComment } from "@/utils/supabase/actions";
 import React, { useEffect, useState } from "react";

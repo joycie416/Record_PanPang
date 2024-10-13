@@ -1,14 +1,13 @@
 import CommentSection from "@/components/features/comment/CommentSection";
-import React from "react";
 
-const Detailpage = ({ params }: { params: { id: string } }) => {
-  const postId = "test-post-id";
-
+const DetailPage = () => {
+  const postId = "2130dce3-e645-4094-9601-99b90bd46c6b";
   return (
     <div>
-      <CommentSection postId="test-post-id" />
+      <h1>댓글 테스트 페이지</h1>
+      <CommentSection postId={postId} />
     </div>
   );
 };
 
-export default Detailpage;
+export default DetailPage;
