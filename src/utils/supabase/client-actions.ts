@@ -100,3 +100,13 @@ export async function createPost(post: CreatePostType) {
     throw error;
   }
 }
+
+// 게시글 삭제
+export async function deletePost(postId: string) {
+  const { error } = await supabase.from("posts").delete().eq("post_id", postId);
+
+  if (error) {
+    console.error(error);
+    throw new Error("게시글 삭제에 실패했습니다.");
+  }
+}
