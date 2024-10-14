@@ -2,13 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-import { createClient } from "@/utils/supabase/server";
 import { SignInWithPasswordCredentials, SignUpWithPasswordCredentials } from "@supabase/supabase-js";
+import { supabase } from "./server";
 
 export async function signin(formData: SignInWithPasswordCredentials) {
-  const supabase = createClient();
-
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // const data = {
@@ -27,8 +24,6 @@ export async function signin(formData: SignInWithPasswordCredentials) {
 }
 
 export async function signup(formData: SignUpWithPasswordCredentials) {
-  const supabase = createClient();
-
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // const data = {
@@ -49,7 +44,6 @@ export async function signup(formData: SignUpWithPasswordCredentials) {
 }
 
 export async function signout() {
-  const supabase = createClient();
   await supabase.auth.signOut();
   redirect("/");
 }
@@ -58,7 +52,6 @@ export async function signout() {
 
 // 댓글 추가
 export async function addComment(content: string, postId: string) {
-  const supabase = createClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();
@@ -78,7 +71,6 @@ export async function addComment(content: string, postId: string) {
 
 // 댓글 삭제
 export async function deleteComment(commentId: string) {
-  const supabase = createClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();
@@ -96,8 +88,6 @@ export async function deleteComment(commentId: string) {
 
 // 댓글 조회
 export async function fetchComment(postId: string) {
-  const supabase = createClient();
-
   const { data, error } = await supabase.from("comments").select("*").eq("post_id", postId);
 
   if (error) {
@@ -109,7 +99,6 @@ export async function fetchComment(postId: string) {
 
 // 댓글 수정
 export async function updateComment(commentId: string, content: string) {
-  const supabase = createClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();
@@ -129,21 +118,29 @@ export async function updateComment(commentId: string, content: string) {
   revalidatePath("/");
 }
 
-// 게시글 추가
-export async function createPost(youtubeUrl: string, content: string) {
-  const supabase = createClient();
+// 현재 사용자 조회
+export async function fetchCurrentUser() {
   const {
-    data: { user }
+    data: { user },
+    error
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    throw new Error("로그인이 필요합니다.");
-  }
-
-  const { error } = await supabase.from("posts").insert([{ user_id: user.id, youtube_url: youtubeUrl, content }]);
-
-  if (error) {
+  if (error || !user) {
     console.error(error);
-    return;
+    return null;
   }
+
+  return user;
+}
+
+// 게시글 조회
+export async function fetchPosts() {
+  const { data, error } = await supabase.from("posts").select("*");
+
+  if (error || !data) {
+    console.error(error);
+    return []; // 에러 발생 시 빈 배열 반환
+  }
+
+  return data;
 }

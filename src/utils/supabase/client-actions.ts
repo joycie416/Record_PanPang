@@ -1,10 +1,10 @@
 import { User } from "@supabase/supabase-js";
-import { createClient } from "./client";
+import { supabase } from "./client";
+import { CreatePostType } from "@/types/post";
 
 const PROFILES = "profiles";
 const STORAGE = "profiles";
 const DEFAULT = "default";
-const supabase = createClient();
 
 export const updateUser = async (user: User, nickname: string, profileImg: File | null) => {
   let profile_img = user.user_metadata.profile_img;
@@ -82,3 +82,21 @@ export const deleteProfileImg = async (user: User) => {
     });
   }
 };
+
+// 게시글 추가
+export async function createPost(post: CreatePostType) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  const { error } = await supabase.from("posts").insert([{ user_id: user.id, ...post }]);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+}

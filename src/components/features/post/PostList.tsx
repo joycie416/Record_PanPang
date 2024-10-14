@@ -1,28 +1,17 @@
-import { createClient } from "@/utils/supabase/client";
 import { Post } from "@/types/post";
+import { User } from "@supabase/supabase-js";
 import PostCard from "@/components/commonUI/PostCard";
-
-// 게시글 조회
-export async function fetchPosts() {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("posts").select("*");
-
-  if (error) {
-    console.error(error);
-    return []; // 에러 발생 시 빈 배열 반환
-  }
-
-  return data;
-}
+import { fetchCurrentUser, fetchPosts } from "@/utils/supabase/server-actions";
 
 const PostList = async () => {
   const posts: Post[] = await fetchPosts();
+  const user: User | null = await fetchCurrentUser();
 
   return (
     <ul className="flex flex-col gap-6">
       {posts.map((post) => (
         <li key={post.post_id}>
-          <PostCard post={post} />
+          <PostCard post={post} user={user} />
         </li>
       ))}
     </ul>

@@ -3,6 +3,8 @@ export type Post = {
   user_id: string;
   created_at: string;
   music_id: string;
-  content: string;
   youtube_url: string;
+  content: string;
 };
+
+export type CreatePostType = Pick<Post, "youtube_url" | "content">;
