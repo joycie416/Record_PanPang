@@ -1,8 +1,19 @@
 "use client";
 
-import { Comment } from "@/types/comment";
-import { addComment, deleteComment, fetchComment, updateComment } from "@/utils/supabase/actions";
 import React, { useEffect, useState } from "react";
+import Image from "next/image"; // next/image 사용
+import { addComment, deleteComment, fetchComment, updateComment } from "@/utils/supabase/server-actions";
+
+interface Profile {
+  nickname: string;
+  profile_img: string;
+}
+
+interface Comment {
+  comment_id: string;
+  content: string;
+  profile: Profile;
+}
 
 const CommentSection = ({ postId }: { postId: string }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -18,7 +29,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
     loadComments();
   }, [postId]);
 
-  // 댓글 작성 핸들
+  // 댓글 작성 핸들러
   const handleAddComment = async () => {
     if (!newComment) return;
 
@@ -28,28 +39,30 @@ const CommentSection = ({ postId }: { postId: string }) => {
     setComments(updatedComments);
   };
 
-  // 댓글 삭제 핸들
+  // 댓글 삭제 핸들러
   const handleDeleteComment = async (commentId: string) => {
     await deleteComment(commentId);
-    const updateComments = await fetchComment(postId);
-    setComments(updateComments);
+    const updatedComments = await fetchComment(postId);
+    setComments(updatedComments);
   };
 
-  // 댓글 수정
+  // 댓글 수정 핸들러
   const handleUpdateComment = async (commentId: string) => {
     if (!editContent) return;
+
     await updateComment(commentId, editContent);
     setEditingCommentId(null);
     const updatedComments = await fetchComment(postId);
     setComments(updatedComments);
   };
 
-  // 수정 모드
+  // 수정 모드 시작
   const startEditing = (commentId: string, currentContent: string) => {
     setEditingCommentId(commentId);
     setEditContent(currentContent);
   };
 
+  // 수정 취소 핸들러
   const handleCancelEdit = () => {
     setEditingCommentId(null);
     setEditContent("");
@@ -57,28 +70,41 @@ const CommentSection = ({ postId }: { postId: string }) => {
 
   return (
     <div>
-      <textarea name="newComment" placeholder="댓글을 입력하세요" onChange={(e) => setNewComment(e.target.value)} />;
+      <textarea
+        name="newComment"
+        placeholder="댓글을 입력하세요"
+        value={newComment}
+        onChange={(e) => setNewComment(e.target.value)}
+      />
       <button onClick={handleAddComment}>추가</button>
+
       <ul>
-        {comments.map((comment) => {
-          return (
-            <li key={comment.comment_id}>
-              {editingCommentId === comment.comment_id ? (
-                <div>
-                  <textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} />
-                  <button onClick={() => handleUpdateComment(comment.comment_id)}>완료</button>
-                  <button onClick={handleCancelEdit}>취소</button>
-                </div>
-              ) : (
-                <span onClick={() => startEditing(comment.comment_id, comment.content)} style={{ cursor: "pointer" }}>
-                  수정
-                </span>
-              )}
-              <button onClick={() => handleDeleteComment(comment.comment_id)}>삭제</button>
-              <p>{comment.content}</p>
-            </li>
-          );
-        })}
+        {comments.map((comment) => (
+          <li key={comment.comment_id}>
+            <div>
+              <img
+                src={comment.profile?.profile_img || "/default-profile.png"}
+                alt={comment.profile?.nickname}
+                width={50}
+                height={50}
+              />
+              <span>{comment.profile?.nickname}</span>
+            </div>
+            {editingCommentId === comment.comment_id ? (
+              <div>
+                <textarea value={editContent} onChange={(e) => setEditContent(e.target.value)} />
+                <button onClick={() => handleUpdateComment(comment.comment_id)}>완료</button>
+                <button onClick={handleCancelEdit}>취소</button>
+              </div>
+            ) : (
+              <>
+                <p>{comment.content}</p>
+                <button onClick={() => handleDeleteComment(comment.comment_id)}>삭제</button>
+                <button onClick={() => startEditing(comment.comment_id, comment.content)}>수정</button>
+              </>
+            )}
+          </li>
+        ))}
       </ul>
     </div>
   );

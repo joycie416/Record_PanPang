@@ -63,15 +63,11 @@ export async function addComment(content: string, postId: string) {
     data: { user }
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    throw new Error("로그인이 필요합니다.");
-  }
+  if (!user) throw new Error("로그인이 필요합니다.");
 
   const { error } = await supabase.from("comments").insert([{ content, post_id: postId, user_id: user.id }]);
 
-  if (error) {
-    throw new Error("댓글 추가에 실패했습니다.");
-  }
+  if (error) throw new Error("댓글 추가에 실패했습니다.");
 
   revalidatePath(`/posts/${postId}`);
 }
@@ -83,28 +79,55 @@ export async function deleteComment(commentId: string) {
     data: { user }
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    throw Error("로그인이 필요합니다.");
-  }
+  if (!user) throw Error("로그인이 필요합니다.");
 
   const { error } = await supabase.from("comments").delete().eq("comment_id", commentId).eq("user_id", user.id);
 
-  if (error) {
-    throw new Error("댓글 삭제에 실패했습니다.");
-  }
+  if (error) throw new Error("댓글 삭제에 실패했습니다.");
 }
 
 // 댓글 조회
 export async function fetchComment(postId: string) {
   const supabase = createClient();
+  const STORAGE = "profiles";
 
-  const { data, error } = await supabase.from("comments").select("*").eq("post_id", postId);
+  const { data: comments, error: commentError } = await supabase
+    .from("comments")
+    .select("comment_id, content, user_id")
+    .eq("post_id", postId);
 
-  if (error) {
+  if (commentError) {
     throw new Error("댓글을 불러오는데 실패했습니다.");
   }
 
-  return data;
+  const commentsWithProfile = await Promise.all(
+    comments.map(async (comment) => {
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("nickname, profile_img")
+        .eq("user_id", comment.user_id)
+        .single();
+
+      if (profileError) {
+        throw new Error("프로필 정보를 불러오는데 실패했습니다.");
+      }
+
+      // `profile_img`를 가져와 절대 경로 생성
+      const { data: { publicUrl: profileImgUrl } = {} } = supabase.storage
+        .from(STORAGE)
+        .getPublicUrl(profile?.profile_img ?? "default");
+
+      return {
+        ...comment,
+        profile: {
+          nickname: profile?.nickname,
+          profile_img: profileImgUrl || "/default-profile.png"
+        }
+      };
+    })
+  );
+
+  return commentsWithProfile;
 }
 
 // 댓글 수정
