@@ -1,7 +1,7 @@
 "use client";
 
 import { authInput } from "@/types/auth";
-import { signin, signup } from "@/utils/supabase/actions";
+import { signin, signup } from "@/utils/supabase/server-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpWithPasswordCredentials } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
@@ -41,22 +41,22 @@ const AuthForm = () => {
   });
 
   const onSubmit = (data: FieldValues) => {
-    console.log('onSubmit :', data)
-    if (path === '/sign-up') {
-      signup({email:data.email, password:data.password, options: { 'data' : {nickname: data.nickname, profile_img: 'default'}}})
+    console.log("onSubmit :", data);
+    if (path === "/sign-up") {
+      signup({
+        email: data.email,
+        password: data.password,
+        options: { data: { nickname: data.nickname, profile_img: "default" } }
+      });
     } else {
-      signin({email:data.email, password:data.password})
+      signin({ email: data.email, password: data.password });
     }
-  }
+  };
 
   return (
     <div className="min-h-screen container flex justify-center items-center m-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="p-4 flex flex-col items-center m-auto">
-        <input
-          {...register("email")}
-          placeholder="Email"
-          className="auth-input w-[300px]"
-        />
+        <input {...register("email")} placeholder="Email" className="auth-input w-[300px]" />
         {formState.errors.email && <span className="text-sky-300 leading-tight">{formState.errors.email.message}</span>}
         <input
           type="password"
@@ -69,7 +69,9 @@ const AuthForm = () => {
           placeholder="password"
           className="auth-input w-[300px] mt-4"
         />
-        {formState.errors.password && <span className="text-sky-300 leading-tight">{formState.errors.password.message}</span>}
+        {formState.errors.password && (
+          <span className="text-sky-300 leading-tight">{formState.errors.password.message}</span>
+        )}
         {path === "/sign-up" && (
           <>
             <input
@@ -83,7 +85,9 @@ const AuthForm = () => {
               placeholder="nickname"
               className="auth-input w-[300px] mt-4"
             />
-            {formState.errors.nickname && <span className="text-sky-300 leading-tight">{formState.errors.nickname.message}</span>}
+            {formState.errors.nickname && (
+              <span className="text-sky-300 leading-tight">{formState.errors.nickname.message}</span>
+            )}
           </>
         )}
         <button type="submit" className="w-[300px] bg-gray-300 hover:bg-gray-400 mt-4 p-2 rounded-lg">

@@ -1,19 +1,20 @@
 import { createClient } from "@/utils/supabase/server";
-import { User } from "@supabase/supabase-js";
-import { ST } from "next/dist/shared/lib/utils";
 import Image from "next/image";
 import EditProfileButton from "./EditProfileButton";
 
 const STORAGE = "profiles";
 
 const Profile = async () => {
+
   const supabase = createClient();
   const {
     data: { user },
     error
   } = await supabase.auth.getUser();
 
-  const {data:{publicUrl}} = supabase.storage.from(STORAGE).getPublicUrl(user?.user_metadata?.profile_img ?? 'default');
+  const {
+    data: { publicUrl }
+  } = supabase.storage.from(STORAGE).getPublicUrl(user?.user_metadata?.profile_img ?? "default");
   console.log("publicUrl :", publicUrl);
 
   return (
@@ -39,7 +40,7 @@ const Profile = async () => {
           <p>
             <span>{user?.user_metadata.nickname}</span> / <span>{user?.email}</span>
           </p>
-          <EditProfileButton />
+          <EditProfileButton user={user} />
         </div>
         <ul></ul>
       </div>
