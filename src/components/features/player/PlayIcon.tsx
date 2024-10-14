@@ -1,4 +1,4 @@
-import useYoutubnStore from "@/store/youtubeStore";
+import useYoutubnStore from "@/store/playerStore";
 
 type Props = {
   style: object;

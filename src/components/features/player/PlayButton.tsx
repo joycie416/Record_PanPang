@@ -5,7 +5,7 @@ import Image from "next/image";
 import YouTube, { YouTubeEvent } from "react-youtube";
 import PlayIcon from "./PlayIcon";
 import { YouTubePlayer } from "youtube-player/dist/types";
-import useYoutubnStore from "@/store/youtubeStore";
+import useYoutubnStore from "@/store/playerStore";
 import { useRef } from "react";
 
 type Props = {
