@@ -78,6 +78,7 @@ const EditProfileModal = ({
                 e.stopPropagation();
                 setNickname("");
                 setProfileImg(null);
+                setImgPath(userImg);
                 setShowModal((prev) => !prev);
               }}
             >
@@ -85,12 +86,14 @@ const EditProfileModal = ({
             </button>
             <button
               className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {
-                  updateUser(user, nickname, profileImg);
-                  updateProfile(user, nickname, profileImg);
-                  updateProfileImg(user, profileImg);
+                  // await updateUser(user, nickname, profileImg);
+                  // await updateProfile(user, nickname, profileImg);
+                  // await updateProfileImg(user, profileImg);
+
+                  await Promise.all([updateUser(user, nickname, profileImg),updateProfile(user, nickname, profileImg),updateProfileImg(user, profileImg)])
                 }
                 alert("프로필이 수정되었습니다.");
                 setShowModal((prev) => !prev);
@@ -100,13 +103,14 @@ const EditProfileModal = ({
             </button>
             <button
               className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {
-                  deleteProfileImg(user);
                   setImgPath(defaultImg);
+                  await deleteProfileImg(user);
                 }
                 alert("프로필 이미지가 삭제되었습니다.");
+                setShowModal(prev => !prev)
               }}
             >
               이미지 삭제

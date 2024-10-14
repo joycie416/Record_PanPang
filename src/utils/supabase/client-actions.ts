@@ -51,11 +51,7 @@ export const updateProfile = async (user: User, nickname: string, profileImg: Fi
 
 export const updateProfileImg = async (user: User, profileImg: File | null) => {
   const hasProfileImg = user.user_metadata.profile_img !== DEFAULT;
-  let profile_img = user.user_metadata.profile_img;
-  if (profileImg) {
-    // 새 이미지 O
-    profile_img = user.id;
-  }
+
 
   if (hasProfileImg && profileImg) {
     // 프로필 이미지 O, 새 이미지 O
