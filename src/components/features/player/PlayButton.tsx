@@ -1,10 +1,12 @@
 "use client";
 
-import { Track } from "@/type/track";
+import { Track } from "@/types/track";
 import Image from "next/image";
-import YouTube, { YouTubeEvent, YouTubePlayer } from "react-youtube";
+import YouTube, { YouTubeEvent } from "react-youtube";
 import PlayIcon from "./PlayIcon";
-import { useRef, useState } from "react";
+import { YouTubePlayer } from "youtube-player/dist/types";
+import useYoutubnStore from "@/store/youtubeStore";
+import { useRef } from "react";
 
 type Props = {
   music: Track;
@@ -12,19 +14,28 @@ type Props = {
 };
 
 const PlayButton = ({ music, id }: Props) => {
-  const [isPlay, setIsPlay] = useState<boolean>(false);
+  const { playedVideo, setIsPlay, setPlayedVideo } = useYoutubnStore();
   const playerRef = useRef<YouTubePlayer | null>(null);
   const onReady = (e: YouTubeEvent) => {
     playerRef.current = e.target;
   };
 
-  const togglePlayVideo = () => {
-    if (playerRef.current && !isPlay) {
+  const togglePlayVideo = async () => {
+    if (playerRef.current && playedVideo.id === music.id) {
+      console.log(await playerRef.current.getPlayerState());
+      if (playedVideo.isPlay) {
+        playerRef.current.pauseVideo();
+        setIsPlay();
+      } else {
+        playerRef.current.playVideo();
+        setIsPlay();
+      }
+    }
+
+    if (playerRef.current && playedVideo.id !== music.id) {
+      console.log(await playerRef.current.getPlayerState());
+      setPlayedVideo(music.id);
       playerRef.current.playVideo();
-      setIsPlay(!isPlay);
-    } else if (playerRef.current && isPlay) {
-      playerRef.current.pauseVideo();
-      setIsPlay(!isPlay);
     }
   };
 
@@ -45,7 +56,7 @@ const PlayButton = ({ music, id }: Props) => {
             transform: "translate(-50%, -50%)",
             fill: "white"
           }}
-          isPlay={isPlay}
+          id={music.id}
         />
       </div>
     </>

@@ -1,4 +1,4 @@
-import { OriginalTrack, Track } from "@/type/track";
+import { OriginalTrack, Track } from "@/types/track";
 
 export const formatTrackData = (data: OriginalTrack) => {
   const newTrack: Track = {

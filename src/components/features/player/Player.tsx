@@ -1,7 +1,7 @@
 import { formatTrackData } from "@/utils/formatTrackData";
 import PlayButton from "./PlayButton";
 import { getYoutubeID } from "@/utils/getYoutubeID";
-import { OriginalTrack } from "@/type/track";
+import { OriginalTrack } from "@/types/track";
 
 type playerProps = {
   id: string;
