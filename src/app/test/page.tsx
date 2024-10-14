@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
-import supabase from "../../../supabaseClient";
 import Player from "@/components/features/player/Player";
+import supabase from "../../../supabaseClient";
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID as string;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET as string;
@@ -41,7 +41,7 @@ const page = async () => {
   const token = await getSpotifyToken();
 
   // supabase에서 게시글 받아오기, 에러 없을 때만 플레이어 컴포넌트 불러오기
-  const { data, error } = await supabase.from("posts").select("*");
+  const { data, error } = await supabase.from("posts").select("*").neq("music_id", "");
   if (!error) {
     const posts = data as postType[];
 
