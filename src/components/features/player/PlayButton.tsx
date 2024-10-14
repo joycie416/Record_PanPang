@@ -6,11 +6,15 @@ import YouTube, { YouTubeEvent } from "react-youtube";
 import PlayIcon from "./PlayIcon";
 import { YouTubePlayer } from "youtube-player/dist/types";
 import useYoutubnStore from "@/store/playerStore";
-import { useRef } from "react";
+import { MutableRefObject, useRef } from "react";
 
 type Props = {
   music: Track;
   id: string | undefined;
+};
+
+export const onReady = (e: YouTubeEvent, playerRef: MutableRefObject<YouTubePlayer | null>) => {
+  playerRef.current = e.target;
 };
 
 const PlayButton = ({ music, id }: Props) => {
@@ -21,10 +25,6 @@ const PlayButton = ({ music, id }: Props) => {
   // playedPlayer - 현재 재생중인 플레이어 정보를 담는 state / YouTubePlayer 가 저장됨
   // setPlayedPlayer - 현재 재생중인 플레이어 정보를 변경하는 state / 다른 노래 틀을 때 재저장용
   const playerRef = useRef<YouTubePlayer | null>(null);
-
-  const onReady = (e: YouTubeEvent) => {
-    playerRef.current = e.target;
-  };
 
   const togglePlayVideo = async () => {
     // 맨 처음 노래 틀었을 때
@@ -65,7 +65,7 @@ const PlayButton = ({ music, id }: Props) => {
   return (
     <>
       <div className="hidden">
-        <YouTube videoId={id} onReady={(e: YouTubeEvent) => onReady(e)} />
+        <YouTube videoId={id} onReady={(e: YouTubeEvent) => onReady(e, playerRef)} />
       </div>
       <div className="relative cursor-pointer" onClick={() => togglePlayVideo()}>
         <Image alt={music.name + "앨범커버"} src={music.album.images} width={50} height={50} className="rounded-md" />

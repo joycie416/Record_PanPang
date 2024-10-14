@@ -1,10 +1,9 @@
-import { createClient } from "@/utils/supabase/server";
 import { Post } from "@/types/post";
 import PostCard from "@/components/commonUI/PostCard";
+import { supabase } from "@/utils/supabase/server";
 
 // 게시글 조회
 export async function fetchPosts() {
-  const supabase = createClient();
   const { data, error } = await supabase.from("posts").select("*");
 
   if (error) {

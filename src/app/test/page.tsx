@@ -1,6 +1,7 @@
 import { UUID } from "crypto";
 import Player from "@/components/features/player/Player";
-import supabase from "../../../supabaseClient";
+import { supabase } from "@/utils/supabase/server";
+import DetailPlayer from "@/components/features/player/DetailPlayer";
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID as string;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET as string;
@@ -48,7 +49,10 @@ const page = async () => {
     return (
       <div>
         {posts.map((post) => (
-          <Player key={post.post_id} id={post.music_id} token={token} youtubeURL={post.youtube_url} />
+          <div key={post.post_id}>
+            <Player id={post.music_id} token={token} youtubeURL={post.youtube_url} />
+            <DetailPlayer id={post.music_id} token={token} youtubeURL={post.youtube_url} />
+          </div>
         ))}
       </div>
     );

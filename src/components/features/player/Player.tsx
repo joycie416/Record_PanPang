@@ -1,7 +1,6 @@
-import { formatTrackData } from "@/utils/formatTrackData";
 import PlayButton from "./PlayButton";
 import { getYoutubeID } from "@/utils/getYoutubeID";
-import { OriginalTrack } from "@/types/track";
+import { getSpotifyTrack } from "@/utils/supabase/server-actions";
 
 type playerProps = {
   id: string;
@@ -10,17 +9,7 @@ type playerProps = {
 };
 
 const Player = async ({ id, token, youtubeURL }: playerProps) => {
-  // 스포티파이에 해당 음악 정보 요청
-  const res = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + token
-    }
-  });
-  const data: OriginalTrack = await res.json();
-
-  // 포맷팅 함수로 필요한 데이터만 받아옴
-  const music = formatTrackData(data);
+  const music = await getSpotifyTrack(id, token);
 
   return (
     <div className="w-[800px] p-4 border-[1px] rounded-md flex flex-row border-gray-300 m-4">
