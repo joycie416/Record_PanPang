@@ -50,9 +50,9 @@ const PlayButton = ({ music, id }: Props) => {
     // 처음 아니고 듣다가 다른 노래 틀었을 때
     if (playedVideo.id !== music.id && playerRef.current) {
       // 만약 이전 노래가 재생 중이라면...
-      if (playedVideo.isPlay) {
+      if (playedVideo.isPlay && playedPlayer) {
         // 재생하던 플레이어 멈추고
-        playedPlayer?.pauseVideo();
+        playedPlayer.pauseVideo();
       }
       // 상태 갱신 해주기
       setPlayedVideo(music.id);

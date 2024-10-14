@@ -1,6 +1,6 @@
 import PlayButton from "./PlayButton";
 import { getYoutubeID } from "@/utils/getYoutubeID";
-import { getSpotifyTrack } from "@/utils/supabase/server-actions";
+import { getSpotifyTrack } from "@/utils/spotify-actions";
 
 type playerProps = {
   id: string;
