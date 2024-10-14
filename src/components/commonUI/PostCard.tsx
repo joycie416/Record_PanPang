@@ -1,6 +1,11 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Post } from "@/types/post";
 
-const PostCard = () => {
+type Props = {
+  post: Post;
+};
+
+const PostCard = ({ post }: Props) => {
   return (
     <Card>
       <CardHeader>
@@ -10,7 +15,7 @@ const PostCard = () => {
         </div>
       </CardHeader>
       <CardContent>
-        
+        <div>{post.content}</div>
       </CardContent>
       <CardFooter>
         <div className="flex items-center gap-6">

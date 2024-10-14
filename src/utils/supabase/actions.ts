@@ -128,3 +128,22 @@ export async function updateComment(commentId: string, content: string) {
   }
   revalidatePath("/");
 }
+
+// 게시글 추가
+export async function createPost(youtubeUrl: string, content: string) {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  const { error } = await supabase.from("posts").insert([{ user_id: user.id, youtube_url: youtubeUrl, content }]);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+}
