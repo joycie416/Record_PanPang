@@ -1,13 +1,17 @@
-'use client'
+"use client";
 
-import { signout } from '@/utils/supabase/actions';
+import { signout } from "@/utils/supabase/server-actions";
 
 const SignOutButton = () => {
   return (
-    <button onClick={() => {
-      signout();
-    }}>로그아웃</button>
-  )
-}
+    <button
+      onClick={() => {
+        signout();
+      }}
+    >
+      로그아웃
+    </button>
+  );
+};
 
-export default SignOutButton
+export default SignOutButton;

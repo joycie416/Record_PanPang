@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { createPost } from "@/utils/supabase/actions";
+import { createPost } from "@/utils/supabase/server-actions";
 import { useRouter } from "next/navigation";
 
 const WritePage = () => {
