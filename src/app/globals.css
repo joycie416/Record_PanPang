@@ -70,3 +70,12 @@ body {
     @apply bg-background text-foreground;
   }
 }
+@layer components {
+  .auth-input {
+    @apply text-gray-300 bg-transparent border border-gray-300 border-solid rounded-lg p-2 outline-none focus:border-sky-300;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
