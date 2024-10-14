@@ -1,5 +1,4 @@
 import Profile from '@/components/features/mypage/profile'
-import React from 'react'
 
 const MyPage = () => {
   return (
