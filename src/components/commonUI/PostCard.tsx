@@ -34,19 +34,7 @@ const PostCard = ({ post, user }: Props) => {
                 <div>2</div>
               </div>
             </div>
-            {currentUserId === post.user_id ? (
-              <PostButtons post={post} />
-            ) : (
-              // <div className="flex items-center gap-2">
-              //   <Button size="sm" onClick={handleUpdatePost}>
-              //     수정
-              //   </Button>
-              //   <Button size="sm" variant="secondary" onClick={handleDeletePost}>
-              //     삭제
-              //   </Button>
-              // </div>
-              <></>
-            )}
+            {currentUserId === post.user_id ? <PostButtons post={post} /> : <></>}
           </div>
         </CardFooter>
       </Card>
