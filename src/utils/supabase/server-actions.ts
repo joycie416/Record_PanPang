@@ -171,7 +171,7 @@ export async function fetchUserPostsByComment() {
   if (commentsError) throw Error("사용자가 작성한 댓글을 불러오는데 실패했습니다.");
 
   const postIds = userComments.map((comment) => comment.post_id);
-  const { data: userPosts, error: postsError } = await supabase.from("posts").select("*").in("id", postIds);
+  const { data: userPosts, error: postsError } = await supabase.from("posts").select("*").in("post_id", postIds);
   if (postsError) throw Error("댓글에 해당한 게시물을 불러오는데 실패했습니다.");
 
   return userPosts;
