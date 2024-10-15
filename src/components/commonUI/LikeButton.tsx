@@ -24,11 +24,20 @@ const LikeButton = ({ isLike, iconStyle, user, post }: Props) => {
     }
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // 이벤트 전파 차단
+    handleToggleLike(); // 좋아요 상태 처리
+  };
+
   return (
     <>
-      <div onClick={handleToggleLike}>
+      <button
+        onClick={(e: React.MouseEvent) => {
+          handleClick(e);
+        }}
+      >
         {!isLike ? <EmptyHeart style={iconStyle} /> : <FillHeart style={iconStyle} />}
-      </div>
+      </button>
     </>
   );
 };
