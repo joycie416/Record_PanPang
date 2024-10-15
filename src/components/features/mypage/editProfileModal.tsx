@@ -89,10 +89,6 @@ const EditProfileModal = ({
               onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {
-                  // await updateUser(user, nickname, profileImg);
-                  // await updateProfile(user, nickname, profileImg);
-                  // await updateProfileImg(user, profileImg);
-
                   await Promise.all([updateUser(user, nickname, profileImg),updateProfile(user, nickname, profileImg),updateProfileImg(user, profileImg)])
                 }
                 alert("프로필이 수정되었습니다.");
@@ -107,6 +103,7 @@ const EditProfileModal = ({
                 e.stopPropagation();
                 if (!!user) {
                   setImgPath(defaultImg);
+                  setProfileImg(null);
                   await deleteProfileImg(user);
                 }
                 alert("프로필 이미지가 삭제되었습니다.");
