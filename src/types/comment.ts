@@ -5,6 +5,7 @@ export interface Profile {
 
 export interface Comment {
   comment_id: string;
+  user_id: string;
   content: string;
   created_at: string;
   profile: Profile;

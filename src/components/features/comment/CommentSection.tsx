@@ -5,15 +5,25 @@ import Image from "next/image";
 import { addComment, deleteComment, updateComment } from "@/utils/supabase/server-actions";
 import { Comment } from "@/types/comment";
 import { fetchComment } from "@/utils/supabase/client-actions";
+import { createClient } from "@/utils/supabase/client";
+
+const supabase = createClient();
 
 const CommentSection = ({ postId }: { postId: string }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadComments() {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+
+      if (user) setUserId(user.id);
+
       const fetchedComments = await fetchComment(postId);
       setComments(fetchedComments);
     }
@@ -100,11 +110,13 @@ const CommentSection = ({ postId }: { postId: string }) => {
                 <button onClick={handleCancelEdit}>취소</button>
               </div>
             ) : (
-              <>
-                <p>{comment.content}</p>
-                <button onClick={() => handleDeleteComment(comment.comment_id)}>삭제</button>
-                <button onClick={() => startEditing(comment.comment_id, comment.content)}>수정</button>
-              </>
+              userId === comment.user_id && (
+                <>
+                  <p>{comment.content}</p>
+                  <button onClick={() => handleDeleteComment(comment.comment_id)}>삭제</button>
+                  <button onClick={() => startEditing(comment.comment_id, comment.content)}>수정</button>
+                </>
+              )
             )}
           </li>
         ))}
