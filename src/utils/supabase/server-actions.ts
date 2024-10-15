@@ -171,3 +171,12 @@ export async function getPostById(postId: string) {
 
   return data;
 }
+
+export const getPublicUrl = (name: string, path: string) => {
+  const supabase = createClient();
+  const {
+    data: { publicUrl }
+  } = supabase.storage.from(name).getPublicUrl(path);
+
+  return publicUrl;
+};
