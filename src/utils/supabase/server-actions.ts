@@ -179,19 +179,3 @@ export const getPublicUrl = (name: string, path: string) => {
 
   return publicUrl;
 };
-
-export async function fetchCurrentUser() {
-  const supabase = createClient();
-  
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    console.error(error);
-    return null;
-  }
-
-  return user;
-}
