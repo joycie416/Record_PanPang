@@ -1,5 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import { supabase } from "./client";
+import { Post } from "@/types/post";
 
 const PROFILES = "profiles";
 const STORAGE = "profiles";
@@ -94,6 +95,61 @@ export const getPublicUrl = (name: string, path: string) => {
 
   return publicUrl;
 };
+
+// 게시글 추가
+export async function createPost(post: Partial<Post>) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  const { error } = await supabase.from("posts").insert([{ user_id: user.id, ...post }]);
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+// 게시글 수정
+export async function updatePost(postId: string, updatedData: Partial<Post>) {
+  const {
+    data: { user },
+    error: userError
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  const { error } = await supabase.from("posts").update(updatedData).eq("post_id", postId).eq("user_id", user.id); // 게시글 소유자가 로그인한 사용자와 일치하는지 확인
+
+  if (error) {
+    console.error(error);
+    throw new Error("게시글 수정에 실패했습니다.");
+  }
+}
+
+// 게시글 삭제
+export async function deletePost(postId: string) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  const { error } = await supabase.from("posts").delete().eq("post_id", postId).eq("user_id", user.id);
+
+  if (error) {
+    console.error(error);
+    throw new Error("게시글 삭제에 실패했습니다.");
+  }
+}
 
 // 댓글 조회
 export async function fetchComment(postId: string) {

@@ -2,13 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-import { createClient } from "@/utils/supabase/server";
 import { SignInWithPasswordCredentials, SignUpWithPasswordCredentials } from "@supabase/supabase-js";
+import { createClient } from "./server";
 
 export async function signin(formData: SignInWithPasswordCredentials) {
   const supabase = createClient();
-
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // const data = {
@@ -28,7 +26,6 @@ export async function signin(formData: SignInWithPasswordCredentials) {
 
 export async function signup(formData: SignUpWithPasswordCredentials) {
   const supabase = createClient();
-
   // type-casting here for convenience
   // in practice, you should validate your inputs
   // const data = {
@@ -109,6 +106,52 @@ export async function updateComment(commentId: string, content: string) {
   revalidatePath("/");
 }
 
+// 현재 사용자 조회
+export async function fetchCurrentUser() {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    console.error(error);
+    return null;
+  }
+
+  return user;
+}
+
+// 게시글 조회
+export async function fetchPosts() {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("posts").select("*");
+
+  if (error || !data) {
+    console.error(error);
+    return []; // 에러 발생 시 빈 배열 반환
+  }
+
+  return data;
+}
+
+// post_id로 게시글 정보 조회
+export async function getPostById(postId: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("post_id, user_id, created_at, music_id, youtube_url, content")
+    .eq("post_id", postId)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data;
+}
+
 // MyComment
 
 export async function fetchUserPostsByComment() {
@@ -145,7 +188,7 @@ export const getPublicUrl = (name: string, path: string) => {
 
 export async function fetchCurrentUser() {
   const supabase = createClient();
-  
+
   const {
     data: { user },
     error
