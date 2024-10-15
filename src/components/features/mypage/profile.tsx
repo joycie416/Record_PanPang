@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { supabase } from "@/utils/supabase/client";
 import Image from "next/image";
@@ -11,22 +11,22 @@ import { fetchSessionData } from "@/utils/supabase/client-actions";
 const STORAGE = "profiles";
 
 const Profile = () => {
-  // const queryClient = useQueryClient();
-  const { data: user, isLoading, isError } = useQuery({
-    queryKey: ["user", 'client'],
+  const {
+    data: user,
+    isLoading,
+    isError
+  } = useQuery({
+    queryKey: ["user", "client"],
     queryFn: () => fetchSessionData()
   });
 
   if (isLoading) {
-    return <ProfileLoading/>
+    return <ProfileLoading />;
   }
+
   if (isError) {
-    return <ProfileError/>
+    return <ProfileError />;
   }
-
-  // console.log('TQ response :', user)
-  
-
 
   const {
     data: { publicUrl }

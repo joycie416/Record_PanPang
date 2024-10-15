@@ -6,7 +6,6 @@ import SignOutButton from "@/components/features/auth/signOutButton";
 import Providers from "@/components/providers/QueryClientProvider";
 import { fetchCurrentUser } from "@/utils/supabase/server-actions";
 import ProfileImg from "@/components/features/navbar/ProfileImg";
-import { createClient } from "@/utils/supabase/server";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,28 +29,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await fetchCurrentUser();
-
-  const supabase = createClient();
-  const { data } = supabase.auth.onAuthStateChange((event, session) => {
-    console.log("onAuthStateChange :", event, session);
-
-    if (event === "INITIAL_SESSION") {
-      // handle initial session
-    } else if (event === "SIGNED_IN") {
-      // handle sign in event
-    } else if (event === "SIGNED_OUT") {
-      // handle sign out event
-    } else if (event === "PASSWORD_RECOVERY") {
-      // handle password recovery event
-    } else if (event === "TOKEN_REFRESHED") {
-      // handle token refreshed event
-    } else if (event === "USER_UPDATED") {
-      // handle user updated event
-    }
-  });
-
-  // call unsubscribe to remove the callback
-  data.subscription.unsubscribe();
 
   return (
     <html lang="en">
