@@ -1,24 +1,25 @@
-"use client";
-
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Post } from "@/types/post";
 import { User } from "@supabase/supabase-js";
 import { Button } from "../ui/button";
 import { deletePost } from "@/utils/supabase/client-actions";
-import FillHeart from "@/app/(assets)/FillHeart";
-import EmptyHeart from "@/app/(assets)/EmptyHeart";
+import Player from "../features/player/Player";
+import LikeButton from "./LikeButton";
 
 type Props = {
   post: Post;
   user: User | null;
   likePosts: string[] | null;
+  token: string;
 };
 
-const PostCard = ({ post, user, likePosts }: Props) => {
-  const iconStyle = { width: "17px", cursor: "pointer", padding: "1px" };
+// 아이콘 스타일 지정
+const iconStyle = { width: "17px", cursor: "pointer", padding: "1px" };
 
+const PostCard = ({ post, user, likePosts, token }: Props) => {
   const currentUserId = user?.id;
 
+  // 좋아요 여부 판별
   const isLike = likePosts ? likePosts.includes(post.post_id) : false;
 
   const handleDelete = async () => {
@@ -44,6 +45,7 @@ const PostCard = ({ post, user, likePosts }: Props) => {
         </div>
       </CardHeader>
       <CardContent>
+        {post.music_id && <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} />}
         <div>{post.content}</div>
       </CardContent>
       <CardFooter>
@@ -53,8 +55,7 @@ const PostCard = ({ post, user, likePosts }: Props) => {
               <div>2</div>
             </div>
             <div className="flex items-center gap-2">
-              {!isLike ? <EmptyHeart style={iconStyle} /> : <FillHeart style={iconStyle} />}
-
+              <LikeButton isLike={isLike} iconStyle={iconStyle} user={user} post={post} />
               <div>2</div>
             </div>
           </div>

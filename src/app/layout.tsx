@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import SignOutButton from "@/components/features/auth/signOutButton";
 import { createClient } from "@/utils/supabase/server";
+import Providers from "@/components/providers/QueryClientProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,8 +28,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const supabase = createClient();
-  const { data: {user}, error } = await supabase.auth.getUser();
-  console.log('root layout :', user);
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+  console.log("root layout :", user);
 
   return (
     <html lang="en">
@@ -57,7 +60,7 @@ export default async function RootLayout({
             )}
           </ul>
         </header>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

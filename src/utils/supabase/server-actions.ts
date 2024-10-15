@@ -166,3 +166,12 @@ export const fetchLikePosts = async (id: string) => {
     return data.map((item) => item.post_id);
   } else return null;
 };
+
+export const getPublicUrl = (name: string, path: string) => {
+  const supabase = createClient();
+  const {
+    data: { publicUrl }
+  } = supabase.storage.from(name).getPublicUrl(path);
+
+  return publicUrl;
+};
