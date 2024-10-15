@@ -9,16 +9,14 @@ import PostButtons from "../features/post/PostButtons";
 type Props = {
   post: Post;
   user: User | null;
-  likePosts: string[] | null;
   token: string;
 };
 
 // 아이콘 스타일 지정
 const iconStyle = { width: "17px", cursor: "pointer", padding: "1px" };
 
-const PostCard = ({ post, user, likePosts, token }: Props) => {
+const PostCard = ({ post, user, token }: Props) => {
   const currentUserId = user?.id;
-  const isLike = likePosts ? likePosts.includes(post.post_id) : false;
 
   return (
     <Link href={`/detail/${post.post_id}`}>
@@ -40,8 +38,7 @@ const PostCard = ({ post, user, likePosts, token }: Props) => {
                 <div>2</div>
               </div>
               <div className="flex items-center gap-2">
-                <LikeButton isLike={isLike} iconStyle={iconStyle} user={user} post={post} />
-                <div>2</div>
+                <LikeButton iconStyle={iconStyle} user={user} post={post} />
               </div>
             </div>
             {currentUserId === post.user_id ? <PostButtons post={post} /> : <></>}
