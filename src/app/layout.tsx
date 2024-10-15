@@ -37,7 +37,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <header className='bg-white flex justify-between sticky top-0 left-0 right-0 p-4'>
+        <header className="bg-white flex justify-between sticky top-0 left-0 right-0 p-4">
           <Link href={"/"}>Home</Link>
           <ul className="flex gap-4">
             {!user ? (
