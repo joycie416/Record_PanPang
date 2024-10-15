@@ -33,9 +33,9 @@ const CommentSection = ({ postId }: { postId: string }) => {
   //날짜
   const formatDate = (date: string) => {
     const utcDate = new Date(date);
-    const kstDate = new Date(utcDate.getTime() - 9 * 60 * 60 * 1000);
 
-    return kstDate.toLocaleString("ko-KR", {
+    return utcDate.toLocaleString("ko-KR", {
+      timeZone: "Asia/Seoul",
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
