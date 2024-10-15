@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getPostById } from "@/utils/supabase/server-actions";
 import PostButtons from "@/components/features/post/PostButtons";
-import { Post } from "@/types/post";
 
 interface Props {
   params: { id: string };
