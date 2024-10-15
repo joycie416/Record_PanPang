@@ -85,7 +85,6 @@ export const deleteProfileImg = async (user: User) => {
 
 // 댓글 조회
 export async function fetchComment(postId: string) {
-  const supabase = createClient();
   const STORAGE = "profiles";
 
   const { data: comments, error: commentError } = await supabase

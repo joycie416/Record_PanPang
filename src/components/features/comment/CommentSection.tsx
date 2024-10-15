@@ -103,8 +103,8 @@ const CommentSection = ({ postId }: { postId: string }) => {
                 <Image
                   src={comment.profile?.profile_img}
                   alt={comment.profile?.nickname}
-                  width={50}
-                  height={50}
+                  width={60}
+                  height={60}
                   className="rounded-full border border-gray-300"
                 />
               </div>
