@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image"; // next/image 사용
-import { addComment, deleteComment, fetchComment, updateComment } from "@/utils/supabase/server-actions";
+import Image from "next/image";
+import { addComment, deleteComment, updateComment } from "@/utils/supabase/server-actions";
 import { Comment } from "@/types/comment";
+import { fetchComment } from "@/utils/supabase/client-actions";
 
 const CommentSection = ({ postId }: { postId: string }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -83,7 +84,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
         {comments.map((comment) => (
           <li key={comment.comment_id}>
             <div>
-              <img
+              <Image
                 src={comment.profile?.profile_img || "/default-profile.png"}
                 alt={comment.profile?.nickname}
                 width={50}
