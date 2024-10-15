@@ -90,10 +90,12 @@ export async function fetchComment(postId: string) {
 
   const { data: comments, error: commentError } = await supabase
     .from("comments")
-    .select("comment_id, content, user_id, created_at")
-    .eq("post_id", postId);
+    .select("comment_id, content, user_id, created_at, update_at")
+    .eq("post_id", postId)
+    .order("created_at", { ascending: true }); // 생성 시간 기준으로 정렬
 
   if (commentError) {
+    console.error(commentError.message);
     throw new Error("댓글을 불러오는데 실패했습니다.");
   }
 
@@ -112,12 +114,12 @@ export async function fetchComment(postId: string) {
       // `profile_img`를 가져와 절대 경로 생성
       const { data: { publicUrl: profileImgUrl } = {} } = supabase.storage
         .from(STORAGE)
-        .getPublicUrl(profile?.profile_img ?? "default");
+        .getPublicUrl(profile.profile_img ?? "default");
 
       return {
         ...comment,
         profile: {
-          nickname: profile?.nickname,
+          nickname: profile.nickname,
           profile_img: profileImgUrl || "/default-profile.png"
         }
       };

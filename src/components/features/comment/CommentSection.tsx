@@ -32,7 +32,10 @@ const CommentSection = ({ postId }: { postId: string }) => {
 
   //날짜
   const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("ko-KR", {
+    const utcDate = new Date(date);
+    const kstDate = new Date(utcDate.getTime() - 9 * 60 * 60 * 1000);
+
+    return kstDate.toLocaleString("ko-KR", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -81,27 +84,26 @@ const CommentSection = ({ postId }: { postId: string }) => {
   };
 
   return (
-    <div>
+    <div className="p-4 max-w-md mx-auto rounded-lg shadow-md">
       <textarea
         name="newComment"
         placeholder="댓글을 입력하세요"
         value={newComment}
         onChange={(e) => setNewComment(e.target.value)}
+        className="w-full p-2 mb-2 border border-gray-300 resize-none focus:outline-none"
       />
-      <button onClick={handleAddComment}>추가</button>
+      <button onClick={handleAddComment} className="py-2 mb-4">
+        추가
+      </button>
 
       <ul>
         {comments.map((comment) => (
           <li key={comment.comment_id}>
             <div>
-              <Image
-                src={comment.profile?.profile_img || "/default-profile.png"}
-                alt={comment.profile?.nickname}
-                width={50}
-                height={50}
-              />
+              <Image src={comment.profile?.profile_img} alt={comment.profile?.nickname} width={50} height={50} />
               <span>작성자: {comment.profile?.nickname}</span>
-              <small>작성일: {formatDate(comment.created_at)}</small>
+              <small>{formatDate(comment.update_at)}</small>
+              <p>{comment.content}</p>
             </div>
             {editingCommentId === comment.comment_id ? (
               <div>
@@ -112,7 +114,6 @@ const CommentSection = ({ postId }: { postId: string }) => {
             ) : (
               userId === comment.user_id && (
                 <>
-                  <p>{comment.content}</p>
                   <button onClick={() => handleDeleteComment(comment.comment_id)}>삭제</button>
                   <button onClick={() => startEditing(comment.comment_id, comment.content)}>수정</button>
                 </>

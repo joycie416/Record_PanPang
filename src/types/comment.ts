@@ -8,5 +8,6 @@ export interface Comment {
   user_id: string;
   content: string;
   created_at: string;
+  update_at: string;
   profile: Profile;
 }

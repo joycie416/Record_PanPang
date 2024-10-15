@@ -103,6 +103,7 @@ export async function updateComment(commentId: string, content: string) {
     .eq("user_id", user.id);
 
   if (error) {
+    console.error("댓글 수정 오류:", error);
     throw new Error("댓글 수정에 실패했습니다.");
   }
   revalidatePath("/");
