@@ -150,3 +150,48 @@ export async function deletePost(postId: string) {
     throw new Error("게시글 삭제에 실패했습니다.");
   }
 }
+
+// 댓글 조회
+export async function fetchComment(postId: string) {
+  const STORAGE = "profiles";
+
+  const { data: comments, error: commentError } = await supabase
+    .from("comments")
+    .select("comment_id, content, user_id, created_at, update_at")
+    .eq("post_id", postId)
+    .order("created_at", { ascending: true }); // 생성 시간 기준으로 정렬
+
+  if (commentError) {
+    console.error(commentError.message);
+    throw new Error("댓글을 불러오는데 실패했습니다.");
+  }
+
+  const commentsWithProfile = await Promise.all(
+    comments.map(async (comment) => {
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("nickname, profile_img")
+        .eq("user_id", comment.user_id)
+        .single();
+
+      if (profileError) {
+        throw new Error("프로필 정보를 불러오는데 실패했습니다.");
+      }
+
+      // `profile_img`를 가져와 절대 경로 생성
+      const { data: { publicUrl: profileImgUrl } = {} } = supabase.storage
+        .from(STORAGE)
+        .getPublicUrl(profile.profile_img ?? "default");
+
+      return {
+        ...comment,
+        profile: {
+          nickname: profile.nickname,
+          profile_img: profileImgUrl || "/default-profile.png"
+        }
+      };
+    })
+  );
+
+  return commentsWithProfile;
+}

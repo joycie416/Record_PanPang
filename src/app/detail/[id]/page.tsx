@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPostById } from "@/utils/supabase/server-actions";
 import PostButtons from "@/components/features/post/PostButtons";
+import CommentSection from "@/components/features/comment/CommentSection";
 
 interface Props {
   params: { id: string };
@@ -20,6 +21,9 @@ const DetailIdPage = async ({ params }: Props) => {
       <div>youtube_url: {post.youtube_url}</div>
       <div>content: {post.content}</div>
       <PostButtons post={post} />
+      <div>
+        <CommentSection postId={post.post_id} />
+      </div>
     </div>
   );
 };
