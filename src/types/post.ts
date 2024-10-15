@@ -6,5 +6,3 @@ export type Post = {
   youtube_url: string;
   content: string;
 };
-
-export type CreatePostType = Pick<Post, "youtube_url" | "content">;

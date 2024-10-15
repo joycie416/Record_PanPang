@@ -1,6 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import { supabase } from "./client";
-import { CreatePostType } from "@/types/post";
+import { Post } from "@/types/post";
 
 const PROFILES = "profiles";
 const STORAGE = "profiles";
@@ -97,7 +97,7 @@ export const getPublicUrl = (name: string, path: string) => {
 };
 
 // 게시글 추가
-export async function createPost(post: CreatePostType) {
+export async function createPost(post: Partial<Post>) {
   const {
     data: { user }
   } = await supabase.auth.getUser();
@@ -114,12 +114,84 @@ export async function createPost(post: CreatePostType) {
   }
 }
 
+// 게시글 수정
+export async function updatePost(postId: string, updatedData: Partial<Post>) {
+  const {
+    data: { user },
+    error: userError
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  const { error } = await supabase.from("posts").update(updatedData).eq("post_id", postId).eq("user_id", user.id); // 게시글 소유자가 로그인한 사용자와 일치하는지 확인
+
+  if (error) {
+    console.error(error);
+    throw new Error("게시글 수정에 실패했습니다.");
+  }
+}
+
 // 게시글 삭제
 export async function deletePost(postId: string) {
-  const { error } = await supabase.from("posts").delete().eq("post_id", postId);
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+
+  const { error } = await supabase.from("posts").delete().eq("post_id", postId).eq("user_id", user.id);
 
   if (error) {
     console.error(error);
     throw new Error("게시글 삭제에 실패했습니다.");
   }
+}
+
+// 댓글 조회
+export async function fetchComment(postId: string) {
+  const STORAGE = "profiles";
+
+  const { data: comments, error: commentError } = await supabase
+    .from("comments")
+    .select("comment_id, content, user_id, created_at, update_at")
+    .eq("post_id", postId)
+    .order("created_at", { ascending: true }); // 생성 시간 기준으로 정렬
+
+  if (commentError) {
+    console.error(commentError.message);
+    throw new Error("댓글을 불러오는데 실패했습니다.");
+  }
+
+  const commentsWithProfile = await Promise.all(
+    comments.map(async (comment) => {
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("nickname, profile_img")
+        .eq("user_id", comment.user_id)
+        .single();
+
+      if (profileError) {
+        throw new Error("프로필 정보를 불러오는데 실패했습니다.");
+      }
+
+      // `profile_img`를 가져와 절대 경로 생성
+      const { data: { publicUrl: profileImgUrl } = {} } = supabase.storage
+        .from(STORAGE)
+        .getPublicUrl(profile.profile_img ?? "default");
+
+      return {
+        ...comment,
+        profile: {
+          nickname: profile.nickname,
+          profile_img: profileImgUrl || "/default-profile.png"
+        }
+      };
+    })
+  );
+
+  return commentsWithProfile;
 }

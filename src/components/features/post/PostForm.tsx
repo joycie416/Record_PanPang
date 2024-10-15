@@ -5,24 +5,35 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { createPost } from "@/utils/supabase/client-actions";
-import { CreatePostType } from "@/types/post";
+import { createPost, updatePost } from "@/utils/supabase/client-actions";
 
-const PostForm = () => {
+type Props = {
+  initialData?: {
+    youtubeUrl: string;
+    content: string;
+  };
+  postId?: string;
+};
+
+const PostForm = ({ initialData, postId }: Props) => {
   const router = useRouter();
-  const [youtubeUrl, setYoutubeUrl] = useState("");
-  const [content, setContent] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState(initialData?.youtubeUrl || "");
+  const [content, setContent] = useState(initialData?.content || "");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    const postData: CreatePostType = {
-      youtube_url: youtubeUrl,
-      content
-    };
-
     e.preventDefault();
 
-    await createPost(postData);
+    const postData = { youtube_url: youtubeUrl, content };
 
+    if (postId) {
+      // 게시글 수정
+      await updatePost(postId, postData);
+    } else {
+      // 게시글 추가
+      await createPost(postData);
+    }
+
+    // 입력값 초기화
     setYoutubeUrl("");
     setContent("");
 
@@ -42,7 +53,7 @@ const PostForm = () => {
       />
       <Textarea placeholder="내용을 입력해주세요" value={content} onChange={(e) => setContent(e.target.value)} />
       <Button size="lg" type="submit">
-        작성하기
+        {postId ? "수정하기" : "작성하기"}
       </Button>
     </form>
   );
