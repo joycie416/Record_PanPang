@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { SignInWithPasswordCredentials, SignUpWithPasswordCredentials } from "@supabase/supabase-js";
 import { createClient } from "./server";
-import { Post } from "@/types/post";
 
 export async function signin(formData: SignInWithPasswordCredentials) {
   const supabase = createClient();
