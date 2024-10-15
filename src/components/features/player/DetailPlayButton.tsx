@@ -1,8 +1,8 @@
 "use client";
 
-import PlayCon from "@/components/commonUI/PlayCon";
-import PauseCon from "@/components/commonUI/PauseCon";
-import StopCon from "@/components/commonUI/StopCon";
+import PlayCon from "@/app/(assets)/PlayCon";
+import PauseCon from "@/app/(assets)/PauseCon";
+import StopCon from "@/app/(assets)/StopCon";
 import Image from "next/image";
 import YouTube, { YouTubeEvent, YouTubePlayer } from "react-youtube";
 import { Track } from "@/types/track";

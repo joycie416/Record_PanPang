@@ -80,7 +80,9 @@ export async function deleteComment(commentId: string) {
 
   const { error } = await supabase.from("comments").delete().eq("comment_id", commentId).eq("user_id", user.id);
 
-  if (error) throw new Error("댓글 삭제에 실패했습니다.");
+  if (error) {
+    throw new Error("댓글 삭제에 실패했습니다.");
+  }
 }
 
 // 댓글 수정
@@ -153,7 +155,6 @@ export async function getPostById(postId: string) {
 }
 
 // MyComment
-
 export async function fetchUserPostsByComment() {
   const supabase = createClient();
 
@@ -176,6 +177,19 @@ export async function fetchUserPostsByComment() {
 
   return userPosts;
 }
+
+// 좋아요 목록 조회
+export const fetchLikePosts = async (id: string) => {
+  const supabase = createClient();
+  const { data }: { data: { post_id: string }[] | null } = await supabase
+    .from("likes")
+    .select("post_id")
+    .eq("user_id", id);
+
+  if (data) {
+    return data.map((item) => item.post_id);
+  } else return null;
+};
 
 export const getPublicUrl = (name: string, path: string) => {
   const supabase = createClient();
