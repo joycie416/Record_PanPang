@@ -1,17 +1,17 @@
 "use client";
 
-import { authInput } from "@/types/auth";
 import { signin, signup } from "@/utils/supabase/server-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignUpWithPasswordCredentials } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 
+const SIGN_UP = "/sign-up"
+
 const AuthForm = () => {
   const path = usePathname();
   const schema =
-    path === "/sign-up"
+    path === SIGN_UP
       ? z.object({
           email: z.string().email({ message: "Invalid email" }).min(1, { message: "Email is required" }),
           password: z.string().min(1, "Password is required"),
@@ -23,7 +23,7 @@ const AuthForm = () => {
         });
 
   const defaultValues =
-    path === "/sign-up"
+    path === SIGN_UP
       ? {
           email: "",
           password: "",
@@ -42,7 +42,7 @@ const AuthForm = () => {
 
   const onSubmit = (data: FieldValues) => {
     console.log("onSubmit :", data);
-    if (path === "/sign-up") {
+    if (path === SIGN_UP) {
       signup({
         email: data.email,
         password: data.password,
@@ -72,7 +72,7 @@ const AuthForm = () => {
         {formState.errors.password && (
           <span className="text-sky-300 leading-tight">{formState.errors.password.message}</span>
         )}
-        {path === "/sign-up" && (
+        {path === SIGN_UP && (
           <>
             <input
               type="text"
@@ -91,7 +91,7 @@ const AuthForm = () => {
           </>
         )}
         <button type="submit" className="w-[300px] bg-gray-300 hover:bg-gray-400 mt-4 p-2 rounded-lg">
-          {path === "/sign-up" ? "회원가입" : "로그인"}
+          {path === SIGN_UP ? "회원가입" : "로그인"}
         </button>
       </form>
     </div>
