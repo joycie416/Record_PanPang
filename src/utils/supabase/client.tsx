@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 
 import { createBrowserClient } from '@supabase/ssr'
 
@@ -8,3 +8,5 @@ export function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_KEY!
   )
 }
+
+export const supabase = createClient();
