@@ -1,10 +1,9 @@
 import { User } from "@supabase/supabase-js";
-import { createClient } from "./client";
+import { supabase } from "./client";
 
 const PROFILES = "profiles";
 const STORAGE = "profiles";
 const DEFAULT = "default";
-const supabase = createClient();
 
 export const updateUser = async (user: User, nickname: string, profileImg: File | null) => {
   let profile_img = user.user_metadata.profile_img;
@@ -52,7 +51,6 @@ export const updateProfile = async (user: User, nickname: string, profileImg: Fi
 export const updateProfileImg = async (user: User, profileImg: File | null) => {
   const hasProfileImg = user.user_metadata.profile_img !== DEFAULT;
 
-
   if (hasProfileImg && profileImg) {
     // 프로필 이미지 O, 새 이미지 O
     const { data: updateImg, error: updateError } = await supabase.storage.from(STORAGE).update(user.id, profileImg);
@@ -77,4 +75,22 @@ export const deleteProfileImg = async (user: User) => {
       }
     });
   }
+};
+
+export const fetchSessionData = async () => {
+  const { data, error } = await supabase.auth.getSession();
+
+  if (!data.session) {
+    console.error(error);
+  }
+
+  return data.session?.user;
+};
+
+export const getPublicUrl = (name: string, path: string) => {
+  const {
+    data: { publicUrl }
+  } = supabase.storage.from(name).getPublicUrl(path);
+
+  return publicUrl;
 };

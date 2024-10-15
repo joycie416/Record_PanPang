@@ -1,18 +1,18 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { createClient } from "@/utils/supabase/client";
-import { deleteProfileImg, updateProfile, updateProfileImg, updateUser } from "@/utils/supabase/client-actions";
+import { deleteProfileImg, getPublicUrl, updateProfile, updateProfileImg, updateUser } from "@/utils/supabase/client-actions";
 import { User } from "@supabase/supabase-js";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
 
 const STORAGE = "profiles";
 const EditProfileModal = ({
   user,
   setShowModal
 }: {
-  user: User | null;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
+  user: User | undefined;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   /* 기존 프로필 이미지가 있고 별도의 파일을 추가하지 않은 경우, */
   /* 수정하기 버튼을 눌러도 기존 프로필 이미지 유지.            */
@@ -21,19 +21,48 @@ const EditProfileModal = ({
   const [nickname, setNickname] = useState<string>("");
   const [profileImg, setProfileImg] = useState<File | null>(null);
   const [imgPath, setImgPath] = useState<string>("");
-  const imgRef = useRef<HTMLInputElement>(null);
 
-  const supabase = createClient();
-  const {
-    data: { publicUrl: userImg }
-  } = supabase.storage.from(STORAGE).getPublicUrl(user?.user_metadata?.profile_img ?? "default");
-  const {
-    data: { publicUrl: defaultImg }
-  } = supabase.storage.from(STORAGE).getPublicUrl("default");
+  // 사용자 프로필 업데이트 시 정보 바로 갱신되도록
+  const queryClient = useQueryClient();
+  const {mutate: handleUpdateUser} = useMutation({
+    mutationFn:() => updateUser(user as User, nickname, profileImg),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['user', 'client']
+      })
+    }
+  })
+  const {mutate: handleUpdateProfile} = useMutation({
+    mutationFn:() => updateProfile(user as User, nickname, profileImg),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['user', 'client']
+      })
+    }
+  })
+  const {mutate: handleUpdateProfileImg} = useMutation({
+    mutationFn:() => updateProfileImg(user as User, profileImg),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['user', 'client']
+      })
+    }
+  })
+  const {mutate: handleDeleteProfileImg} = useMutation({
+    mutationFn:() => deleteProfileImg(user as User),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['user', 'client']
+      })
+    }
+  })
+
+  const userImg = getPublicUrl(STORAGE,user?.user_metadata?.profile_img ?? "default");
+  const defaultImg = getPublicUrl(STORAGE, "default");
 
   // 불러온 이미지 미리 보기
-  const previewImg = () => {
-    const file = imgRef.current?.files[0];
+  const previewImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = (e.target?.files as FileList)[0];
     console.log("file :", file);
     if (!file) {
       setImgPath(userImg);
@@ -59,10 +88,9 @@ const EditProfileModal = ({
             accept="image/*" // image 파일만 받을 수 있도록
             onChange={(e) => {
               setProfileImg(!e.target.files ? null : e.target.files[0]);
-              previewImg();
+              previewImg(e);
             }}
             alt="프로필 이미지"
-            ref={imgRef}
           />
           <Input
             type="text"
@@ -89,7 +117,9 @@ const EditProfileModal = ({
               onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {
-                  await Promise.all([updateUser(user, nickname, profileImg),updateProfile(user, nickname, profileImg),updateProfileImg(user, profileImg)])
+                  await Promise.all([handleUpdateUser(),handleUpdateProfile(),handleUpdateProfileImg()])
+                  setNickname("");
+                  setProfileImg(null);
                 }
                 alert("프로필이 수정되었습니다.");
                 setShowModal((prev) => !prev);
@@ -102,12 +132,12 @@ const EditProfileModal = ({
               onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {
+                  handleDeleteProfileImg();
                   setImgPath(defaultImg);
                   setProfileImg(null);
-                  await deleteProfileImg(user);
                 }
                 alert("프로필 이미지가 삭제되었습니다.");
-                setShowModal(prev => !prev)
+                // setShowModal(prev => !prev)
               }}
             >
               이미지 삭제

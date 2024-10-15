@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import EditProfileModal from "./editProfileModal";
 import { User } from "@supabase/supabase-js";
+import EditProfileModal from "./EditProfileModal";
 
-const EditProfileButton = ({user}: {user: User | null}) => {
+const EditProfileButton = ({user}: {user: User | undefined}) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   return (
     <>
