@@ -1,7 +1,7 @@
 "use client";
 
 import { Comment } from "@/types/comment";
-import { addComment, deleteComment, fetchComment, updateComment } from "@/utils/supabase/actions";
+import { addComment, deleteComment, fetchComment, updateComment } from "@/utils/supabase/server-actions";
 import React, { useEffect, useState } from "react";
 
 const CommentSection = ({ postId }: { postId: string }) => {
