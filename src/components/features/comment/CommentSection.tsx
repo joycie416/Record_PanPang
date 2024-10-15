@@ -84,7 +84,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto rounded-lg shadow-md">
+    <div className="p-4 mx-auto rounded-lg shadow-md">
       <textarea
         name="newComment"
         placeholder="댓글을 입력하세요"
@@ -95,58 +95,59 @@ const CommentSection = ({ postId }: { postId: string }) => {
       <button onClick={handleAddComment} className="py-2 mb-4 bg-sky-400 rounded hover:bg-sky-600">
         추가
       </button>
-
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment.comment_id} className="flex items-start gap-4 p-4 border-b">
-            <div className="flex-shrink-0">
-              <Image
-                src={comment.profile?.profile_img}
-                alt={comment.profile?.nickname}
-                width={50}
-                height={50}
-                className="rounded-full border border-gray-300"
-              />
-            </div>
-            <div className="flex-1">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-semibold">작성자: {comment.profile?.nickname}</span>
-                <small className="text-gray-400">{formatDate(comment.update_at)}</small>
+      <div className="w-100 h-64 overflow-y-auto border border-gray-300 rounded p-4">
+        <ul>
+          {comments.map((comment) => (
+            <li key={comment.comment_id} className="flex items-start gap-4 p-4 border-b">
+              <div className="flex-shrink-0">
+                <Image
+                  src={comment.profile?.profile_img}
+                  alt={comment.profile?.nickname}
+                  width={50}
+                  height={50}
+                  className="rounded-full border border-gray-300"
+                />
               </div>
-              <p className="mb-2">{comment.content}</p>
-              {editingCommentId === comment.comment_id ? (
-                <div className="flex gap-2">
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    className="flex-1 p-2 border border-gray-300 resize-none focus:outline-none"
-                  />
-                  <button
-                    onClick={() => handleUpdateComment(comment.comment_id)}
-                    className="py-2 px-4 bg-sky-400 hover:bg-sky-600"
-                  >
-                    완료
-                  </button>
-                  <button onClick={handleCancelEdit} className="py-2 px-4">
-                    취소
-                  </button>
+              <div className="flex-1 ">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-semibold">작성자: {comment.profile?.nickname}</span>
+                  <small className="text-gray-400">{formatDate(comment.update_at)}</small>
                 </div>
-              ) : (
-                userId === comment.user_id && (
-                  <div className="flex gap-2 mt-2">
-                    <button onClick={() => startEditing(comment.comment_id, comment.content)} className="py-2 px-4 ">
-                      수정
+                <p className="mb-2">{comment.content}</p>
+                {editingCommentId === comment.comment_id ? (
+                  <div className="flex gap-2">
+                    <textarea
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      className="flex-1 p-2 border border-gray-300 resize-none focus:outline-none"
+                    />
+                    <button
+                      onClick={() => handleUpdateComment(comment.comment_id)}
+                      className="py-2 px-4 bg-sky-400 hover:bg-sky-600"
+                    >
+                      완료
                     </button>
-                    <button onClick={() => handleDeleteComment(comment.comment_id)} className="py-2 px-4 ">
-                      삭제
+                    <button onClick={handleCancelEdit} className="py-2 px-4">
+                      취소
                     </button>
                   </div>
-                )
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
+                ) : (
+                  userId === comment.user_id && (
+                    <div className="flex gap-2 mt-2">
+                      <button onClick={() => startEditing(comment.comment_id, comment.content)} className="py-2 px-4 ">
+                        수정
+                      </button>
+                      <button onClick={() => handleDeleteComment(comment.comment_id)} className="py-2 px-4 ">
+                        삭제
+                      </button>
+                    </div>
+                  )
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
