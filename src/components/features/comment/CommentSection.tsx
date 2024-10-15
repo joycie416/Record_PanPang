@@ -44,6 +44,15 @@ const CommentSection = ({ postId }: { postId: string }) => {
     });
   };
 
+  const lineBreaks = (content: string, postId: string) => {
+    return content.split("\n").map((line, idx) => (
+      <span key={`${postId}_line_${idx}`}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
+
   // 댓글 작성 핸들러
   const handleAddComment = async () => {
     if (!newComment) return;
@@ -113,7 +122,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
                   <span className="font-semibold">작성자: {comment.profile?.nickname}</span>
                   <small className="text-gray-400">{formatDate(comment.update_at)}</small>
                 </div>
-                <p className="mb-2">{comment.content}</p>
+                <p className="mb-2">{lineBreaks(comment.content, postId)}</p>
                 {editingCommentId === comment.comment_id ? (
                   <div className="flex gap-2">
                     <textarea
