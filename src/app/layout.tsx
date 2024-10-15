@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Link from "next/link";
 import SignOutButton from "@/components/features/auth/signOutButton";
-import { supabase, createClient } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import Providers from "@/components/providers/QueryClientProvider";
 
 const geistSans = localFont({
@@ -27,14 +27,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = createClient()
-  const { data: {user}, error } = await supabase.auth.getUser();
-  console.log('root layout :', user);
+  const supabase = createClient();
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser();
+  console.log("root layout :", user);
 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <header className="flex justify-between p-4">
+        <header className='bg-white flex justify-between sticky top-0 left-0 right-0 p-4'>
           <Link href={"/"}>Home</Link>
           <ul className="flex gap-4">
             {!user ? (
@@ -58,10 +61,7 @@ export default async function RootLayout({
             )}
           </ul>
         </header>
-        <Providers>
-          {children}
-        </Providers>
-        
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

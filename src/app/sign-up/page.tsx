@@ -1,18 +1,14 @@
 import AuthForm from "@/components/features/auth/authForm"
+import { Metadata } from "next"
 
-type params = {
-  params: {
-    id: string;
-  };
-};
-
-export function generateMetaData({ params }: params) {
-  return { title: params.id, description: `RPP 회원가입` };
+export const metadata: Metadata = {
+  title: 'RPP 회원가입',
+  description: 'RPP 회원가입',
 }
 
 const SignUpPage = () => {
   return (
-    <div className="bg-gray-950 min-h-screen">
+    <div className="bg-gray-700 min-h-screen">
       <AuthForm />
     </div>
   )
