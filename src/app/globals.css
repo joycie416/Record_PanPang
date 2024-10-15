@@ -70,3 +70,25 @@ body {
     @apply bg-background text-foreground;
   }
 }
+@layer components {
+  .auth-input {
+    @apply text-gray-300 bg-transparent border border-gray-300 border-solid rounded-lg p-2 outline-none focus:border-sky-300;
+  }
+  .modal {
+    /* 화면 정 가운데 위치 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
