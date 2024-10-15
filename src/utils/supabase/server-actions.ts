@@ -51,7 +51,51 @@ export async function signout() {
   redirect("/");
 }
 
-// 댓글 CRUD
+// 현재 사용자 조회
+export async function fetchCurrentUser() {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    console.error(error);
+    return null;
+  }
+
+  return user;
+}
+
+// 게시글 조회
+export async function fetchPosts() {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("posts").select("*");
+
+  if (error || !data) {
+    console.error(error);
+    return []; // 에러 발생 시 빈 배열 반환
+  }
+
+  return data;
+}
+
+// post_id로 게시글 정보 조회
+export async function getPostById(postId: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("post_id, user_id, created_at, music_id, youtube_url, content")
+    .eq("post_id", postId)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data;
+}
 
 // 댓글 추가
 export async function addComment(content: string, postId: string) {
@@ -106,52 +150,6 @@ export async function updateComment(commentId: string, content: string) {
     throw new Error("댓글 수정에 실패했습니다.");
   }
   revalidatePath("/");
-}
-
-// 현재 사용자 조회
-export async function fetchCurrentUser() {
-  const supabase = createClient();
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    console.error(error);
-    return null;
-  }
-
-  return user;
-}
-
-// 게시글 조회
-export async function fetchPosts() {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("posts").select("*");
-
-  if (error || !data) {
-    console.error(error);
-    return []; // 에러 발생 시 빈 배열 반환
-  }
-
-  return data;
-}
-
-// post_id로 게시글 정보 조회
-export async function getPostById(postId: string) {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("posts")
-    .select("post_id, user_id, created_at, music_id, youtube_url, content")
-    .eq("post_id", postId)
-    .single();
-
-  if (error) {
-    console.error(error);
-    return null;
-  }
-
-  return data;
 }
 
 // MyComment
