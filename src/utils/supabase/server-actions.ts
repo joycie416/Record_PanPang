@@ -93,7 +93,7 @@ export async function fetchComment(postId: string) {
 
   const { data: comments, error: commentError } = await supabase
     .from("comments")
-    .select("comment_id, content, user_id")
+    .select("comment_id, content, user_id, created_at")
     .eq("post_id", postId);
 
   if (commentError) {

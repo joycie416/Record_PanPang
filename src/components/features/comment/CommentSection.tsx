@@ -3,17 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image"; // next/image 사용
 import { addComment, deleteComment, fetchComment, updateComment } from "@/utils/supabase/server-actions";
-
-interface Profile {
-  nickname: string;
-  profile_img: string;
-}
-
-interface Comment {
-  comment_id: string;
-  content: string;
-  profile: Profile;
-}
+import { Comment } from "@/types/comment";
 
 const CommentSection = ({ postId }: { postId: string }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -28,6 +18,17 @@ const CommentSection = ({ postId }: { postId: string }) => {
     }
     loadComments();
   }, [postId]);
+
+  //날짜
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  };
 
   // 댓글 작성 핸들러
   const handleAddComment = async () => {
@@ -88,7 +89,8 @@ const CommentSection = ({ postId }: { postId: string }) => {
                 width={50}
                 height={50}
               />
-              <span>{comment.profile?.nickname}</span>
+              <span>작성자: {comment.profile?.nickname}</span>
+              <small>작성일: {formatDate(comment.created_at)}</small>
             </div>
             {editingCommentId === comment.comment_id ? (
               <div>
