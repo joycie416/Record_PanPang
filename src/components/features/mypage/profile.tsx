@@ -1,16 +1,32 @@
-import { createClient } from "@/utils/supabase/server";
+'use client'
+
+import { supabase } from "@/utils/supabase/client";
 import Image from "next/image";
 import EditProfileButton from "./EditProfileButton";
+import { useQuery } from "@tanstack/react-query";
+import ProfileLoading from "./ProfileLoading";
+import ProfileError from "./ProfileError";
+import { fetchSessionData } from "@/utils/supabase/client-actions";
 
 const STORAGE = "profiles";
 
-const Profile = async () => {
+const Profile = () => {
+  // const queryClient = useQueryClient();
+  const { data: user, isLoading, isError } = useQuery({
+    queryKey: ["user", 'client'],
+    queryFn: () => fetchSessionData()
+  });
 
-  const supabase = createClient();
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
+  if (isLoading) {
+    return <ProfileLoading/>
+  }
+  if (isError) {
+    return <ProfileError/>
+  }
+
+  // console.log('TQ response :', user)
+  
+
 
   const {
     data: { publicUrl }
@@ -38,7 +54,7 @@ const Profile = async () => {
       <div className="w-full">
         <div className="w-full flex justify-between items-center">
           <p>
-            <span>{user?.user_metadata.nickname}</span> / <span>{user?.email}</span>
+            <span>{user?.user_metadata?.nickname}</span> / <span>{user?.email}</span>
           </p>
           <EditProfileButton user={user} />
         </div>
