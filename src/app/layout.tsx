@@ -5,6 +5,9 @@ import Link from "next/link";
 import SignOutButton from "@/components/features/auth/signOutButton";
 import { createClient } from "@/utils/supabase/server";
 import Providers from "@/components/providers/QueryClientProvider";
+import NavBar from "@/components/commonUI/NavBar";
+import { fetchCurrentUser, getPublicUrl } from "@/utils/supabase/server-actions";
+import Image from "next/image";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,39 +31,43 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const supabase = createClient();
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
+  const user = await fetchCurrentUser();
   console.log("root layout :", user);
+
+  const {data : {publicUrl: userImg}} = supabase.storage.from('profiles').getPublicUrl(user?.user_metadata.profile_img)
+  console.log('userImg :', userImg)
 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <header className='bg-white flex justify-between sticky top-0 left-0 right-0 p-4'>
+        <NavBar>
           <Link href={"/"}>Home</Link>
-          <ul className="flex gap-4">
+          <ul className="flex gap-4 items-center">
             {!user ? (
               <>
                 <li>
-                  <Link href={"/sign-up"}>회원가입</Link>
+                  <Link href={"/sign-in"}>로그인</Link>
                 </li>
                 <li>
-                  <Link href={"/sign-in"}>로그인</Link>
+                  <Link href={"/sign-up"}>회원가입</Link>
                 </li>
               </>
             ) : (
               <>
                 <li>
-                  <Link href={"/mypage"}>마이페이지</Link>
-                </li>
-                <li>
                   <SignOutButton />
+                </li>
+                <li className="flex gap-4 items-center">
+                  <Link href={"/mypage"}>
+                  <p>Profile</p>
+                  </Link>
+                  <Link href={"/mypage"} className="min-w-fit min-h-fit rounded-full">
+                  <Image src={userImg} alt='프로필 이미지' width={40} height={40} className="w-[40px] h-[40px] border-2 rounded-full aspect-auto object-cover"/></Link>
                 </li>
               </>
             )}
           </ul>
-        </header>
+        </NavBar>
         <Providers>{children}</Providers>
       </body>
     </html>
