@@ -42,12 +42,12 @@ const DetailPlayButton = ({ music, id }: { music: Track; id: string | undefined 
           priority
         />
         <div className="flex flex-col gap-y-3">
-          <p className="font-black text-6xl">{music.name}</p>
+          <p className="font-black text-5xl">{music.name}</p>
           <p>
             {music.album.name}
             <span className="ml-3">{music.album.release_date}</span>
           </p>
-          <p className="font-bold text-3xl">{music.artists.name}</p>
+          <p className="font-bold text-2xl">{music.artists.name}</p>
           <div className=" w-96 h-12 relative mt-auto rounded-sm bg-black">
             <div className="flex flex-row w-48 justify-between absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <button onClick={() => handlePlayer("play")}>

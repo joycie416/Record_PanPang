@@ -9,6 +9,8 @@ import { createPost, updatePost } from "@/utils/supabase/client-actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Post } from "@/types/post";
 import { usePostById } from "@/hook/usePostById";
+import SpotifySearch from "../spotifySearch/page";
+import { Track } from "@/types/Spotify";
 
 type Props = {
   postId?: string;
@@ -22,6 +24,8 @@ const PostForm = ({ postId }: Props) => {
   const [content, setContent] = useState("");
   const [youtubeUrlError, setYoutubeUrlError] = useState<string | null>(null);
   const [contentError, setContentError] = useState<string | null>(null);
+  const [cardError, setCardError] = useState<string | null>(null);
+  const [card, setCard] = useState<Track>();
 
   // 수정 시 초기 데이터를 세팅하는 useEffect 추가
   useEffect(() => {
@@ -77,39 +81,49 @@ const PostForm = ({ postId }: Props) => {
       setContentError(null);
     }
 
+    if (!card) {
+      setCardError("음악을 선택해주세요.");
+      isValid = false;
+    } else {
+      setCardError(null);
+    }
+
     if (!isValid) {
       return;
     }
 
     queryClient.invalidateQueries({ queryKey: ["posts"] });
 
-    const postData = { youtube_url: youtubeUrl, content };
+    const postData = { youtube_url: youtubeUrl, content, music_id: card?.id };
     await mutation.mutateAsync(postData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className=" flex flex-col gap-5">
-      <Input
-        placeholder="선택한 노래의 유튜브 URL을 추가해주세요 *"
-        value={youtubeUrl}
-        className={youtubeUrlError ? "border-red-500" : ""}
-        onChange={(e) => setYoutubeUrl(e.target.value)}
-      />
-      {youtubeUrlError && <p className="text-red-500 text-sm mt-1">{youtubeUrlError}</p>}
-      <div className="flex flex-col gap-5 items-center">
-        <Textarea
-          className={`h-32 resize-none ${contentError ? "border-red-500" : ""}`}
-          placeholder="내용을 입력해주세요 *"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+    <>
+      <SpotifySearch setCard={setCard} card={card} cardError={cardError} />
+      <form onSubmit={handleSubmit} className=" flex flex-col gap-5">
+        <Input
+          placeholder="선택한 노래의 유튜브 URL을 추가해주세요 *"
+          value={youtubeUrl}
+          className={youtubeUrlError ? "border-red-500" : ""}
+          onChange={(e) => setYoutubeUrl(e.target.value)}
         />
-        {contentError && <p className="text-red-500 text-sm mt-1">{contentError}</p>}
+        {youtubeUrlError && <p className="text-red-500 text-sm mt-1">{youtubeUrlError}</p>}
+        <div className="flex flex-col gap-5 items-center">
+          <Textarea
+            className={`h-32 resize-none ${contentError ? "border-red-500" : ""}`}
+            placeholder="내용을 입력해주세요 *"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+          {contentError && <p className="text-red-500 text-sm mt-1">{contentError}</p>}
 
-        <Button size="lg" className="w-24">
-          {postId ? "수정하기" : "작성하기"}
-        </Button>
-      </div>
-    </form>
+          <Button size="lg" className="w-24">
+            {postId ? "수정하기" : "작성하기"}
+          </Button>
+        </div>
+      </form>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { SpotifyTracks, Track } from "@/types/Spotify";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { Music } from "lucide-react";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
@@ -9,12 +9,16 @@ import { Input } from "@/components/ui/input";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
-const SpotifySearch = () => {
+type Props = {
+  setCard: Dispatch<SetStateAction<Track | undefined>>;
+  card: Track | undefined;
+  cardError: string | null;
+};
+const SpotifySearch = ({ setCard, card, cardError }: Props) => {
   const [token, setToken] = useState("");
   const [search, setSearch] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
-  const [card, setCard] = useState<Track>();
 
   //처음 렌더링시에 fetchToke함수를 실행시켜주고 token을 가져와서 상태값 token에 담아줌
   useEffect(() => {
@@ -107,6 +111,7 @@ const SpotifySearch = () => {
           className="h-12
         "
         />
+        {cardError && <p className="text-red-500 text-sm mt-1 absolute right-6 top-0 translate-y-1/2 ">{cardError}</p>}
         <Command className="rounded-lg border shadow-md">
           {open ? (
             <CommandList className="absolute top-full left-0 w-full bg-white rounded-b-lg border-t-0 max-h-[300px] overflow-y-auto shadow-lg">
@@ -154,7 +159,7 @@ const SpotifySearch = () => {
             </div>
           </Card>
         ) : (
-          <Card className="flex w-[1000px] h-[240px]"></Card>
+          <Card className="flex h-[200px]"></Card>
         )}
       </div>
     </div>

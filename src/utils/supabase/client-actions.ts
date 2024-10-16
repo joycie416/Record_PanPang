@@ -70,17 +70,17 @@ export const updateProfileImg = async (user: User, profileImg: File | null) => {
 
   if (hasProfileImg && profileImg) {
     // 프로필 이미지 O, 새 이미지 O
-    const { data: updateImg, error: updateError } = await supabase.storage.from(STORAGE).update(user.id, profileImg);
+    await supabase.storage.from(STORAGE).update(user.id, profileImg);
   } else if (!hasProfileImg && profileImg) {
     // 프로필 이미지 X, 새 이미지 O
-    const { data: uploadImg, error: uploadError } = await supabase.storage.from(STORAGE).upload(user.id, profileImg);
+    await supabase.storage.from(STORAGE).upload(user.id, profileImg);
   }
 };
 
 // storage 이미지 삭제
 export const deleteProfileImg = async (user: User) => {
   if (user.user_metadata.profile_img !== DEFAULT) {
-    const { data, error } = await supabase.storage.from(STORAGE).remove([user.id]);
+    const { error } = await supabase.storage.from(STORAGE).remove([user.id]);
     console.error("delete error :", error);
     await supabase.auth.updateUser({
       data: {
