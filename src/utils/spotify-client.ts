@@ -1,7 +1,6 @@
 "use client";
 
 import { OriginalTrack } from "@/types/track";
-import { formatTrackData } from "./formatTrackData";
 
 export const fetchToken = async () => {
   const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
@@ -34,6 +33,5 @@ export const getSpotifyTrack = async (id: string, token: string) => {
   const data: OriginalTrack = await res.json();
 
   // 포맷팅 함수로 필요한 데이터만 받아옴
-  const music = formatTrackData(data);
-  return music;
+  return data;
 };
