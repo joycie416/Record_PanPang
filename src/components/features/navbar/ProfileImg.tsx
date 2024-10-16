@@ -1,7 +1,8 @@
 "use client";
 
+import { supabase } from "@/utils/supabase/client";
 import { fetchSessionData, getPublicUrl } from "@/utils/supabase/client-actions";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -9,9 +10,21 @@ import React from "react";
 const ProfileImg = () => {
   const defaultImg = getPublicUrl("profiles", "default");
 
-  const { data: user, isLoading, isError } = useQuery({
-    queryKey: ["user", 'client'],
+  const {
+    data: user,
+    isLoading,
+    isError
+  } = useQuery({
+    queryKey: ["user", "client"],
     queryFn: () => fetchSessionData()
+  });
+
+  const queryClient = useQueryClient();
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    // 모든 auth state 변화에 따라 session 다시 저장
+    queryClient.invalidateQueries({ queryKey: ["user", "client"] });
+    console.log('current user info :', user?.user_metadata)
   });
 
   if (isLoading || isError) {
@@ -28,7 +41,7 @@ const ProfileImg = () => {
     );
   }
 
-  const userImg = getPublicUrl('profiles', user?.user_metadata.profile_img)
+  const userImg = getPublicUrl("profiles", user?.user_metadata.profile_img);
 
   return (
     <Link href={"/mypage"} className="min-w-fit min-h-fit rounded-full">
