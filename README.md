@@ -1,4 +1,4 @@
-# 커튼콜 🎭 [outsourcing-project]
+# 레코드팡팡 🎭 [Record PanPang]
 
 [메인페이지] ![스크린샷 2024-09-20 오후 4 45 08](https://github.com/user-attachments/assets/6e929713-6ba0-4e00-b423-bd1f2cec40a2)
 
@@ -27,10 +27,10 @@
 
 ### 👨‍👩‍👧‍👦 팀원 소개
 
-|  송진우   |             이보영             |        정수희         |   조아영    |            조해인            |
-| :-------: | :----------------------------: | :-------------------: | :---------: | :--------------------------: |
-| **팀원**  |            **팀원**            |       **팀원**        |  **팀원**   |           **팀장**           |
-| 댓글 전반 | 음악 검색 기능, 음악 정보 생성 | 음악 플레이어, 좋아요 | 게시글 전반 | 회원가입/로그인, 프로필 수정 |
+|  송진우   |     이보영     |        정수희         |   조아영    |            조해인            |
+| :-------: | :------------: | :-------------------: | :---------: | :--------------------------: |
+| **팀원**  |    **팀원**    |       **팀원**        |  **팀원**   |           **팀장**           |
+| 댓글 전반 | 음악 검색 기능 | 음악 플레이어, 좋아요 | 게시글 전반 | 회원가입/로그인, 프로필 수정 |
 
 ---
 
@@ -61,6 +61,8 @@
 - tanstack query 설치 : yarn add @tanstack/react-query
   - tailwind.config.js 파일 생성 : npx tailwindcss init -p
 - zustand 설치 : yarn add zustand
+- zod 설치 : yarn add zod
+- react-hook-form 설치 : yarn add react-hook-form @hookform/resolvers
 - shadcn/ui(캐러셀 라이브러리) : yarn add shadcn/ui
   - gray, cssVariables X
 
@@ -179,32 +181,58 @@ const Embla = ({ data }) => {
 };
 ```
 
-3. 장르별로 분류된 공연 보여주기
+2. 유효성 검사 - 2
 
-```jsx
-// Genre.jsx
-// MainPage.jsx에서 prop으로 받은 데이터를 장르에 따라 filter해 GenreDiv에 보여줌
-const Genre = ({data}) => {
-  const [clicked, setClicked] = useState(0);
-  const genreArray = Object.values(genreCodes);
+`profiles` 테이블에 저장된 `email`을 불러와서 해당 이메일이 존재하는 확인합니다.
 
+```tsx
+// ./src/components/auth/Auth
 
-  return (
-      <div>
-        <div>
-          {
-            genreArray..map((item, idx) => (
-              <GenreButton idx={idx} clicked={clicked} setClicked={setClicked} key={item}>
-                {item}
-              </GenreButton>
-            ))
-          }
-        </div>
-        <div>
-          <GenreDiv plays={data.filter(play => play.genrenm === genreArray[clicked]).slice(0,10)} idx={clicked}/>
-        </div>
-      </div>
-  )
+const AuthForm = () => {
+  ...
+  const { register, handleSubmit, formState } = useForm({
+    mode: "onChange", //'onBlur' : focus가 사라졌을 때
+    defaultValues,
+    resolver: zodResolver(schema)
+  });
+  ...
+  const onSubmit = async (data: FieldValues) => {
+    const emailData = await checkEmail(data.email);
+
+    if (path === SIGN_UP) {
+      if (emailData.length !== 0) {
+        setEmailMessage("이미 존재하는 계정입니다.");
+      } else {
+        await signup({
+          email: data.email,
+          password: data.password,
+          options: { data: { nickname: data.nickname, email: data.email, profile_img: "default" } }
+        });
+      }
+    } else {
+      if (emailData.length === 0) {
+        setEmailMessage("존재하지 않는 계정입니다.");
+      } else {
+        await signin({ email: data.email, password: data.password });
+      }
+    }
+  };
+  ...
+};
+```
+
+```tsx
+// ./src/utils/supabase/client-actions.ts
+
+export async function checkEmail(email: string) {
+  const { data, error } = await supabase.from(PROFILES).select("email").eq("email", email);
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
 }
 ```
 
@@ -228,6 +256,44 @@ const Genre = ({data}) => {
 
 [마이페이지]
 
+사용자 정보와 사용자가 작성한 게시글과 댓글, 좋아요한 게시글을 확인할 수 있습니다.
+
+1. 프로필 수정 기능
+
+`프로필 수정하기` 버튼을 클릭하면 모달창을 통해 사용자 정보를 수정할 수 있습니다.
+
+실시간으로 변화를 감지할 수 있도록 TanStack Query를 사용해 데이터를 불러와 변화가 발생하면 `invalidateQueries`를 통해 변경된 정보를 가져오도록 합니다.
+
+```tsx
+// ./src/components/features/mypage/EditProfileModal.tsx
+
+const EditProfileModal = ({
+  user,
+  setShowModal
+}: {
+  user: User | undefined;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  ...
+  // 사용자 프로필 업데이트 시 정보 바로 갱신되도록
+  const queryClient = useQueryClient();
+  // 사용자 정보 업데이트 성공 시 invalidateQueries
+  const { mutate: handleUpdateUser } = useMutation({
+    mutationFn: () => updateUser(user as User, nickname, profileImg),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user", "client"]
+      });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    }
+  });
+  ...
+};
+
+
+```
+
 ---
 
 [네비게이션 바]
@@ -240,7 +306,7 @@ const Genre = ({data}) => {
 
 ## 💥 Trouble Shooting
 
-[예시]
+[회원가입/로그인]
 
 🔥 문제점
 
@@ -284,8 +350,74 @@ export const getClassifiedData = async () => {
 
 [마이페이지]
 
+🔥 다른 사용자로 로그인하면 기존 사용자 정보가 마이 페이지 사용자 정보에 적용됨.
+
+TanStack Query를 사용해 데이터를 불러와서 auth state가 변경되면 `invalidateQueries`를 실행함. 이때 클라이언트 컴포넌트에서만 TanStack Query를 사용할 수 있고, 항상 상단에 노출되어있는 client 컴포넌트가 네비게이션 바의 프로필 이미지이므로 해당 컴포넌트에 `onAuthStateChange`를 적용함.
+
+```tsx
+// ./xrc/components/features/navbar/ProfileImg.tsx
+
+const ProfileImg = () => {
+  ...
+  supabase.auth.onAuthStateChange(() => {
+    // 모든 auth state 변화에 따라 session 다시 저장
+    queryClient.invalidateQueries({ queryKey: ["user", "client"] });
+  });
+  ...
+};
+```
+
 ---
 
 [네비게이션 바]
+
+🔥 사용자 정보 변경 시 프로필 이미지가 같이 반영되지 않음
+
+TanStack Query의 Provider 내부에 헤더를 포함시켜 `invalidateQueries`의 영향을 받도록 함.
+
+```tsx
+// ./src/app/layout.tsx
+
+export default async function RootLayout({
+  children
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+        <Providers>
+          <Header />
+          <Background>{children}</Background>
+          <Footer />
+        </Providers>
+      </body>
+    </html>
+  );
+}
+```
+
+```tsx
+// ./xrc/components/features/navbar/ProfileImg.tsx
+
+const ProfileImg = () => {
+  const defaultImg = getPublicUrl("profiles", "default");
+
+  const {
+    data: user,
+    isLoading,
+    isError
+  } = useQuery({
+    queryKey: ["user", "client"],
+    queryFn: () => fetchSessionData()
+  });
+
+  supabase.auth.onAuthStateChange(() => {
+    // 모든 auth state 변화에 따라 session 다시 저장
+    queryClient.invalidateQueries({ queryKey: ["user", "client"] });
+  });
+  ...
+};
+```
 
 ---
