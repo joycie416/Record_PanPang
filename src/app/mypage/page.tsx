@@ -1,5 +1,5 @@
 import MyPageTabs from "@/components/features/mypage/MyPageTabs";
-import Profile from "@/components/features/mypage/profile";
+import Profile from "@/components/features/mypage/Profile";
 import { Metadata } from "next";
 import { fetchCurrentUser } from "@/utils/supabase/server-actions";
 import { getSpotifyToken } from "@/utils/spotify-server";
