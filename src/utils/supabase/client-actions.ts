@@ -260,3 +260,13 @@ export async function fetchComment(postId: string): Promise<Comment[]> {
 
   return commentsWithProfile;
 }
+
+// 포스트 댓글 개수 조회
+export const fetchPostCommentCount = async (id: string) => {
+  const { data } = await supabase.from("comments").select("*").eq("post_id", id);
+  if (data) {
+    return data.length;
+  } else if (!data) {
+    return;
+  }
+};
