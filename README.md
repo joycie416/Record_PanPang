@@ -27,9 +27,9 @@
 
 ### 👨‍👩‍👧‍👦 팀원 소개
 
-|   송진우   |      이보영      |        정수희        |  조아영  |         조해인         |
-| :--------: | :--------------: | :------------------: | :------: | :--------------------: |
-|  **팀원**  |     **팀원**     |       **팀원**       | **팀원** |        **팀장**        |
+|  송진우   |     이보영     |        정수희         |   조아영    |            조해인            |
+| :-------: | :------------: | :-------------------: | :---------: | :--------------------------: |
+| **팀원**  |    **팀원**    |       **팀원**        |  **팀원**   |           **팀장**           |
 | 댓글 전반 | 음악 검색 기능 | 음악 플레이어, 좋아요 | 게시글 전반 | 회원가입/로그인, 프로필 수정 |
 
 ---
@@ -121,8 +121,8 @@ export const getData = async () => {
         stdate: getDateString(), // 오늘 날짜 반환하는 함수
         eddate: getDateString(),
         rows: 1000,
-        cpage: 1,
-      },
+        cpage: 1
+      }
     });
     return parseXMLToJSON(data).dbs.db;
   } catch (error) {
@@ -138,10 +138,10 @@ export const getData = async () => {
 const {
   data: mainData,
   isPending,
-  isError,
+  isError
 } = useQuery({
   queryKey: ["main-data"],
-  queryFn: getData,
+  queryFn: getData
 });
 ```
 
@@ -151,9 +151,7 @@ const {
 // Embla.jsx
 // MainPage.jsx에서 prop으로 데이터 전달 받음
 const Embla = ({ data }) => {
-  const [emblaRef] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ stopOnMouseEnter: true, stopOnInteraction: false }),
-  ]);
+  const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay({ stopOnMouseEnter: true, stopOnInteraction: false })]);
 
   const indices = []; // 랜덤 인덱스 저장
   while (indices.length < 8) {
@@ -173,9 +171,7 @@ const Embla = ({ data }) => {
           [0, 2, 4, 6].map(
             (
               i // 각 슬라이드에 두개씩 보여줌
-            ) => (
-              <Slide play={[carousel[i], carousel[i + 1]]} key={`slide-${i}`} />
-            )
+            ) => <Slide play={[carousel[i], carousel[i + 1]]} key={`slide-${i}`} />
           )}
       </div>
     </div>
@@ -212,11 +208,9 @@ const Genre = ({data}) => {
 }
 ```
 
-
 ---
 
 [플레이어]
-
 
 ---
 
@@ -230,7 +224,84 @@ const Genre = ({data}) => {
 
 [댓글]
 
----
+1. Supabase를 이용한 CRUD 구현
+
+servert-action - 댓글 추가, 수정, 삭제
+
+```jsx
+// 댓글 추가
+export async function addComment(content: string, postId: string) {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.from("comments").insert([{ content, post_id: postId, user_id: user.id }]);
+
+  if (error) throw new Error("댓글 추가에 실패했습니다.");
+
+  revalidatePath(`/posts/${postId}`);
+}
+
+// 댓글 삭제
+export async function deleteComment(commentId: string) {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.from("comments").delete().eq("comment_id", commentId).eq("user_id", user.id);
+
+  if (error) {
+    throw new Error("댓글 삭제에 실패했습니다.");
+  }
+}
+
+// 댓글 수정
+export async function updateComment(commentId: string, content: string) {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인 해주세요.");
+  }
+  const { error } = await supabase
+    .from("comments")
+    .update({ content })
+    .eq("comment_id", commentId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error("댓글 수정에 실패했습니다.");
+  }
+  revalidatePath("/");
+}
+```
+
+client-action - 댓글 조회
+
+```jsx
+// 댓글 조회
+export async function fetchComment(postId: string): Promise<Comment[]> {
+  const STORAGE = "profiles";
+
+  const { data: comments, error: commentError } = await supabase
+    .from("comments")
+    .select("comment_id, content, user_id, created_at, update_at")
+    .eq("post_id", postId)
+    .order("created_at", { ascending: false }); // 생성 시간 기준으로 정렬
+
+  if (commentError) {
+    console.error(commentError.message);
+    throw new Error("댓글을 불러오는데 실패했습니다.");
+  }
+```
 
 [마이페이지]
 
@@ -239,7 +310,8 @@ const Genre = ({data}) => {
 [네비게이션 바]
 
 ---
-```
+
+````
 
 ---
 
@@ -267,12 +339,11 @@ export const getClassifiedData = async () => {
   const responses = Promise.all(genreArray.map((genre) => getGenreData(genre)));
   return responses;
 };
-```
+````
 
 ---
 
 [플레이어]
-
 
 ---
 
@@ -285,6 +356,13 @@ export const getClassifiedData = async () => {
 ---
 
 [댓글]
+
+🔥 문제점<br>
+댓글 작성 시 시간이 로컬과 다르게 표시되는 문제
+댓글을 작성하면 표시되는 시간이 실제 로컬 시간과 일치하지 않는 문제가 있었습니다. Supabase가 기본적으로 UTC 시간을 사용해 데이터를 저장하기 때문에 발생한 문제였습니다.
+
+해결<br>
+댓글 작성 시간을 표시할 때 로컬 시간대로 변환하는 formatDate 함수를 사용했습니다. toLocaleString()을 사용하여 한국 표준시(KST)로 변환하여 표시했습니다.
 
 ---
 
