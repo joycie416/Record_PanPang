@@ -3,15 +3,18 @@
 import { SpotifyTracks, Track } from "@/types/Spotify";
 import React, { useEffect, useState } from "react";
 
-import { Calendar } from "lucide-react";
-
-import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Music } from "lucide-react";
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
 
 const SpotifySearch = () => {
   const [token, setToken] = useState("");
   const [search, setSearch] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [card, setCard] = useState<Track>();
 
   //처음 렌더링시에 fetchToke함수를 실행시켜주고 token을 가져와서 상태값 token에 담아줌
   useEffect(() => {
@@ -40,9 +43,12 @@ const SpotifySearch = () => {
   }, []);
 
   //사용자가 입력한 검색단어들이 search로 들어감, 입력값이 0보다 길어지면 dropdown됨
-  const handleInputChange = (value: string) => {
-    setSearch(value);
-    setOpen(value.length > 0);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value === "0") {
+      return;
+    }
+    setSearch(e.target.value);
+    setOpen(e.target.value.length > 0);
   };
 
   useEffect(() => {
@@ -51,7 +57,7 @@ const SpotifySearch = () => {
     }
     // spotify에서 track data를 가져오는 비동기 함수
     const getTrack = async () => {
-      const res = await fetch(`https://api.spotify.com/v1/search?q=${search}&type=track&limit=10&offset=0`, {
+      const res = await fetch(`https://api.spotify.com/v1/search?q=${search}&type=track&limit=50&offset=0`, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + `${token}`
@@ -67,51 +73,87 @@ const SpotifySearch = () => {
       console.log("tracks", tracks);
       setTracks(tracks);
       // console.log("Album", tracks[0].album);
-      //res를 state로 담아서 관리 필요
+      //track를 state로 담아서 관리 필요
     };
     getTrack();
     //사용자가 검색 단어를 입력할 때마다 getTrack을 실행시켜줌
   }, [search, token]);
 
-  console.log("tracks!!!", tracks);
+  const shiftTrackToInfocard = (id: string) => {
+    const trackInfo = tracks.find((item) => {
+      return item.id === id;
+    });
 
+    console.log("trackInfo", trackInfo);
+
+    if (trackInfo) {
+      setCard(trackInfo);
+    }
+
+    setOpen(false);
+    setSearch("");
+  };
+
+  const formatDuration = (durationMs: number) => {
+    const minutes = Math.floor(durationMs / 60000);
+    const seconds = Math.floor((durationMs % 60000) / 1000);
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  };
+
+  console.log("open", open);
   return (
-    <div>
+    <div className="flex flex-col gap-12 justify-center items-center">
       <div className="relative w-full max-w-lg">
+        <Input value={search} onChange={handleInputChange} placeholder="노래를 입력해주세요." />
         <Command className="rounded-lg border shadow-md">
-          <CommandInput placeholder="노래를 입력해주세요." value={search} onValueChange={handleInputChange} />
+          {/* <CommandInput placeholder="노래를 입력해주세요." value={search} onValueChange={handleInputChange} /> */}
           {open ? (
             <CommandList className="absolute top-full left-0 w-full bg-white rounded-b-lg border-t-0 max-h-[300px] overflow-y-auto shadow-lg">
               <CommandEmpty>No results found.</CommandEmpty>
-              {tracks.map((track) => (
-                <CommandItem key={track.id}>
-                  <Calendar className="mr-2 h-4 w-4" />
-                  {track.name}
-                </CommandItem>
-              ))}
+              <CommandGroup heading="Suggestions">
+                {tracks.map((track) => (
+                  <CommandItem key={track.id} onSelect={() => shiftTrackToInfocard(track.id)}>
+                    <Music className="mr-2 h-4 w-4" />
+                    {track.name} - {track.artists[0]?.name}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
             </CommandList>
           ) : (
             <CommandList></CommandList>
           )}
         </Command>
       </div>
+      <div>
+        <Card className="flex w-[1000px] h-[240px]">
+          <div className="p-[18px]">
+            <Image
+              src={card?.album.images[1]?.url || ""}
+              alt="Project image"
+              width={200}
+              height={200}
+              // layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+          </div>
+          <div className="flex flex-col gap-3 ">
+            <CardHeader>
+              <CardTitle className="text-3xl font-extrabold">{card?.name}</CardTitle>
+              <CardDescription className="text-lg">{card?.artists[0].name}</CardDescription>
+            </CardHeader>
+            <CardContent></CardContent>
+            <CardFooter className=" flex flex-col items-start">
+              <CardDescription>{formatDuration(card?.duration_ms || 0)}</CardDescription>
+              <CardDescription>
+                {card?.album.name} - {card?.album.type} / {card?.album.release_date}
+              </CardDescription>
+            </CardFooter>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
 
 export default SpotifySearch;
-
-// ..............{track.artists.name}
-
-{
-  /* <div>
-      <input
-        className="border-2 border-black"
-        type="text"
-        placeholder="노래를 검색해주세요"
-        value={search}
-        onChange={handleInputChange}
-      />
-      <button>버튼</button>
-      </div> */
-}
