@@ -29,7 +29,7 @@ export async function updateSession(request: NextRequest) {
     data: { user }
   } = await supabase.auth.getUser();
 
-  console.log("current user :", user?.id);
+  console.log("middleware current user :", user?.user_metadata.nickname, user?.user_metadata.profile_img);
 
   if (!!user && (request.nextUrl.pathname.startsWith("/sign-in") || request.nextUrl.pathname.startsWith("/sign-up"))) {
     // 사용자 정보가 있는데, 로그인, 회원가입에 접근하려는 경우 메인페이지로 이동
