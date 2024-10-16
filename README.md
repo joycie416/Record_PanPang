@@ -234,9 +234,86 @@ const Genre = ({data}) => {
 
 [마이페이지]
 
+사용자 정보와 사용자가 작성한 게시글과 댓글, 좋아요한 게시글을 확인할 수 있습니다.
+
+1. 프로필 수정 기능
+
+`프로필 수정하기` 버튼을 클릭하면 모달창을 통해 사용자 정보를 수정할 수 있습니다.
+
+실시간으로 변화를 감지할 수 있도록 TanStack Query를 사용해 데이터를 불러와 변화가 발생하면 `invalidateQueries`를 통해 변경된 정보를 가져오도록 합니다.
+
+```tsx
+// ./src/components/features/mypage/EditProfileModal.tsx
+
+...
+const EditProfileModal = ({
+  user,
+  setShowModal
+}: {
+  user: User | undefined;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+
+...
+
+  // 사용자 프로필 업데이트 시 정보 바로 갱신되도록
+  const queryClient = useQueryClient();
+  // 사용자 정보 업데이트 성공 시 invalidateQueries
+  const { mutate: handleUpdateUser } = useMutation({
+    mutationFn: () => updateUser(user as User, nickname, profileImg),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["user", "client"]
+      });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    }
+  });
+
+...
+
+};
+
+
+```
+
+
 ---
 
 [네비게이션 바]
+
+로그인 정보가 없을 시 회원가입, 로그인 버튼이 우측 상단에 위치하며, 로그인 정보가 있을 시 로그아웃, 마이페이지 버튼과 프로필 이미지가 우측 상단에 위치합니다.
+
+1. Link 태그로 연결하여 페이지 로딩 최적화
+
+페이지 정보를 미리 불러와서 이동 시 시간을 줄일 수 있도록 했습니다.
+
+
+```tsx
+// ./src/components/features/navbar/ProfileImg.tsx
+
+...
+
+const ProfileImg = () => {
+
+  ...
+
+  const userImg = getPublicUrl("profiles", user?.user_metadata.profile_img);
+
+  return (
+    <Link href={"/mypage"} className="min-w-fit min-h-fit rounded-full">
+      <Image
+        src={userImg}
+        alt="프로필 이미지"
+        width={40}
+        height={40}
+        className="w-[40px] h-[40px] border-2 rounded-full aspect-auto object-cover"
+      />
+    </Link>
+  );
+};
+```
+
 
 ---
 
@@ -290,8 +367,85 @@ export const getClassifiedData = async () => {
 
 [마이페이지]
 
+🔥 문제점
+
+1. 다른 사용자로 로그인하면 기존 사용자 정보가 마이 페이지 사용자 정보에 적용됨.
+
+TanStack Query를 사용해 데이터를 불러와서 auth state가 변경되면 `invalidateQueries`를 실행함. 이때 클라이언트 컴포넌트에서만 TanStack Query를 사용할 수 있고, 항상 상단에 노출되어있는 client 컴포넌트가 네비게이션 바의 프로필 이미지이므로 해당 컴포넌트에 `onAuthStateChange`를 적용함.
+
+```tsx
+// ./xrc/components/features/navbar/ProfileImg.tsx
+
+const ProfileImg = () => {
+  ...
+
+  supabase.auth.onAuthStateChange(() => {
+    // 모든 auth state 변화에 따라 session 다시 저장
+    queryClient.invalidateQueries({ queryKey: ["user", "client"] });
+  });
+
+  ...
+
+};
+```
+
 ---
 
 [네비게이션 바]
+
+🔥 문제점
+
+1. 사용자 정보 변경 시 프로필 이미지가 같이 반영되지 않음
+
+TanStack Query의 Provider 내부에 헤더를 포함시켜 `invalidateQueries`의 영향을 받도록 함.
+
+```tsx
+// ./src/app/layout.tsx
+
+...
+
+export default async function RootLayout({
+  children
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+        <Providers>
+          <Header />
+          <Background>{children}</Background>
+          <Footer />
+        </Providers>
+      </body>
+    </html>
+  );
+}
+```
+
+```tsx
+// ./xrc/components/features/navbar/ProfileImg.tsx
+
+const ProfileImg = () => {
+  const defaultImg = getPublicUrl("profiles", "default");
+
+  const {
+    data: user,
+    isLoading,
+    isError
+  } = useQuery({
+    queryKey: ["user", "client"],
+    queryFn: () => fetchSessionData()
+  });
+
+  supabase.auth.onAuthStateChange(() => {
+    // 모든 auth state 변화에 따라 session 다시 저장
+    queryClient.invalidateQueries({ queryKey: ["user", "client"] });
+  });
+
+  ...
+
+};
+```
 
 ---
