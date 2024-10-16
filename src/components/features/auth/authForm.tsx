@@ -12,7 +12,7 @@ import { z } from "zod";
 
 const SIGN_UP = "/sign-up";
 const AUTH_CSS =
-  "w-full max-w-[300px] min-w-[150px] text-gray-300 bg-transparent border border-gray-300 border-solid p-2 outline-none focus:border-sky-300";
+  "w-full max-w-[400px] min-w-[200px] h-[45px] text-lg text-gray-300 bg-transparent border border-gray-300 border-solid p-3 outline-none focus:border-sky-300";
 
 const AuthForm = () => {
   const [emailMessage, setEmailMessage] = useState("");
@@ -90,7 +90,7 @@ const AuthForm = () => {
             )}
           </>
         )}
-        <Button type="submit" className="w-full max-w-[300px] min-w-[150px] bg-gray-300 hover:bg-gray-400 mt-4 p-2">
+        <Button type="submit" className="w-full max-w-[400px] min-w-[200px] h-[45px] text-lg bg-gray-300 hover:bg-gray-400 mt-4 p-2">
           {path === SIGN_UP ? "회원가입" : "로그인"}
         </Button>
       </form>
