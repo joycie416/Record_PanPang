@@ -17,7 +17,11 @@ export async function signin(formData: SignInWithPasswordCredentials) {
   const { error } = await supabase.auth.signInWithPassword(formData);
 
   if (error) {
-    redirect("/error");
+    console.log("Sign Up Error");
+    console.error(error);
+
+    throw new Error('로그인 중 오류가 발생했습니다.')
+    // redirect("/error");
   }
 
   revalidatePath("/", "layout");
@@ -38,7 +42,9 @@ export async function signup(formData: SignUpWithPasswordCredentials) {
   if (error) {
     console.log("Sign Up Error :");
     console.error(error);
-    redirect("/error");
+
+    // throw new Error('회원가입 중 오류가 발생했습니다.')
+    // redirect("/error");
   }
 
   revalidatePath("/", "layout");

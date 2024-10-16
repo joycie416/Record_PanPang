@@ -1,25 +1,29 @@
 "use client";
 
+import { supabase } from "@/utils/supabase/client";
 import { signin, signup } from "@/utils/supabase/server-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname } from "next/navigation";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 
-const SIGN_UP = "/sign-up"
+const SIGN_UP = "/sign-up";
 
 const AuthForm = () => {
   const path = usePathname();
   const schema =
     path === SIGN_UP
       ? z.object({
-          email: z.string().email({ message: "Invalid email" }).min(1, { message: "Email is required" }),
-          password: z.string().min(1, "Password is required"),
-          nickname: z.string().min(1, "Nickname is required")
+          email: z
+            .string()
+            .email({ message: "이메일 형식으로 입력해주세요" })
+            .min(1, { message: "이메일을 입력해주세요" }),
+          password: z.string().min(6, "6자 이상 입력해주세요"),
+          nickname: z.string().min(1, "닉네임을 입력해주세요.").max(10, "최대 10자 입력 가능합니다.")
         })
       : z.object({
-          email: z.string().min(1, "Email is required"),
-          password: z.string().min(1, "Password is required")
+          email: z.string().min(1, "이메일을 입력해주세요"),
+          password: z.string().min(1, "비밀번호를 입력해주세요")
         });
 
   const defaultValues =
@@ -40,16 +44,23 @@ const AuthForm = () => {
     resolver: zodResolver(schema)
   });
 
-  const onSubmit = (data: FieldValues) => {
+  const onSubmit = async (data: FieldValues) => {
     console.log("onSubmit :", data);
+
     if (path === SIGN_UP) {
-      signup({
+      // const {
+      //   data: { users },
+      //   error
+      // } = await supabase.auth.admin.listUsers();
+      // console.log("user list :", users);
+
+      await signup({
         email: data.email,
         password: data.password,
-        options: { data: { nickname: data.nickname, profile_img: "default" } }
+        options: { data: { nickname: data.nickname, email: data.email, profile_img: "default" } }
       });
     } else {
-      signin({ email: data.email, password: data.password });
+      await signin({ email: data.email, password: data.password });
     }
   };
 
