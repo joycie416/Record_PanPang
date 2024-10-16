@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 const EditProfileButton = ({ user }: { user: User | undefined }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  
+
   return (
     <>
       <Button
