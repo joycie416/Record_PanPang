@@ -32,7 +32,7 @@ const MyLike = () => {
   }, []);
 
   return (
-    <ul>
+    <ul className="flex flex-col gap-6">
       {userPosts.map((post) => {
         return (
           <li key={post.post_id}>

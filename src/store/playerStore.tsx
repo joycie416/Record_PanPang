@@ -10,7 +10,7 @@ interface YoutubeStore {
   token: string;
   setPlayedVideo: (id: string) => void;
   setIsPlay: () => void;
-  setPlayedPlayer: (player: YouTubePlayer) => void;
+  setPlayedPlayer: (player: YouTubePlayer | null) => void;
 }
 
 const useYoutubnStore = create<YoutubeStore>((set) => ({
@@ -19,7 +19,7 @@ const useYoutubnStore = create<YoutubeStore>((set) => ({
   token: "",
   setPlayedVideo: (id: string) => set({ playedVideo: { isPlay: true, id } }),
   setIsPlay: () => set((state) => ({ playedVideo: { ...state.playedVideo, isPlay: !state.playedVideo.isPlay } })),
-  setPlayedPlayer: (player: YouTubePlayer) => set({ playedPlayer: player })
+  setPlayedPlayer: (player: YouTubePlayer | null) => set({ playedPlayer: player })
 }));
 
 export default useYoutubnStore;
