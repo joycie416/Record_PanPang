@@ -76,7 +76,7 @@ const LikeButton = ({ iconStyle, user, post }: Props) => {
   });
 
   const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+    e.stopPropagation();
     if (user) {
       toggleLikeMutation.mutate();
     }
