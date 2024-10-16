@@ -33,7 +33,7 @@ const PostForm = ({ postId }: Props) => {
     const fetchData = async () => {
       const getTrack = async () => {
         const token = await fetchToken();
-        const res = await fetch(`https://api.spotify.com/v1/search?q=${post.music_id}&type=track&limit=50&offset=0`, {
+        const res = await fetch(`https://api.spotify.com/v1/search?q=${post.keyword}&type=track&limit=50&offset=0`, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + `${token}`
@@ -119,7 +119,12 @@ const PostForm = ({ postId }: Props) => {
 
     queryClient.invalidateQueries({ queryKey: ["posts"] });
 
-    const postData = { youtube_url: youtubeUrl, content, music_id: card?.id };
+    const postData = {
+      youtube_url: youtubeUrl,
+      content,
+      music_id: card?.id,
+      keyword: `${card?.name}-${card?.artists[0].name}`
+    };
     await mutation.mutateAsync(postData);
   };
 
