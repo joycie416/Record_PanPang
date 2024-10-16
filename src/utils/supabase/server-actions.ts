@@ -30,11 +30,6 @@ export async function signin(formData: SignInWithPasswordCredentials) {
 
 export async function signup(formData: SignUpWithPasswordCredentials) {
   const supabase = createClient();
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  // const data = {
-  //   email: formData.get('email') as string,
-  //   password: formData.get('password') as string,
   // }
 
   const { error } = await supabase.auth.signUp(formData);
@@ -43,7 +38,7 @@ export async function signup(formData: SignUpWithPasswordCredentials) {
     console.log("Sign Up Error :");
     console.error(error);
 
-    // throw new Error('회원가입 중 오류가 발생했습니다.')
+    throw new Error('회원가입 중 오류가 발생했습니다.')
     // redirect("/error");
   }
 
@@ -55,6 +50,21 @@ export async function signout() {
   const supabase = createClient();
   await supabase.auth.signOut();
   redirect("/");
+}
+
+export async function getEmails(email:string) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("email")
+    .eq('email', email)
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
 }
 
 // 현재 사용자 조회

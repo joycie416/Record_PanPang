@@ -1,15 +1,17 @@
 "use client";
 
 import { supabase } from "@/utils/supabase/client";
-import { signin, signup } from "@/utils/supabase/server-actions";
+import { getEmails, signin, signup } from "@/utils/supabase/server-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const SIGN_UP = "/sign-up";
 
 const AuthForm = () => {
+  const [emailMessage, setEmailMessage] = useState("");
   const path = usePathname();
   const schema =
     path === SIGN_UP
@@ -45,30 +47,38 @@ const AuthForm = () => {
   });
 
   const onSubmit = async (data: FieldValues) => {
-    console.log("onSubmit :", data);
+    const emailData = await getEmails(data.email);
 
     if (path === SIGN_UP) {
-      // const {
-      //   data: { users },
-      //   error
-      // } = await supabase.auth.admin.listUsers();
-      // console.log("user list :", users);
-
-      await signup({
-        email: data.email,
-        password: data.password,
-        options: { data: { nickname: data.nickname, email: data.email, profile_img: "default" } }
-      });
+      if (emailData.length !== 0) {
+        setEmailMessage("이미 존재하는 계정입니다.");
+      } else {
+        await signup({
+          email: data.email,
+          password: data.password,
+          options: { data: { nickname: data.nickname, email: data.email, profile_img: "default" } }
+        });
+      }
     } else {
-      await signin({ email: data.email, password: data.password });
+      if (emailData.length === 0) {
+        setEmailMessage("존재하지 않는 계정입니다.");
+      } else {
+        await signin({ email: data.email, password: data.password });
+      }
     }
   };
 
   return (
     <div className="min-h-screen container flex justify-center items-center m-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="p-4 flex flex-col items-center m-auto">
-        <input {...register("email")} placeholder="Email" className="auth-input w-[300px]" />
+        <input
+          {...register("email")}
+          placeholder="Email"
+          className="auth-input w-[300px]"
+          onChange={() => setEmailMessage("")}
+        />
         {formState.errors.email && <span className="text-sky-300 leading-tight">{formState.errors.email.message}</span>}
+        {!!emailMessage && <span className="text-sky-300 leading-tight">{emailMessage}</span>}
         <input
           type="password"
           {...register("password", {
