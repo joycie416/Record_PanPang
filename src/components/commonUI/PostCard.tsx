@@ -5,9 +5,9 @@ import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Post } from "@/types/post";
 import { User } from "@supabase/supabase-js";
-// import Player from "../features/player/Player";
 import LikeButton from "./LikeButton";
 import PostButtons from "../features/post/PostButtons";
+import Player from "../features/player/Player";
 
 type Props = {
   post: Post;
@@ -15,12 +15,7 @@ type Props = {
   token: string;
 };
 
-// 아이콘 스타일 지정
-const iconStyle = { width: "17px", cursor: "pointer", padding: "1px" };
-
-// const PostCard = ({ post, user, token }: Props) => {
-const PostCard = ({ post, user }: Props) => {
-  // 현재 사용자 정보
+const PostCard = ({ post, user, token }: Props) => {
   const currentUserId = user?.id;
 
   // content 줄바꿈
@@ -55,7 +50,7 @@ const PostCard = ({ post, user }: Props) => {
           </div>
         </CardHeader>
         <CardContent>
-          {/* <div>{post.music_id && <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} />}</div> */}
+          <div>{post.music_id && <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} />}</div>
           <div>{PostContent}</div>
         </CardContent>
         <CardFooter>
@@ -65,7 +60,7 @@ const PostCard = ({ post, user }: Props) => {
                 <div>2</div>
               </div>
               <div className="flex items-center gap-2">
-                <LikeButton iconStyle={iconStyle} user={user} post={post} />
+                <LikeButton iconStyle={{ width: "17px", cursor: "pointer", padding: "1px" }} user={user} post={post} />
               </div>
             </div>
             {currentUserId === post.user_id ? <PostButtons post={post} /> : <></>}
