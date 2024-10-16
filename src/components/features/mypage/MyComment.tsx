@@ -1,22 +1,14 @@
 "use client";
 
 import PostCard from "@/components/commonUI/PostCard";
+import { Post } from "@/types/post";
 import { supabase } from "@/utils/supabase/client";
 import { fetchUserPostsByComment } from "@/utils/supabase/server-actions";
 import { User } from "@supabase/supabase-js";
 import React, { useEffect, useState } from "react";
 
-interface posts {
-  post_id: string;
-  user_id: string;
-  created_at: string;
-  music_id: string;
-  content: string;
-  youtube_url: string;
-}
-
 const MyComment = () => {
-  const [userPosts, setUserPosts] = useState<posts[]>([]);
+  const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
