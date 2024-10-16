@@ -133,7 +133,6 @@ export async function updateComment(commentId: string, content: string) {
     .eq("user_id", user.id);
 
   if (error) {
-    console.error("댓글 수정 오류:", error);
     throw new Error("댓글 수정에 실패했습니다.");
   }
   revalidatePath("/");
@@ -157,7 +156,7 @@ export async function fetchUserPostsByComment() {
   if (commentsError) throw Error("사용자가 작성한 댓글을 불러오는데 실패했습니다.");
 
   const postIds = userComments.map((comment) => comment.post_id);
-  const { data: userPosts, error: postsError } = await supabase.from("posts").select("*").in("id", postIds);
+  const { data: userPosts, error: postsError } = await supabase.from("posts").select("*").in("post_id", postIds);
   if (postsError) throw Error("댓글에 해당한 게시물을 불러오는데 실패했습니다.");
 
   return userPosts;

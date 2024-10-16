@@ -33,15 +33,24 @@ const CommentSection = ({ postId }: { postId: string }) => {
   //날짜
   const formatDate = (date: string) => {
     const utcDate = new Date(date);
-    const kstDate = new Date(utcDate.getTime() - 9 * 60 * 60 * 1000);
 
-    return kstDate.toLocaleString("ko-KR", {
+    return utcDate.toLocaleString("ko-KR", {
+      timeZone: "Asia/Seoul",
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
       hour: "2-digit",
       minute: "2-digit"
     });
+  };
+
+  const lineBreaks = (content: string, postId: string) => {
+    return content.split("\n").map((line, idx) => (
+      <span key={`${postId}_line_${idx}`}>
+        {line}
+        <br />
+      </span>
+    ));
   };
 
   // 댓글 작성 핸들러
@@ -113,7 +122,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
                   <span className="font-semibold">작성자: {comment.profile?.nickname}</span>
                   <small className="text-gray-400">{formatDate(comment.update_at)}</small>
                 </div>
-                <p className="mb-2">{comment.content}</p>
+                <p className="mb-2">{lineBreaks(comment.content, postId)}</p>
                 {editingCommentId === comment.comment_id ? (
                   <div className="flex gap-2">
                     <textarea
