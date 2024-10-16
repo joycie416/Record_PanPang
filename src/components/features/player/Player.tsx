@@ -3,7 +3,7 @@
 import { Track } from "@/types/track";
 import PlayButton from "./PlayButton";
 import { getYoutubeID } from "@/utils/getYoutubeID";
-import { getSpotifyTrack } from "@/utils/spotify-server";
+import { getSpotifyTrack } from "@/utils/spotify-client";
 import { useEffect, useState } from "react";
 
 type playerProps = {

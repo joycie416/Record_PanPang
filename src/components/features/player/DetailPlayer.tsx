@@ -1,7 +1,7 @@
 "use client";
 
 import { getYoutubeID } from "@/utils/getYoutubeID";
-import { getSpotifyTrack } from "@/utils/spotify-server";
+import { getSpotifyTrack } from "@/utils/spotify-client";
 import DetailPlayButton from "./DetailPlayButton";
 import { useEffect, useState } from "react";
 import { Track } from "@/types/track";

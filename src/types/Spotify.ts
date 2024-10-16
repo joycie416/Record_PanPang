@@ -77,9 +77,3 @@ export interface SpotifyTokenResponse {
   token_type: string;
   expires_in: number;
 }
-
-// {
-//   "access_token": "BQDrSWqMGOeKPRAn3ndgW2q6rUNF6W2IG7e8yfUyAEsubtav_tRxLI0v6qgke88-3zwkV7JBhi9N0Cb1qOG1z9HSt17AAi_MPATZPUrL-t46-jBBqjk",
-//   "token_type": "Bearer",
-//   "expires_in": 3600
-// }

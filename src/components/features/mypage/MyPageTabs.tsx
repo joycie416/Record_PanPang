@@ -16,7 +16,7 @@ const MyPageTabs = () => {
       setToken(token);
     };
     getToken();
-  }, []);
+  }, [setToken]);
 
   const tabs = [
     { id: 1, label: "게시글" },

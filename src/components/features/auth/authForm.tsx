@@ -1,6 +1,5 @@
 "use client";
 
-import { supabase } from "@/utils/supabase/client";
 import { getEmails, signin, signup } from "@/utils/supabase/server-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname } from "next/navigation";
