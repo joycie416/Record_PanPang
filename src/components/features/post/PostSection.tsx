@@ -4,12 +4,25 @@ import Image from "next/image";
 import { User } from "@supabase/supabase-js";
 import PostButtons from "./PostButtons";
 import { usePostById } from "@/hook/usePostById";
+import DetailPlayer from "../player/DetailPlayer";
+import { useEffect, useState } from "react";
+import { fetchToken } from "@/utils/spotify-client";
 type Props = {
   postId: string;
   user: User | null;
 };
 
 const PostSection = ({ postId, user }: Props) => {
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await fetchToken();
+      setToken(token);
+    };
+    getToken();
+  }, []);
+
   // 현재 사용자 정보
   const currentUserId = user?.id;
 
@@ -56,6 +69,7 @@ const PostSection = ({ postId, user }: Props) => {
         </div>
       </div>
       <div>youtube_url: {post.youtube_url}</div>
+      <DetailPlayer id={post.music_id} youtubeURL={post.youtube_url} token={token} />
       <div>content: {PostContent}</div>
       {currentUserId === post.user_id ? <PostButtons post={post} /> : <></>}
     </>
