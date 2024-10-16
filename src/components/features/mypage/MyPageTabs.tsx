@@ -32,7 +32,7 @@ const MyPageTabs = ({ user }: Props) => {
 
   return (
     <div className="max-w-full mx-auto">
-      <ul className="flex justify-around border-b border-gray-300 my-4">
+      <ul className="flex justify-around border-b border-gray-300 mt-4 mb-6">
         {tabs.map((tab) => (
           <ul
             key={tab.id}
@@ -47,7 +47,7 @@ const MyPageTabs = ({ user }: Props) => {
           </ul>
         ))}
       </ul>
-      <div className="p-4">{tabs.find((tab) => tab.id === activeTab)?.component}</div>
+      <div>{tabs.find((tab) => tab.id === activeTab)?.component}</div>
     </div>
   );
 };

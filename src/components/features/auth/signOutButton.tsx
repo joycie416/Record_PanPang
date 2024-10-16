@@ -5,6 +5,7 @@ import { signout } from "@/utils/supabase/server-actions";
 const SignOutButton = () => {
   return (
     <button
+      className="font-medium"
       onClick={() => {
         signout();
       }}

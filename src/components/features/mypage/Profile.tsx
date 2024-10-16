@@ -34,30 +34,30 @@ const Profile = () => {
 
   return (
     <div className="w-full flex">
-      <div className="mr-10">
-        <Image
-          src={publicUrl}
-          alt={"프로필 이미지"}
-          width={200}
-          height={200}
-          style={{
-            maxWidth: 200,
-            width: "full",
-            aspectRatio: "1/1",
-            objectFit: "cover"
-          }}
-          priority
-          className="border-2 border-gray-300 rounded-full"
-        />
-      </div>
-      <div className="w-full">
-        <div className="w-full flex justify-between items-center">
-          <p>
-            <span>{user?.user_metadata?.nickname}</span> / <span>{user?.email}</span>
-          </p>
-          <EditProfileButton user={user} />
+      <div className="flex items-center">
+        <div className="w-[160px] h-[160px] box-decoration-clone">
+          <Image
+            src={publicUrl}
+            alt={"프로필 이미지"}
+            width={160}
+            height={160}
+            style={{
+              maxWidth: 200,
+              width: "full",
+              aspectRatio: "1/1",
+              objectFit: "cover"
+            }}
+            priority
+            className="border-2 border-gray-300 rounded-full"
+          />
         </div>
-        <ul></ul>
+        <div className="flex gap-1 font-medium">
+          <span className="ml-6">{user?.user_metadata?.nickname}</span> / <span>{user?.email}</span>
+        </div>
+      </div>
+      <div className="w-full"></div>
+      <div className="w-full flex justify-end items-start">
+        <EditProfileButton user={user} />
       </div>
     </div>
   );

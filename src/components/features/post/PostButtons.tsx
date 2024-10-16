@@ -29,12 +29,12 @@ const PostButtons = ({ post }: Props) => {
   });
 
   const handleDeletePost = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    e.stopPropagation();
     mutation.mutate();
   };
 
   const handleGoEditPage = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    e.stopPropagation();
     router.push(`/write/${post.post_id}`);
   };
 
