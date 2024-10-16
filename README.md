@@ -1,31 +1,25 @@
 # 레코드팡팡 🎭 [Record PanPang]
 
-[메인페이지] ![스크린샷 2024-09-20 오후 4 45 08](https://github.com/user-attachments/assets/6e929713-6ba0-4e00-b423-bd1f2cec40a2)
-
-[상세페이지] <img width="1224" alt="스크린샷 2024-09-20 오후 4 13 01" src="https://github.com/user-attachments/assets/1d4c5324-ec12-4c0b-8e99-024fde72e82a">
-
-[커뮤니티 페이지] <img width="1105" alt="스크린샷 2024-09-22 오전 12 08 43" src="https://github.com/user-attachments/assets/a99ff3df-c371-4eb5-8d57-cff8567bd4d5">
-
-[카테고리 페이지] <img width="1224" alt="화면캡처_2024-09-20_192523" src="src/assets/화면캡처_2024-09-20_192523.png">
+## 🔗 배포 링크
 
 ---
 
-## 팀 소개
-
-[내일배움캠프] 2조
-
 ## 👨‍🏫 프로젝트 소개
 
-### 음악을 공유하는 페이지
+일상과 기분을 공유하며 노래를 추천하는 뉴스피드 사이트입니다. 사용자들이 자신의 감정과 순간을 노래와 함께 표현할 수 있는 공간을 제공합니다.
 
-### 🚩 프로젝트 개요
+## 🚩 프로젝트 개요
 
 - **프로젝트명** &nbsp; :&nbsp; **Record PanPang**
 - **진행 기간** &nbsp;: &nbsp; **24.10.10 ~ 24.10.17**
 
 ---
 
-### 👨‍👩‍👧‍👦 팀원 소개
+## ❤ 팀 소개
+
+[내일배움캠프] 2조
+
+## 👨‍👩‍👧‍👦 팀원 소개
 
 |  송진우   |     이보영     |        정수희         |   조아영    |            조해인            |
 | :-------: | :------------: | :-------------------: | :---------: | :--------------------------: |
@@ -36,24 +30,28 @@
 
 ## 📚 STACKS
 
-<div align=Left>
-<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
-<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
-<img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white">
-<img src="https://img.shields.io/badge/typescript-1572B6?style=for-the-badge&logo=typescript&logoColor=white">
-<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=next.js&logoColor=white">
-<img src="https://img.shields.io/badge/TailwindCss-06B6D4?style=for-the-badge&logo=java&logoColor=white">
-<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
-<img src="https://img.shields.io/badge/VSCODE-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
-<img src="https://img.shields.io/badge/VERCEL-007ACC?style=for-the-badge&logo=VERCEL&logoColor=white">
-<img src="https://img.shields.io/badge/SLACK-green?style=for-the-badge&logo=SLACK&logoColor=white">
-</div>
+![js](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white)
+![html](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
+![css](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff&style=for-the-badge)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind_CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
+![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-666666?style=for-the-badge)
+![TanStack Query](https://img.shields.io/badge/TanStack_Query-666666?style=for-the-badge)
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
+![eslint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white)
+![prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
+![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 
 ---
 
-## 설치 패키지
+## ✔️ 설치 패키지
 
 - 프로젝트 세팅 : npx create-next-app@latest
   - tailwindcss 포함
@@ -65,8 +63,6 @@
 - react-hook-form 설치 : yarn add react-hook-form @hookform/resolvers
 - shadcn/ui(캐러셀 라이브러리) : yarn add shadcn/ui
   - gray, cssVariables X
-
----
 
 ## ✔️ Code Convention
 
@@ -84,7 +80,7 @@
 
 ## ✔️ Git Commit Convention
 
-작업 타입 작업내용
+**작업 타입 작업내용**
 
 - update : 해당 파일에 새로운 기능이 생김
 - add : 없던 파일을 생성함, 초기 세팅
@@ -98,15 +94,152 @@
 - gitfix : gitignore 수정
 - script : package.json 변경(npm 설치 등)
 
+---
+
+## 📦 프로젝트 파일 구조
+
+<details>
+  <summary><b>Record PanPang 파일 구조</b></summary>
+
+```
+ ┣ 📂src
+ ┃ ┣ 📂app
+ ┃ ┃ ┣ 📂(assets)
+ ┃ ┃ ┃ ┣ 📜EmptyHeart.tsx
+ ┃ ┃ ┃ ┣ 📜FillHeart.tsx
+ ┃ ┃ ┃ ┣ 📜PauseCon.tsx
+ ┃ ┃ ┃ ┣ 📜PlayCon.tsx
+ ┃ ┃ ┃ ┗ 📜StopCon.tsx
+ ┃ ┃ ┣ 📂api
+ ┃ ┃ ┃ ┗ 📜spotifyToken.ts
+ ┃ ┃ ┣ 📂detail
+ ┃ ┃ ┃ ┗ 📂[id]
+ ┃ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┣ 📂fonts
+ ┃ ┃ ┃ ┣ 📜Pretendard.subset.woff
+ ┃ ┃ ┃ ┗ 📜Pretendard.subset.woff2
+ ┃ ┃ ┣ 📂mypage
+ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┣ 📂sign-in
+ ┃ ┃ ┃ ┣ 📜error.tsx
+ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┣ 📂sign-up
+ ┃ ┃ ┃ ┣ 📜error.tsx
+ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┣ 📂write
+ ┃ ┃ ┃ ┣ 📂[id]
+ ┃ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┣ 📜globals.css
+ ┃ ┃ ┣ 📜layout.tsx
+ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📂commonUI
+ ┃ ┃ ┃ ┣ 📜LikeButton.tsx
+ ┃ ┃ ┃ ┗ 📜PostCard.tsx
+ ┃ ┃ ┣ 📂features
+ ┃ ┃ ┃ ┣ 📂auth
+ ┃ ┃ ┃ ┃ ┣ 📜authForm.tsx
+ ┃ ┃ ┃ ┃ ┗ 📜signOutButton.tsx
+ ┃ ┃ ┃ ┣ 📂comment
+ ┃ ┃ ┃ ┃ ┣ 📜CommentInput.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜CommentItem.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜CommentList.tsx
+ ┃ ┃ ┃ ┃ ┗ 📜CommentSection.tsx
+ ┃ ┃ ┃ ┣ 📂mypage
+ ┃ ┃ ┃ ┃ ┣ 📜EditProfileButton.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜editProfileModal.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyComment.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyLike.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyPageTabs.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜MyPost.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜profile.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜ProfileError.tsx
+ ┃ ┃ ┃ ┃ ┗ 📜ProfileLoading.tsx
+ ┃ ┃ ┃ ┣ 📂navbar
+ ┃ ┃ ┃ ┃ ┣ 📜Footer.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜Header.tsx
+ ┃ ┃ ┃ ┃ ┗ 📜ProfileImg.tsx
+ ┃ ┃ ┃ ┣ 📂player
+ ┃ ┃ ┃ ┃ ┣ 📜DetailPlayButton.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜DetailPlayer.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜PlayButton.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜Player.tsx
+ ┃ ┃ ┃ ┃ ┗ 📜PlayIcon.tsx
+ ┃ ┃ ┃ ┣ 📂post
+ ┃ ┃ ┃ ┃ ┣ 📜PostButtons.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜PostForm.tsx
+ ┃ ┃ ┃ ┃ ┣ 📜PostList.tsx
+ ┃ ┃ ┃ ┃ ┗ 📜PostSection.tsx
+ ┃ ┃ ┃ ┗ 📂spotifySearch
+ ┃ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┣ 📂providers
+ ┃ ┃ ┃ ┗ 📜QueryClientProvider.tsx
+ ┃ ┃ ┗ 📂ui
+ ┃ ┃ ┃ ┣ 📜button.tsx
+ ┃ ┃ ┃ ┣ 📜card.tsx
+ ┃ ┃ ┃ ┣ 📜command.tsx
+ ┃ ┃ ┃ ┣ 📜dialog.tsx
+ ┃ ┃ ┃ ┣ 📜input.tsx
+ ┃ ┃ ┃ ┗ 📜textarea.tsx
+ ┃ ┣ 📂hook
+ ┃ ┃ ┣ 📜usePostById.ts
+ ┃ ┃ ┣ 📜usePostByUserId.ts
+ ┃ ┃ ┗ 📜usePosts.ts
+ ┃ ┣ 📂lib
+ ┃ ┃ ┗ 📜utils.ts
+ ┃ ┣ 📂store
+ ┃ ┃ ┣ 📜playerStore.tsx
+ ┃ ┃ ┗ 📜spotifyStore.tsx
+ ┃ ┣ 📂types
+ ┃ ┃ ┣ 📜auth.ts
+ ┃ ┃ ┣ 📜comment.ts
+ ┃ ┃ ┣ 📜post.ts
+ ┃ ┃ ┣ 📜Spotify.ts
+ ┃ ┃ ┗ 📜track.ts
+ ┃ ┣ 📂utils
+ ┃ ┃ ┣ 📂supabase
+ ┃ ┃ ┃ ┣ 📜client-actions.ts
+ ┃ ┃ ┃ ┣ 📜client.tsx
+ ┃ ┃ ┃ ┣ 📜middleware.ts
+ ┃ ┃ ┃ ┣ 📜server-actions.ts
+ ┃ ┃ ┃ ┗ 📜server.tsx
+ ┃ ┃ ┣ 📜formatTrackData.ts
+ ┃ ┃ ┣ 📜getYoutubeID.ts
+ ┃ ┃ ┣ 📜spotify-client.ts
+ ┃ ┃ ┗ 📜spotify-server.ts
+ ┃ ┗ 📜middleware.ts
+ ┣ 📜.env.local
+ ┣ 📜.eslintrc.json
+ ┣ 📜.gitignore
+ ┣ 📜.prettierrc
+ ┣ 📜components.json
+ ┣ 📜next-env.d.ts
+ ┣ 📜next.config.mjs
+ ┣ 📜package-lock.json
+ ┣ 📜package.json
+ ┣ 📜postcss.config.mjs
+ ┣ 📜README.md
+ ┣ 📜tailwind.config.ts
+ ┣ 📜tsconfig.json
+ ┗ 📜yarn.lock
+```
+
+</details>
+<br/>
+
+## 📋 Supabase ERD 설계도
+
+---
+
 ## 🗂️ 기능 설명
 
-[회원가입/로그인]
+### 회원가입/로그인
 
 Supabase Auth를 사용해 관리했습니다.
 
 1. 유효성 검사 - 1
-
-유효성 검사를 위해 `zod`와 `react-hook-form`를 사용합니다. 존재하는 이메일은 별도의 유효성 검사를 통해 알려줍니다.
+   유효성 검사를 위해 `zod`와 `react-hook-form`를 사용합니다. 존재하는 이메일은 별도의 유효성 검사를 통해 알려줍니다.
 
 ```tsx
 // ./src/components/auth/Auth
@@ -155,8 +288,7 @@ const AuthForm = () => {
 ```
 
 2. 유효성 검사 - 2
-
-`profiles` 테이블에 저장된 `email`을 불러와서 해당 이메일이 존재하는 확인합니다.
+   `profiles` 테이블에 저장된 `email`을 불러와서 해당 이메일이 존재하는 확인합니다.
 
 ```tsx
 // ./src/components/auth/Auth
@@ -209,110 +341,103 @@ export async function checkEmail(email: string) {
 }
 ```
 
----
+<br />
 
-[플레이어]
+### 플레이어
 
----
+```tsx
 
-[검색]
+```
 
----
+<br />
 
-[게시글]
+### 검색
 
----
+```tsx
 
-[댓글]
+```
 
-1. Supabase를 이용한 CRUD 구현
+<br />
 
-servert-action - 댓글 추가, 수정, 삭제
+### 게시글
 
-```jsx
-// 댓글 추가
-export async function addComment(content: string, postId: string) {
-  const supabase = createClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
+게시글 목록을 TanStack Query를 이용하여 실시간으로 반영되도록 구현했습니다.<br />
+이 기능을 통해 사용자는 게시글이 추가, 수정, 삭제될 때 즉시 업데이트된 내용을 확인할 수 있습니다.
 
-  if (!user) throw new Error("로그인이 필요합니다.");
+```tsx
+// PostList.tsx
+const PostList = ({ user, token }: Props) => {
+  // 게시글 데이터를 가져오는 훅 호출
+  const { data: posts, isLoading, isError } = usePosts();
 
-  const { error } = await supabase.from("comments").insert([{ content, post_id: postId, user_id: user.id }]);
-
-  if (error) throw new Error("댓글 추가에 실패했습니다.");
-
-  revalidatePath(`/posts/${postId}`);
-}
-
-// 댓글 삭제
-export async function deleteComment(commentId: string) {
-  const supabase = createClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  if (!user) throw Error("로그인이 필요합니다.");
-
-  const { error } = await supabase.from("comments").delete().eq("comment_id", commentId).eq("user_id", user.id);
-
-  if (error) {
-    throw new Error("댓글 삭제에 실패했습니다.");
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
-}
-
-// 댓글 수정
-export async function updateComment(commentId: string, content: string) {
-  const supabase = createClient();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("로그인 해주세요.");
+  if (isError) {
+    return <div>게시글을 불러오는 데 문제가 발생했습니다.</div>;
   }
-  const { error } = await supabase
-    .from("comments")
-    .update({ content })
-    .eq("comment_id", commentId)
-    .eq("user_id", user.id);
-
-  if (error) {
-    throw new Error("댓글 수정에 실패했습니다.");
+  if (!posts) {
+    return <div>게시글이 없습니다.</div>;
   }
-  revalidatePath("/");
+
+  return (
+    <ul className="flex flex-col gap-6">
+      {posts.map((post) => (
+        <li key={post.post_id}>
+          {/* 각 게시글을 PostCard 컴포넌트로 렌더링 */}
+          <PostCard post={post} user={user} token={token} />
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+// usePosts.ts
+export const usePosts = () => {
+  return useQuery({
+    queryKey: ["posts"], // 쿼리 키
+    queryFn: fetchPosts // 데이터 가져오는 함수
+  });
+};
+
+// client-actions.ts
+export async function fetchPosts() {
+  // posts 테이블에서 데이터 가져오기
+  const { data: posts, error: postsError } = await supabase
+    .from("posts")
+    .select("*, profiles(nickname, profile_img)") // 프로필 데이터 포함
+    .order("created_at", { ascending: false }); // 최신 게시글 우선 정렬
+
+  // 에러 발생 시 처리
+  if (postsError || !posts) {
+    console.error(postsError);
+    return []; // 에러 발생 시 빈 배열 반환
+  }
+
+  // 결과에서 각 포스트의 프로필 데이터 추가
+  return posts.map((post) => ({
+    ...post
+  }));
 }
 ```
 
-client-action - 댓글 조회
+<br/>
 
-```jsx
-// 댓글 조회
-export async function fetchComment(postId: string): Promise<Comment[]> {
-  const STORAGE = "profiles";
+### 댓글
 
-  const { data: comments, error: commentError } = await supabase
-    .from("comments")
-    .select("comment_id, content, user_id, created_at, update_at")
-    .eq("post_id", postId)
-    .order("created_at", { ascending: false }); // 생성 시간 기준으로 정렬
+```tsx
 
-  if (commentError) {
-    console.error(commentError.message);
-    throw new Error("댓글을 불러오는데 실패했습니다.");
-  }
 ```
 
-[마이페이지]
+<br />
+
+### 마이페이지
 
 사용자 정보와 사용자가 작성한 게시글과 댓글, 좋아요한 게시글을 확인할 수 있습니다.
 
 1. 프로필 수정 기능
-
-`프로필 수정하기` 버튼을 클릭하면 모달창을 통해 사용자 정보를 수정할 수 있습니다.
-
-실시간으로 변화를 감지할 수 있도록 TanStack Query를 사용해 데이터를 불러와 변화가 발생하면 `invalidateQueries`를 통해 변경된 정보를 가져오도록 합니다.
+   `프로필 수정하기` 버튼을 클릭하면 모달창을 통해 사용자 정보를 수정할 수 있습니다.
+   실시간으로 변화를 감지할 수 있도록 TanStack Query를 사용해 데이터를 불러와 변화가 발생하면 `invalidateQueries`를 통해 변경된 정보를 가져오도록 합니다.
 
 ```tsx
 // ./src/components/features/mypage/EditProfileModal.tsx
@@ -340,13 +465,11 @@ const EditProfileModal = ({
   });
   ...
 };
-
-
 ```
 
----
+<br />
 
-[네비게이션 바]
+### 네비게이션 바
 
 로그인 정보가 없을 시 회원가입, 로그인 버튼이 우측 상단에 위치하며, 로그인 정보가 있을 시 로그아웃, 마이페이지 버튼과 프로필 이미지가 우측 상단에 위치합니다.
 
@@ -377,11 +500,9 @@ const ProfileImg = () => {
 
 ---
 
----
-
 ## 💥 Trouble Shooting
 
-[회원가입/로그인]
+### 회원가입/로그인
 
 🔥 로그아웃 해도 '로그아웃, 마이페이지' 버튼이 유지됨.
 
@@ -410,9 +531,7 @@ export async function signout() {
   const supabase = createClient();
   ...
 }
-
 ...
-
 ```
 
 ```tsx
@@ -432,33 +551,61 @@ export const supabase = createClient();
 `email` 컬럼 값을 unique하게 설정하기 위해 모든 사용자를 지우는 과정이 필요했습니다. 덩달아 연결된 정보도 같이 사라지게 되어 결국 모든 데이터를 지울 수 밖에 없었습니다.
 
 좀 더 자세히 생각하고 데이터 베이스를 설계해야 한다는 것을 배웠습니다.
+<br />
+<br />
 
----
+### 플레이어
 
-[플레이어]
+```tsx
 
----
+```
 
-[검색]
+<br />
 
----
+### 검색
 
-[게시글]
+```tsx
 
----
+```
 
-[댓글]
+<br />
 
-🔥 문제점<br>
-댓글 작성 시 시간이 로컬과 다르게 표시되는 문제
-댓글을 작성하면 표시되는 시간이 실제 로컬 시간과 일치하지 않는 문제가 있었습니다. Supabase가 기본적으로 UTC 시간을 사용해 데이터를 저장하기 때문에 발생한 문제였습니다.
+### 게시글
 
-해결<br>
-댓글 작성 시간을 표시할 때 로컬 시간대로 변환하는 formatDate 함수를 사용했습니다. toLocaleString()을 사용하여 한국 표준시(KST)로 변환하여 표시했습니다.
+**Supabase 외래키 연결**
 
----
+- **문제 발생:** `posts` 테이블에서 `post_id`로 `user_id`를 찾아 `profiles` 테이블에서 `nickname`, `profile_img` 데이터를 가져오려 했습니다. 아래 코드와 같이 작성하고 Supabase에서 외래키 연결을 시도했지만 연결되지 않았습니다. 'insert or update on table "posts" violates foreign key constraint "posts_user_id_fkey"'오류는 `posts` 테이블의 `user_id` 필드가 `profiles` 테이블의 `user_id`와 외래키로 연결되어 있는데, 삽입하려는 `user_id` 값이 `profiles` 테이블에 존재하지 않거나 유효하지 않은 경우 이 오류가 발생합니다.
+- **해결 방법:** 두 테이블 간의 연결에 문제가 있는 것으로 추측되어, 기존에 등록된 데이터를 모두 삭제한 후 외래키를 다시 연결했습니다.
 
-[마이페이지]
+```tsx
+// post_id로 게시글 정보 조회
+export async function getPostById(postId: string) {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*, profiles(nickname, profile_img)")
+    .eq("post_id", postId)
+    .single();
+
+  if (error || !data) {
+    console.error(error);
+    return null;
+  }
+
+  return data;
+}
+```
+
+<br />
+
+### 댓글
+
+```tsx
+
+```
+
+<br />
+
+### 마이페이지
 
 🔥 다른 사용자로 로그인하면 기존 사용자 정보가 마이 페이지 사용자 정보에 적용됨.
 
@@ -477,9 +624,9 @@ const ProfileImg = () => {
 };
 ```
 
----
+<br />
 
-[네비게이션 바]
+### 네비게이션 바
 
 🔥 사용자 정보 변경 시 프로필 이미지가 같이 반영되지 않음
 
@@ -529,5 +676,3 @@ const ProfileImg = () => {
   ...
 };
 ```
-
----
