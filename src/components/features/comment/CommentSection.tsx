@@ -114,7 +114,14 @@ const CommentSection = ({ postId }: { postId: string }) => {
                   alt={comment.profile?.nickname}
                   width={60}
                   height={60}
-                  className="rounded-full border border-gray-300"
+                  style={{
+                    maxWidth: 200,
+                    width: "full",
+                    aspectRatio: "1/1",
+                    objectFit: "cover"
+                  }}
+                  priority
+                  className="border-2 border-gray-300 rounded-full"
                 />
               </div>
               <div className="flex-1 ">
