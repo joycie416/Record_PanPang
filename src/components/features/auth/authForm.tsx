@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { checkEmail } from "@/utils/supabase/client-actions";
 import { signin, signup } from "@/utils/supabase/server-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +11,8 @@ import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const SIGN_UP = "/sign-up";
+const AUTH_CSS =
+  "w-full max-w-[300px] min-w-[150px] text-gray-300 bg-transparent border border-gray-300 border-solid p-2 outline-none focus:border-sky-300";
 
 const AuthForm = () => {
   const [emailMessage, setEmailMessage] = useState("");
@@ -69,51 +73,26 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen container flex justify-center items-center m-auto">
+    <div className="container modal">
       <form onSubmit={handleSubmit(onSubmit)} className="p-4 flex flex-col items-center m-auto">
-        <input
-          {...register("email")}
-          placeholder="Email"
-          className="auth-input w-[300px]"
-          onChange={() => setEmailMessage("")}
-        />
+        <Input {...register("email")} placeholder="email" className={AUTH_CSS} onChange={() => setEmailMessage("")} />
         {formState.errors.email && <span className="text-sky-300 leading-tight">{formState.errors.email.message}</span>}
         {!!emailMessage && <span className="text-sky-300 leading-tight">{emailMessage}</span>}
-        <input
-          type="password"
-          {...register("password", {
-            // required: {
-            //   value: true,
-            //   message: "password required"
-            // }
-          })}
-          placeholder="password"
-          className="auth-input w-[300px] mt-4"
-        />
+        <Input type="password" {...register("password")} placeholder="password" className={AUTH_CSS + " mt-4"} />
         {formState.errors.password && (
           <span className="text-sky-300 leading-tight">{formState.errors.password.message}</span>
         )}
         {path === SIGN_UP && (
           <>
-            <input
-              type="text"
-              {...register("nickname", {
-                // required: {
-                //   value: true,
-                //   message: "nickname required"
-                // }
-              })}
-              placeholder="nickname"
-              className="auth-input w-[300px] mt-4"
-            />
+            <Input type="text" {...register("nickname")} placeholder="nickname" className={AUTH_CSS + " mt-4"} />
             {formState.errors.nickname && (
               <span className="text-sky-300 leading-tight">{formState.errors.nickname.message}</span>
             )}
           </>
         )}
-        <button type="submit" className="w-[300px] bg-gray-300 hover:bg-gray-400 mt-4 p-2 rounded-lg">
+        <Button type="submit" className="w-full max-w-[300px] min-w-[150px] bg-gray-300 hover:bg-gray-400 mt-4 p-2">
           {path === SIGN_UP ? "회원가입" : "로그인"}
-        </button>
+        </Button>
       </form>
     </div>
   );
