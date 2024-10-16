@@ -1,12 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { User } from "@supabase/supabase-js";
 import PostButtons from "./PostButtons";
 import { usePostById } from "@/hook/usePostById";
 import DetailPlayer from "../player/DetailPlayer";
-import { useEffect, useState } from "react";
 import { fetchToken } from "@/utils/spotify-client";
+
 type Props = {
   postId: string;
   user: User | null;
@@ -53,24 +54,21 @@ const PostSection = ({ postId, user }: Props) => {
 
   return (
     <>
-      <div className="flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="w-16 border-2 border-gray-300 rounded-full overflow-hidden">
-            <Image
-              src={profileImgUrl}
-              alt="프로필 이미지"
-              width={60}
-              height={60}
-              className="w-[60px] h-[60px] object-cover"
-              priority
-            />
-          </div>
-          <div>{post.profiles.nickname}</div>
+      <div className="flex items-center gap-2">
+        <div className="w-16 border-2 border-gray-300 rounded-full overflow-hidden">
+          <Image
+            src={profileImgUrl}
+            alt="프로필 이미지"
+            width={60}
+            height={60}
+            className="w-[60px] h-[60px] object-cover"
+            priority
+          />
         </div>
+        <div>{post.profiles.nickname}</div>
       </div>
-      <div>youtube_url: {post.youtube_url}</div>
       <DetailPlayer id={post.music_id} youtubeURL={post.youtube_url} token={token} />
-      <div>content: {PostContent}</div>
+      <div>{PostContent}</div>
       {currentUserId === post.user_id ? <PostButtons post={post} /> : <></>}
     </>
   );
