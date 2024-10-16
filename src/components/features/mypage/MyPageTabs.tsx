@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import MyComment from "./MyComment";
+import MyPost from "./MyPost";
 
 const MyPageTabs = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const tabs = [
-    { id: 1, label: "게시글" },
+    { id: 1, label: "게시글", component: <MyPost /> },
     { id: 2, label: "댓글", component: <MyComment /> },
     { id: 3, label: "좋아요" }
   ];
