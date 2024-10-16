@@ -2,16 +2,14 @@ import Link from "next/link";
 import { fetchCurrentUser } from "@/utils/supabase/server-actions";
 import { buttonVariants } from "@/components/ui/button";
 import PostList from "@/components/features/post/PostList";
-import { getSpotifyToken } from "@/utils/spotify-server";
 
 export default async function Home() {
   const user = await fetchCurrentUser();
-  const token: string = await getSpotifyToken();
 
   return (
     <>
       <div className="container mx-auto">
-        <PostList user={user} token={token} />
+        <PostList user={user} />
       </div>
       <Link href="/write" className={`fixed bottom-6 right-6 ${buttonVariants({ size: "icon" })}`}>
         +

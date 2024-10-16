@@ -3,13 +3,25 @@
 import { User } from "@supabase/supabase-js";
 import { usePosts } from "@/hook/usePosts";
 import PostCard from "@/components/commonUI/PostCard";
+import { useEffect } from "react";
+import useSpotifyStore from "@/store/spotifyStore";
+import { fetchToken } from "@/utils/spotify-client";
 
 type Props = {
   user: User | null;
-  token: string;
 };
 
-const PostList = ({ user, token }: Props) => {
+const PostList = ({ user }: Props) => {
+  const { setToken, token } = useSpotifyStore();
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await fetchToken();
+      setToken(token);
+    };
+    getToken();
+  }, [setToken]);
+
   const { data: posts, isLoading, isError } = usePosts();
 
   if (isLoading) {
