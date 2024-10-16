@@ -68,11 +68,8 @@ const SpotifySearch = () => {
       }
 
       const data: SpotifyTracks = await res.json();
-      console.log("data", data);
       const tracks: Track[] = data.tracks.items;
-      console.log("tracks", tracks);
       setTracks(tracks);
-      // console.log("Album", tracks[0].album);
       //track를 state로 담아서 관리 필요
     };
     getTrack();
@@ -84,8 +81,6 @@ const SpotifySearch = () => {
     const trackInfo = tracks.find((item) => {
       return item.id === id;
     });
-
-    console.log("trackInfo", trackInfo);
 
     if (trackInfo) {
       setCard(trackInfo);
