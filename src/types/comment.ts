@@ -1,9 +1,10 @@
 export interface Comment {
   comment_id: string;
   user_id: string;
-  post_id: string;
+  post_id?: string;
   content: string;
   update_at: string;
+  created_at?: string;
   profile?: {
     profile_img: string;
     nickname: string;
