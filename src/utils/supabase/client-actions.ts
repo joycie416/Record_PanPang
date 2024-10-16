@@ -7,6 +7,21 @@ const PROFILES = "profiles";
 const STORAGE = "profiles";
 const DEFAULT = "default";
 
+// 이메일 존재 여부 확인용
+export async function checkEmail(email:string) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("email")
+    .eq('email', email)
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
+}
+
 // auth 정보 업데이트
 export const updateUser = async (user: User, nickname: string, profileImg: File | null) => {
   let profile_img = user.user_metadata.profile_img;
