@@ -5,15 +5,18 @@
 ---
 
 ## 👨‍🏫 프로젝트 소개
+
 일상과 기분을 공유하며 노래를 추천하는 뉴스피드 사이트입니다. 사용자들이 자신의 감정과 순간을 노래와 함께 표현할 수 있는 공간을 제공합니다.
 
 ## 🚩 프로젝트 개요
+
 - **프로젝트명** &nbsp; :&nbsp; **Record PanPang**
 - **진행 기간** &nbsp;: &nbsp; **24.10.10 ~ 24.10.17**
 
 ---
 
 ## ❤ 팀 소개
+
 [내일배움캠프] 2조
 
 ## 👨‍👩‍👧‍👦 팀원 소개
@@ -26,28 +29,30 @@
 ---
 
 ## 📚 STACKS
+
 ![js](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white)
 ![html](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
-![css](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white) 
-![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff&style=for-the-badge) 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) 
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) 
-![Tailwind_CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) 
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white) 
-![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white) 
-![Zustand](https://img.shields.io/badge/Zustand-666666?style=for-the-badge) 
-![TanStack Query](https://img.shields.io/badge/TanStack_Query-666666?style=for-the-badge) 
-![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white) 
-![eslint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white) 
-![prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E) 
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white) 
-![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white) 
-![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white) 
+![css](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff&style=for-the-badge)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind_CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
+![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-666666?style=for-the-badge)
+![TanStack Query](https://img.shields.io/badge/TanStack_Query-666666?style=for-the-badge)
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
+![eslint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white)
+![prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 
 ---
 
 ## ✔️ 설치 패키지
+
 - 프로젝트 세팅 : npx create-next-app@latest
   - tailwindcss 포함
   - 실행 : yarn dev
@@ -60,6 +65,7 @@
   - gray, cssVariables X
 
 ## ✔️ Code Convention
+
 - ES Lint , prettier 사용
 - 컴포넌트일 경우에만 .jsx확장자 사용
 - customHook을 사용하는 경우 : use + 함수명
@@ -73,7 +79,9 @@
 - 약칭은 되도록 사용하지 않기
 
 ## ✔️ Git Commit Convention
+
 **작업 타입 작업내용**
+
 - update : 해당 파일에 새로운 기능이 생김
 - add : 없던 파일을 생성함, 초기 세팅
 - bugfix : 버그 수정
@@ -85,7 +93,7 @@
 - style : css
 - gitfix : gitignore 수정
 - script : package.json 변경(npm 설치 등)
-  
+
 ---
 
 ## 📦 프로젝트 파일 구조
@@ -222,16 +230,16 @@
 
 ## 📋 Supabase ERD 설계도
 
-
 ---
 
 ## 🗂️ 기능 설명
 
 ### 회원가입/로그인
+
 Supabase Auth를 사용해 관리했습니다.
 
 1. 유효성 검사 - 1
-유효성 검사를 위해 `zod`와 `react-hook-form`를 사용합니다. 존재하는 이메일은 별도의 유효성 검사를 통해 알려줍니다.
+   유효성 검사를 위해 `zod`와 `react-hook-form`를 사용합니다. 존재하는 이메일은 별도의 유효성 검사를 통해 알려줍니다.
 
 ```tsx
 // ./src/components/auth/Auth
@@ -260,27 +268,22 @@ const AuthForm = () => {
   });
   ...
   return (
-    <div className="container modal">
-      <form onSubmit={handleSubmit(onSubmit)} className="p-4 flex flex-col items-center m-auto">
-        <Input
-          {...register("email")}
-          placeholder="email"
-          className={AUTH_CSS}
-          onChange={() => setEmailMessage("")}
-        />
-        {formState.errors.email && <span className="text-sky-300 leading-tight">{formState.errors.email.message}</span>}
-        {!!emailMessage && <span className="text-sky-300 leading-tight">{emailMessage}</span>}
-        
-        ...
-
-      </form>
+    <div className="embla" ref={emblaRef}>
+      <div className="embla__container">
+        {carousel &&
+          [0, 2, 4, 6].map(
+            (
+              i // 각 슬라이드에 두개씩 보여줌
+            ) => <Slide play={[carousel[i], carousel[i + 1]]} key={`slide-${i}`} />
+          )}
+      </div>
     </div>
   );
 };
 ```
 
 2. 유효성 검사 - 2
-`profiles` 테이블에 저장된 `email`을 불러와서 해당 이메일이 존재하는 확인합니다.
+   `profiles` 테이블에 저장된 `email`을 불러와서 해당 이메일이 존재하는 확인합니다.
 
 ```tsx
 // ./src/components/auth/Auth
@@ -332,25 +335,31 @@ export async function checkEmail(email: string) {
   return data;
 }
 ```
+
 <br />
 
 ### 플레이어
 
 ```tsx
+
 ```
+
 <br />
 
 ### 검색
 
 ```tsx
+
 ```
+
 <br />
 
 ### 게시글
+
 게시글 목록을 TanStack Query를 이용하여 실시간으로 반영되도록 구현했습니다.<br />
 이 기능을 통해 사용자는 게시글이 추가, 수정, 삭제될 때 즉시 업데이트된 내용을 확인할 수 있습니다.
 
-``` tsx
+```tsx
 // PostList.tsx
 const PostList = ({ user, token }: Props) => {
   // 게시글 데이터를 가져오는 훅 호출
@@ -406,20 +415,24 @@ export async function fetchPosts() {
   }));
 }
 ```
+
 <br/>
 
 ### 댓글
 
 ```tsx
+
 ```
+
 <br />
 
 ### 마이페이지
+
 사용자 정보와 사용자가 작성한 게시글과 댓글, 좋아요한 게시글을 확인할 수 있습니다.
 
 1. 프로필 수정 기능
-`프로필 수정하기` 버튼을 클릭하면 모달창을 통해 사용자 정보를 수정할 수 있습니다.
-실시간으로 변화를 감지할 수 있도록 TanStack Query를 사용해 데이터를 불러와 변화가 발생하면 `invalidateQueries`를 통해 변경된 정보를 가져오도록 합니다.
+   `프로필 수정하기` 버튼을 클릭하면 모달창을 통해 사용자 정보를 수정할 수 있습니다.
+   실시간으로 변화를 감지할 수 있도록 TanStack Query를 사용해 데이터를 불러와 변화가 발생하면 `invalidateQueries`를 통해 변경된 정보를 가져오도록 합니다.
 
 ```tsx
 // ./src/components/features/mypage/EditProfileModal.tsx
@@ -448,9 +461,11 @@ const EditProfileModal = ({
   ...
 };
 ```
+
 <br />
 
 ### 네비게이션 바
+
 로그인 정보가 없을 시 회원가입, 로그인 버튼이 우측 상단에 위치하며, 로그인 정보가 있을 시 로그아웃, 마이페이지 버튼과 프로필 이미지가 우측 상단에 위치합니다.
 
 1. Link 태그로 연결하여 페이지 로딩 최적화
@@ -481,6 +496,7 @@ const ProfileImg = () => {
 ---
 
 ## 💥 Trouble Shooting
+
 ### 회원가입/로그인
 
 🔥 로그아웃 해도 '로그아웃, 마이페이지' 버튼이 유지됨.
@@ -536,17 +552,23 @@ export const supabase = createClient();
 ### 플레이어
 
 ```tsx
+
 ```
+
 <br />
 
 ### 검색
 
 ```tsx
+
 ```
+
 <br />
 
 ### 게시글
+
 **Supabase 외래키 연결**
+
 - **문제 발생:** `posts` 테이블에서 `post_id`로 `user_id`를 찾아 `profiles` 테이블에서 `nickname`, `profile_img` 데이터를 가져오려 했습니다. 아래 코드와 같이 작성하고 Supabase에서 외래키 연결을 시도했지만 연결되지 않았습니다. 'insert or update on table "posts" violates foreign key constraint "posts_user_id_fkey"'오류는 `posts` 테이블의 `user_id` 필드가 `profiles` 테이블의 `user_id`와 외래키로 연결되어 있는데, 삽입하려는 `user_id` 값이 `profiles` 테이블에 존재하지 않거나 유효하지 않은 경우 이 오류가 발생합니다.
 - **해결 방법:** 두 테이블 간의 연결에 문제가 있는 것으로 추측되어, 기존에 등록된 데이터를 모두 삭제한 후 외래키를 다시 연결했습니다.
 
@@ -567,12 +589,15 @@ export async function getPostById(postId: string) {
   return data;
 }
 ```
+
 <br />
 
 ### 댓글
 
 ```tsx
+
 ```
+
 <br />
 
 ### 마이페이지
@@ -593,6 +618,7 @@ const ProfileImg = () => {
   ...
 };
 ```
+
 <br />
 
 ### 네비게이션 바
