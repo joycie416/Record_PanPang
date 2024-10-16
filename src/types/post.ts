@@ -9,4 +9,5 @@ export interface Post {
   music_id: string;
   youtube_url: string;
   content: string;
+  keyword: string;
 }

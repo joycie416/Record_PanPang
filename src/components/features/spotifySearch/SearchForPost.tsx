@@ -3,11 +3,8 @@
 import { SpotifyTracks, Track } from "@/types/Spotify";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-import { Music } from "lucide-react";
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
-import { Input } from "@/components/ui/input";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
+import CommandForPost from "./Command";
+import CardForPost from "./Card";
 
 type Props = {
   setCard: Dispatch<SetStateAction<Track | undefined>>;
@@ -103,65 +100,15 @@ const SpotifySearch = ({ setCard, card, cardError }: Props) => {
 
   return (
     <div className="container mx-auto flex flex-col gap-8 justify-center items-center">
-      <div className="relative w-full max-w-lg">
-        <Input
-          value={search}
-          onChange={handleInputChange}
-          placeholder="노래를 입력해주세요."
-          className="h-12
-        "
-        />
-        {cardError && <p className="text-red-500 text-sm mt-1 absolute right-6 top-0 translate-y-1/2 ">{cardError}</p>}
-        <Command className="rounded-lg border shadow-md">
-          {open ? (
-            <CommandList className="absolute top-full left-0 w-full bg-white rounded-b-lg border-t-0 max-h-[300px] overflow-y-auto shadow-lg">
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup heading="Suggestions">
-                {tracks.map((track) => (
-                  <CommandItem key={track.id} onSelect={() => shiftTrackToInfocard(track.id)}>
-                    <Music className="mr-2 h-4 w-4" />
-                    {track.name} - {track.artists[0]?.name}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          ) : (
-            <CommandList></CommandList>
-          )}
-        </Command>
-      </div>
-      <div className="w-full">
-        {card ? (
-          <Card className="flex w-full h-[200px]">
-            <div className="p-[18px]">
-              <Image
-                src={card?.album.images[1]?.url || ""}
-                alt="Project image"
-                width={160}
-                height={260}
-                // layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <CardHeader>
-                <CardTitle className="text-3xl font-extrabold">{card?.name}</CardTitle>
-                <CardDescription className="text-lg">{card?.artists[0].name}</CardDescription>
-              </CardHeader>
-
-              <CardFooter className=" flex flex-col items-start">
-                <CardDescription>{formatDuration(card?.duration_ms || 0)}</CardDescription>
-                <CardDescription>
-                  {card?.album.name} - {card?.album.type} / {card?.album.release_date}
-                </CardDescription>
-              </CardFooter>
-            </div>
-          </Card>
-        ) : (
-          <Card className="flex h-[200px]"></Card>
-        )}
-      </div>
+      <CommandForPost
+        search={search}
+        tracks={tracks}
+        open={open}
+        handleInputChange={handleInputChange}
+        shiftTrackToInfocard={shiftTrackToInfocard}
+        cardError={cardError}
+      />
+      <CardForPost card={card} formatDuration={formatDuration} />
     </div>
   );
 };

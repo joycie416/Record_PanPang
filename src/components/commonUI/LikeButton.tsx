@@ -35,19 +35,20 @@ const LikeButton = ({ iconStyle, user, post }: Props) => {
   // 현재 사용자가 좋아요 했는지 안했는지 확인
   const isLike = likes?.some((like) => like.user_id === user?.id) || false;
 
-  const toggleLikeMutation = useMutation({
-    mutationFn: async () => {
-      if (!user) {
-        alert("로그인한 사용자만 이용할 수 있습니다.");
-        throw new Error("유저를 찾을 수 없습니다.");
-      }
+  const toggleLike = async () => {
+    if (!user) {
+      throw new Error("유저를 찾을 수 없습니다.");
+    }
 
-      if (isLike) {
-        await supabase.from("likes").delete().eq("user_id", user.id).eq("post_id", post.post_id);
-      } else {
-        await supabase.from("likes").insert({ post_id: post.post_id, user_id: user.id });
-      }
-    },
+    if (isLike) {
+      await supabase.from("likes").delete().eq("user_id", user.id).eq("post_id", post.post_id);
+    } else {
+      await supabase.from("likes").insert({ post_id: post.post_id, user_id: user.id });
+    }
+  };
+
+  const toggleLikeMutation = useMutation({
+    mutationFn: () => toggleLike(),
 
     // 낙관적 업데이트 실행되는 부분
     onMutate: async () => {
@@ -76,15 +77,18 @@ const LikeButton = ({ iconStyle, user, post }: Props) => {
   });
 
   const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (user) {
+    e.stopPropagation();
+    if (!user) {
+      console.log("확인");
+      alert("로그인한 사용자만 이용할 수 있습니다.");
+    } else if (user) {
       toggleLikeMutation.mutate();
     }
   };
 
   return (
     <div className="flex flex-row gap-x-2">
-      <button onClick={handleClick} disabled={!user || toggleLikeMutation.isPending}>
+      <button onClick={handleClick} disabled={toggleLikeMutation.isPending}>
         {isLike ? <FillHeart style={iconStyle} /> : <EmptyHeart style={iconStyle} />}
       </button>
       <p>{likes?.length || 0}</p>
