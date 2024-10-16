@@ -58,7 +58,7 @@ const PostForm = ({ postId }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     queryClient.invalidateQueries({ queryKey: ["posts"] });
 
     const postData = { youtube_url: youtubeUrl, content };
@@ -77,9 +77,7 @@ const PostForm = ({ postId }: Props) => {
         onChange={(e) => setYoutubeUrl(e.target.value)}
       />
       <Textarea placeholder="내용을 입력해주세요" value={content} onChange={(e) => setContent(e.target.value)} />
-      <Button size="lg">
-        {postId ? "수정하기" : "작성하기"}
-      </Button>
+      <Button size="lg">{postId ? "수정하기" : "작성하기"}</Button>
     </form>
   );
 };

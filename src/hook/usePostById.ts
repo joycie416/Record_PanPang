@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPostById } from "@/utils/supabase/client-actions";
-import { Post } from "@/types/post";
 
 export const usePostById = (postId: string) => {
   return useQuery({

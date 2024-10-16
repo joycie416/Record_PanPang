@@ -113,46 +113,37 @@ export async function fetchCurrentUser() {
 
 // 게시글 조회
 export async function fetchPosts() {
-  const { data, error } = await supabase.from("posts").select("*").order("created_at", { ascending: false });
+  // posts 테이블에서 데이터 가져오기
+  const { data: posts, error: postsError } = await supabase
+    .from("posts")
+    .select("*, profiles(nickname, profile_img)")
+    .order("created_at", { ascending: false });
 
-  if (error || !data) {
-    console.error(error);
+  if (postsError || !posts) {
+    console.error(postsError);
     return []; // 에러 발생 시 빈 배열 반환
   }
 
-  return data;
+  // 결과에서 각 포스트의 프로필 데이터 추가
+  return posts.map((post) => ({
+    ...post
+  }));
 }
 
 // post_id로 게시글 정보 조회
 export async function getPostById(postId: string) {
-  const { data: postData, error: postError } = await supabase
+  const { data, error } = await supabase
     .from("posts")
-    .select("post_id, user_id, created_at, music_id, youtube_url, content")
+    .select("*, profiles(nickname, profile_img)")
     .eq("post_id", postId)
     .single();
 
-  if (postError) {
-    console.error(postError);
-    return []; // 에러 발생 시 빈 배열 반환
-  }
-
-  // profile 테이블에서 user_id로 nickname, profile_img 가져오기
-  const { data: profileData, error: profileError } = await supabase
-    .from("profiles")
-    .select("nickname, profile_img")
-    .eq("user_id", postData.user_id)
-    .single();
-
-  if (profileError || !profileData) {
-    console.error(profileError);
+  if (error || !data) {
+    console.error(error);
     return null;
   }
 
-  // 게시글 정보와 프로필 정보 합쳐서 반환
-  return {
-    ...postData,
-    profile: profileData
-  };
+  return data;
 }
 
 // 게시글 추가
