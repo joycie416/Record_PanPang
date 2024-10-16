@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { User } from "@supabase/supabase-js";
-import EditProfileModal from "./editProfileModal";
+import EditProfileModal from "./EditProfileModal";
 import { Button } from "@/components/ui/button";
 
 const EditProfileButton = ({ user }: { user: User | undefined }) => {

@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Music } from "lucide-react";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
 const SpotifySearch = () => {
@@ -79,6 +79,7 @@ const SpotifySearch = () => {
     //사용자가 검색 단어를 입력할 때마다 getTrack을 실행시켜줌
   }, [search, token]);
 
+  //검색 리스트 클릭시 불러온 데이터의 목록과 대조하여 해당하는 데이터만 추출해서 상태값card에 넣어주는 함수
   const shiftTrackToInfocard = (id: string) => {
     const trackInfo = tracks.find((item) => {
       return item.id === id;
@@ -94,19 +95,24 @@ const SpotifySearch = () => {
     setSearch("");
   };
 
+  //초로 만들어진 시간은 분초로 변경해주는 함수
   const formatDuration = (durationMs: number) => {
     const minutes = Math.floor(durationMs / 60000);
     const seconds = Math.floor((durationMs % 60000) / 1000);
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
 
-  console.log("open", open);
   return (
-    <div className="flex flex-col gap-12 justify-center items-center">
+    <div className="container mx-auto flex flex-col gap-8 justify-center items-center">
       <div className="relative w-full max-w-lg">
-        <Input value={search} onChange={handleInputChange} placeholder="노래를 입력해주세요." />
+        <Input
+          value={search}
+          onChange={handleInputChange}
+          placeholder="노래를 입력해주세요."
+          className="h-12
+        "
+        />
         <Command className="rounded-lg border shadow-md">
-          {/* <CommandInput placeholder="노래를 입력해주세요." value={search} onValueChange={handleInputChange} /> */}
           {open ? (
             <CommandList className="absolute top-full left-0 w-full bg-white rounded-b-lg border-t-0 max-h-[300px] overflow-y-auto shadow-lg">
               <CommandEmpty>No results found.</CommandEmpty>
@@ -124,33 +130,37 @@ const SpotifySearch = () => {
           )}
         </Command>
       </div>
-      <div>
-        <Card className="flex w-[1000px] h-[240px]">
-          <div className="p-[18px]">
-            <Image
-              src={card?.album.images[1]?.url || ""}
-              alt="Project image"
-              width={200}
-              height={200}
-              // layout="fill"
-              objectFit="cover"
-              className="rounded-lg"
-            />
-          </div>
-          <div className="flex flex-col gap-3 ">
-            <CardHeader>
-              <CardTitle className="text-3xl font-extrabold">{card?.name}</CardTitle>
-              <CardDescription className="text-lg">{card?.artists[0].name}</CardDescription>
-            </CardHeader>
-            <CardContent></CardContent>
-            <CardFooter className=" flex flex-col items-start">
-              <CardDescription>{formatDuration(card?.duration_ms || 0)}</CardDescription>
-              <CardDescription>
-                {card?.album.name} - {card?.album.type} / {card?.album.release_date}
-              </CardDescription>
-            </CardFooter>
-          </div>
-        </Card>
+      <div className="w-full">
+        {card ? (
+          <Card className="flex w-full h-[200px]">
+            <div className="p-[18px]">
+              <Image
+                src={card?.album.images[1]?.url || ""}
+                alt="Project image"
+                width={160}
+                height={260}
+                // layout="fill"
+                objectFit="cover"
+                className="rounded-lg"
+              />
+            </div>
+            <div className="flex flex-col gap-3">
+              <CardHeader>
+                <CardTitle className="text-3xl font-extrabold">{card?.name}</CardTitle>
+                <CardDescription className="text-lg">{card?.artists[0].name}</CardDescription>
+              </CardHeader>
+
+              <CardFooter className=" flex flex-col items-start">
+                <CardDescription>{formatDuration(card?.duration_ms || 0)}</CardDescription>
+                <CardDescription>
+                  {card?.album.name} - {card?.album.type} / {card?.album.release_date}
+                </CardDescription>
+              </CardFooter>
+            </div>
+          </Card>
+        ) : (
+          <Card className="flex w-[1000px] h-[240px]"></Card>
+        )}
       </div>
     </div>
   );

@@ -66,18 +66,23 @@ const PostForm = ({ postId }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex w-full max-w-sm items-center space-x-2">
-        <Input type="text" placeholder="음악검색" />
-        <Button size="lg">검색</Button>
-      </div>
+    <form onSubmit={handleSubmit} className=" flex flex-col gap-5">
       <Input
         placeholder="선택한 노래의 유튜브 URL을 추가해주세요 *"
         value={youtubeUrl}
         onChange={(e) => setYoutubeUrl(e.target.value)}
       />
-      <Textarea placeholder="내용을 입력해주세요" value={content} onChange={(e) => setContent(e.target.value)} />
-      <Button size="lg">{postId ? "수정하기" : "작성하기"}</Button>
+      <div className="flex flex-col gap-5 items-center">
+        <Textarea
+          className="h-32"
+          placeholder="내용을 입력해주세요"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+        <Button size="lg" className="w-24">
+          {postId ? "수정하기" : "작성하기"}
+        </Button>
+      </div>
     </form>
   );
 };
