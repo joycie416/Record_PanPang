@@ -1,7 +1,14 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { deleteProfileImg, getPublicUrl, updateProfile, updateProfileImg, updateUser } from "@/utils/supabase/client-actions";
+import {
+  deleteProfileImg,
+  getPublicUrl,
+  updateProfile,
+  updateProfileImg,
+  updateUser
+} from "@/utils/supabase/client-actions";
 import { User } from "@supabase/supabase-js";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -24,40 +31,40 @@ const EditProfileModal = ({
 
   // 사용자 프로필 업데이트 시 정보 바로 갱신되도록
   const queryClient = useQueryClient();
-  const {mutate: handleUpdateUser} = useMutation({
-    mutationFn:() => updateUser(user as User, nickname, profileImg),
+  const { mutate: handleUpdateUser } = useMutation({
+    mutationFn: () => updateUser(user as User, nickname, profileImg),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['user', 'client']
-      })
+        queryKey: ["user", "client"]
+      });
     }
-  })
-  const {mutate: handleUpdateProfile} = useMutation({
-    mutationFn:() => updateProfile(user as User, nickname, profileImg),
+  });
+  const { mutate: handleUpdateProfile } = useMutation({
+    mutationFn: () => updateProfile(user as User, nickname, profileImg),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['user', 'client']
-      })
+        queryKey: ["user", "client"]
+      });
     }
-  })
-  const {mutate: handleUpdateProfileImg} = useMutation({
-    mutationFn:() => updateProfileImg(user as User, profileImg),
+  });
+  const { mutate: handleUpdateProfileImg } = useMutation({
+    mutationFn: () => updateProfileImg(user as User, profileImg),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['user', 'client']
-      })
+        queryKey: ["user", "client"]
+      });
     }
-  })
-  const {mutate: handleDeleteProfileImg} = useMutation({
-    mutationFn:() => deleteProfileImg(user as User),
+  });
+  const { mutate: handleDeleteProfileImg } = useMutation({
+    mutationFn: () => deleteProfileImg(user as User),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['user', 'client']
-      })
+        queryKey: ["user", "client"]
+      });
     }
-  })
+  });
 
-  const userImg = getPublicUrl(STORAGE,user?.user_metadata?.profile_img ?? "default");
+  const userImg = getPublicUrl(STORAGE, user?.user_metadata?.profile_img ?? "default");
   const defaultImg = getPublicUrl(STORAGE, "default");
 
   // 불러온 이미지 미리 보기
@@ -75,8 +82,22 @@ const EditProfileModal = ({
     }
   };
   return (
-    <div className="w-full min-h-screen fixed top-0 left-0 bg-gray-950/50">
-      <div className="modal w-[30%] min-w-[300px] max-w-[400px] h-[430px] flex flex-col p-10 bg-white rounded-3xl">
+    <div
+      className="w-full min-h-screen fixed top-0 left-0 bg-gray-950/50"
+      onClick={(e) => {
+        e.stopPropagation();
+        setNickname("");
+        setProfileImg(null);
+        setImgPath(userImg);
+        setShowModal((prev) => !prev);
+      }}
+    >
+      <div
+        className="modal w-[30%] min-w-[300px] max-w-[400px] h-[430px] flex flex-col p-10 bg-white rounded-3xl"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <div className="w-full h-full flex flex-col justify-between items-center">
           <img
             src={!imgPath ? userImg : imgPath}
@@ -100,7 +121,7 @@ const EditProfileModal = ({
             }}
           />
           <div className="w-full flex justify-around items-center">
-            <button
+            <Button
               className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
               onClick={(e) => {
                 e.stopPropagation();
@@ -111,13 +132,13 @@ const EditProfileModal = ({
               }}
             >
               닫기
-            </button>
-            <button
+            </Button>
+            <Button
               className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
               onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {
-                  await Promise.all([handleUpdateUser(),handleUpdateProfile(),handleUpdateProfileImg()])
+                  await Promise.all([handleUpdateUser(), handleUpdateProfile(), handleUpdateProfileImg()]);
                   setNickname("");
                   setProfileImg(null);
                 }
@@ -126,8 +147,8 @@ const EditProfileModal = ({
               }}
             >
               수정하기
-            </button>
-            <button
+            </Button>
+            <Button
               className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
               onClick={async (e) => {
                 e.stopPropagation();
@@ -141,7 +162,7 @@ const EditProfileModal = ({
               }}
             >
               이미지 삭제
-            </button>
+            </Button>
           </div>
         </div>
       </div>
