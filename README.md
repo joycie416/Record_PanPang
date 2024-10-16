@@ -282,6 +282,15 @@ const AuthForm = () => {
         ...
 
       </form>
+    <div className="embla" ref={emblaRef}>
+      <div className="embla__container">
+        {carousel &&
+          [0, 2, 4, 6].map(
+            (
+              i // 각 슬라이드에 두개씩 보여줌
+            ) => <Slide play={[carousel[i], carousel[i + 1]]} key={`slide-${i}`} />
+          )}
+      </div>
     </div>
   );
 };
