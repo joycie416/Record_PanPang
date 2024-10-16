@@ -74,7 +74,7 @@ const PostForm = ({ postId }: Props) => {
       />
       <div className="flex flex-col gap-5 items-center">
         <Textarea
-          className="h-32"
+          className="h-32 resize-none"
           placeholder="내용을 입력해주세요"
           value={content}
           onChange={(e) => setContent(e.target.value)}

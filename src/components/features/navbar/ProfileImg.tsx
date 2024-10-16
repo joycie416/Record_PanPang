@@ -21,10 +21,9 @@ const ProfileImg = () => {
 
   const queryClient = useQueryClient();
 
-  supabase.auth.onAuthStateChange((event, session) => {
+  supabase.auth.onAuthStateChange(() => {
     // 모든 auth state 변화에 따라 session 다시 저장
     queryClient.invalidateQueries({ queryKey: ["user", "client"] });
-    console.log('current user info :', user?.user_metadata)
   });
 
   if (isLoading || isError) {
