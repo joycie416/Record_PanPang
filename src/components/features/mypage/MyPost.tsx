@@ -3,13 +3,14 @@
 import { User } from "@supabase/supabase-js";
 import PostCard from "@/components/commonUI/PostCard";
 import { usePostByUserId } from "@/hook/usePostByUserId";
+import useSpotifyStore from "@/store/spotifyStore";
 
 type Props = {
   user: User | null;
-  token: string;
 };
 
-const MyPost = ({ user, token }: Props) => {
+const MyPost = ({ user }: Props) => {
+  const { token } = useSpotifyStore();
   // 현재 사용자 정보
   const currentUserId = user?.id;
   const { data: posts, isLoading, isError } = usePostByUserId(currentUserId ?? "");

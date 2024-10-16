@@ -10,10 +10,9 @@ import { fetchToken } from "@/utils/spotify-client";
 
 type Props = {
   user: User;
-  token: string;
 };
 
-const MyPageTabs = ({ user, token }: Props) => {
+const MyPageTabs = ({ user }: Props) => {
   const [activeTab, setActiveTab] = useState(1);
   const { setToken } = useSpotifyStore();
 
@@ -26,7 +25,7 @@ const MyPageTabs = ({ user, token }: Props) => {
   }, [setToken]);
 
   const tabs = [
-    { id: 1, label: "게시글", component: <MyPost user={user} token={token} /> },
+    { id: 1, label: "게시글", component: <MyPost user={user} /> },
     { id: 2, label: "댓글", component: <MyComment /> },
     { id: 3, label: "좋아요", component: <MyLike /> }
   ];
