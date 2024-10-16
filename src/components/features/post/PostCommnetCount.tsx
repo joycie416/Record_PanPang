@@ -15,7 +15,7 @@ const PostCommnetCount = ({ post }: { post: Post }) => {
     };
 
     getCommentCount();
-  }, []);
+  }, [post.post_id]);
 
   return (
     <div className="flex gap-x-2">
