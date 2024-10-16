@@ -1,13 +1,26 @@
-import { Post } from "@/types/post";
-import { User } from "@supabase/supabase-js";
-import PostCard from "@/components/commonUI/PostCard";
-import { fetchCurrentUser, fetchPosts } from "@/utils/supabase/server-actions";
-import { getSpotifyToken } from "@/utils/spotify-actions";
+"use client";
 
-const PostList = async () => {
-  const posts: Post[] = await fetchPosts();
-  const user: User | null = await fetchCurrentUser();
-  const token: string = await getSpotifyToken();
+import { User } from "@supabase/supabase-js";
+import { usePosts } from "@/hook/usePosts";
+import PostCard from "@/components/commonUI/PostCard";
+
+type Props = {
+  user: User | null;
+  token: string;
+};
+
+const PostList = ({ user, token }: Props) => {
+  const { data: posts, isLoading, isError } = usePosts();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>게시글을 불러오는 데 문제가 발생했습니다.</div>;
+  }
+  if (!posts) {
+    return <div>게시글이 없습니다.</div>;
+  }
 
   return (
     <ul className="flex flex-col gap-6">

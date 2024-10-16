@@ -1,15 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MyComment from "./MyComment";
+import useSpotifyStore from "@/store/spotifyStore";
+import MyLike from "./MyLike";
 
 const MyPageTabs = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const { setToken } = useSpotifyStore();
+
+  useEffect(() => {
+    const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+    const clientPW = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
+
+    const fetchToken = async () => {
+      const res = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        cache: "no-store",
+        body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientPW}`
+      });
+      if (!res.ok) {
+        throw new Error("Failed to fetch token");
+      }
+      const data = await res.json();
+
+      const { access_token: token } = data;
+
+      setToken(token);
+    };
+    fetchToken();
+  }, []);
 
   const tabs = [
     { id: 1, label: "게시글" },
     { id: 2, label: "댓글", component: <MyComment /> },
-    { id: 3, label: "좋아요" }
+    { id: 3, label: "좋아요", component: <MyLike /> }
   ];
 
   return (
