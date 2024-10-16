@@ -11,13 +11,13 @@ import { Post } from "@/types/post";
 import { usePostById } from "@/hook/usePostById";
 
 type Props = {
-  postId: string;
+  postId?: string;
 };
 
 const PostForm = ({ postId }: Props) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: post } = usePostById(postId);
+  const { data: post } = usePostById(postId ? postId : "");
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [content, setContent] = useState("");
 
