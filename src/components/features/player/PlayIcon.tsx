@@ -1,5 +1,5 @@
-import PlayCon from "@/components/commonUI/PlayCon";
-import PauseCon from "@/components/commonUI/PauseCon";
+import PlayCon from "@/app/(assets)/PlayCon";
+import PauseCon from "@/app/(assets)/PauseCon";
 import useYoutubnStore from "@/store/playerStore";
 
 type Props = {
