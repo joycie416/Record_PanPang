@@ -4,11 +4,11 @@ import PostCard from "@/components/commonUI/PostCard";
 import useSpotifyStore from "@/store/spotifyStore";
 import { Post } from "@/types/post";
 import { supabase } from "@/utils/supabase/client";
-import { fetchUserPostsByComment } from "@/utils/supabase/server-actions";
+import { fetchLikePosts } from "@/utils/supabase/server-actions";
 import { User } from "@supabase/supabase-js";
 import React, { useEffect, useState } from "react";
 
-const MyComment = () => {
+const MyLike = () => {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const { token } = useSpotifyStore();
@@ -24,7 +24,7 @@ const MyComment = () => {
     };
 
     const loadUserPosts = async () => {
-      const posts = await fetchUserPostsByComment();
+      const posts = await fetchLikePosts();
       setUserPosts(posts);
     };
     loadUser();
@@ -44,4 +44,4 @@ const MyComment = () => {
   );
 };
 
-export default MyComment;
+export default MyLike;

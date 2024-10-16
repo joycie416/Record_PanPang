@@ -1,7 +1,7 @@
 import { YouTubePlayer } from "react-youtube";
 import { create } from "zustand";
 
-interface PlayedVideo {
+interface YoutubeStore {
   playedVideo: {
     id: string;
     isPlay: boolean;
@@ -13,7 +13,7 @@ interface PlayedVideo {
   setPlayedPlayer: (player: YouTubePlayer) => void;
 }
 
-const useYoutubnStore = create<PlayedVideo>((set) => ({
+const useYoutubnStore = create<YoutubeStore>((set) => ({
   playedVideo: { id: "", isPlay: false },
   playedPlayer: null,
   token: "",
