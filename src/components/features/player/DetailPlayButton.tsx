@@ -33,7 +33,14 @@ const DetailPlayButton = ({ music, id }: { music: Track; id: string | undefined 
         <YouTube videoId={id} onReady={(e: YouTubeEvent) => onReady(e, playerRef)} />
       </div>
       <div className="container flex flex-row gap-x-5">
-        <Image alt={music.name + "앨범커버"} src={music.album.images} width={250} height={250} className="rounded-sm" />
+        <Image
+          alt={music.name + "앨범커버"}
+          src={music.album.images}
+          width={250}
+          height={250}
+          className="rounded-sm"
+          priority
+        />
         <div className="flex flex-col gap-y-3">
           <p className="font-black text-6xl">{music.name}</p>
           <p>
