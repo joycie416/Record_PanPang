@@ -29,6 +29,9 @@ const EditProfileModal = ({
   const [profileImg, setProfileImg] = useState<File | null>(null);
   const [imgPath, setImgPath] = useState<string>("");
 
+  // 현재 사용자 정보
+  const currentUserId = user?.id;
+
   // 사용자 프로필 업데이트 시 정보 바로 갱신되도록
   const queryClient = useQueryClient();
   const { mutate: handleUpdateUser } = useMutation({
@@ -37,6 +40,8 @@ const EditProfileModal = ({
       queryClient.invalidateQueries({
         queryKey: ["user", "client"]
       });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
   });
   const { mutate: handleUpdateProfile } = useMutation({
@@ -45,6 +50,8 @@ const EditProfileModal = ({
       queryClient.invalidateQueries({
         queryKey: ["user", "client"]
       });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
   });
   const { mutate: handleUpdateProfileImg } = useMutation({
@@ -53,6 +60,8 @@ const EditProfileModal = ({
       queryClient.invalidateQueries({
         queryKey: ["user", "client"]
       });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
   });
   const { mutate: handleDeleteProfileImg } = useMutation({
@@ -61,6 +70,8 @@ const EditProfileModal = ({
       queryClient.invalidateQueries({
         queryKey: ["user", "client"]
       });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
   });
 
