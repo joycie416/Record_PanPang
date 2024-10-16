@@ -555,6 +555,52 @@ const EditProfileModal = ({
 };
 ```
 
+액티브 탭
+
+1. 액티브 탭 기능을 사용하여 사용자 경험을 개선하였습니다.
+
+```tsx
+const MyPageTabs = ({ user, token }: Props) => {
+  const [activeTab, setActiveTab] = useState(1);
+  const { setToken } = useSpotifyStore();
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await fetchToken();
+      setToken(token);
+    };
+    getToken();
+  }, [setToken]);
+
+  const tabs = [
+    { id: 1, label: "게시글", component: <MyPost user={user} token={token} /> },
+    { id: 2, label: "댓글", component: <MyComment /> },
+    { id: 3, label: "좋아요", component: <MyLike /> }
+  ];
+
+  return (
+    <div className="max-w-full mx-auto">
+      <ul className="flex justify-around border-b border-gray-300 my-4">
+        {tabs.map((tab) => (
+          <ul
+            key={tab.id}
+            className={`w-full text-center py-2 cursor-pointer ${
+              activeTab === tab.id
+                ? "border-b-2 border-sky-400 text-sky-400 font-semibold"
+                : "text-gray-400 active:text-gray-300"
+            }`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </ul>
+        ))}
+      </ul>
+      <div className="p-4">{tabs.find((tab) => tab.id === activeTab)?.component}</div>
+    </div>
+  );
+};
+```
+
 <br />
 
 ### 네비게이션 바
