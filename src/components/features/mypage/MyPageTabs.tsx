@@ -4,7 +4,7 @@ import { useState } from "react";
 import MyComment from "./MyComment";
 
 const MyPageTabs = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
 
   const tabs = [
     { id: 1, label: "게시글" },
