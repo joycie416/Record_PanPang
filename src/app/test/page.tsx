@@ -1,7 +1,7 @@
 import { UUID } from "crypto";
 import Player from "@/components/features/player/Player";
-import { supabase } from "@/utils/supabase/server";
 import DetailPlayer from "@/components/features/player/DetailPlayer";
+import { createClient } from "@/utils/supabase/server";
 
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID as string;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET as string;
@@ -16,6 +16,7 @@ type postType = {
 };
 
 const page = async () => {
+  const supabase = createClient();
   // 스포티파이 api 요청을 위한 토큰 받아오는 함수
   const getSpotifyToken = async () => {
     const params = new URLSearchParams({

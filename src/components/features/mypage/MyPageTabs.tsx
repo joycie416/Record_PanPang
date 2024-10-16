@@ -1,15 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MyComment from "./MyComment";
+import useSpotifyStore from "@/store/spotifyStore";
+import MyLike from "./MyLike";
+import { fetchToken } from "@/utils/spotify-client";
 
 const MyPageTabs = () => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
+  const { setToken } = useSpotifyStore();
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await fetchToken();
+      setToken(token);
+    };
+    getToken();
+  }, []);
 
   const tabs = [
     { id: 1, label: "게시글" },
     { id: 2, label: "댓글", component: <MyComment /> },
-    { id: 3, label: "좋아요" }
+    { id: 3, label: "좋아요", component: <MyLike /> }
   ];
 
   return (
