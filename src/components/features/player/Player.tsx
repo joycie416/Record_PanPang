@@ -26,7 +26,11 @@ const Player = ({ id, token, youtubeURL }: playerProps) => {
   }, [id, token]);
 
   if (!music) {
-    return <div>loading...</div>;
+    return (
+      <div>
+        {token}, {id}, {music}
+      </div>
+    );
   }
 
   return (
