@@ -434,8 +434,87 @@ export async function fetchPosts() {
 
 ### 댓글
 
-```tsx
+사용자가 댓글을 작성할 수 있습니다.
+정렬을 통해 댓글을 작성하면 댓글 목록 맨 위에서 확인할 수 있고, 댓글 작성,수정 시간을 확인할 수 있습니다.
 
+서버 액션 - 추가, 수정, 삭제<br>
+클라이언트 액션 - 댓글 조회를 처리하여 사용자가 빠르게 댓글을 확인할 수 있으며, 보안성을 강화 했습니다.
+
+server-action
+
+```tsx
+// 댓글 추가
+export async function addComment(content: string, postId: string) {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.from("comments").insert([{ content, post_id: postId, user_id: user.id }]);
+
+  if (error) throw new Error("댓글 추가에 실패했습니다.");
+
+  revalidatePath(`/posts/${postId}`);
+}
+
+// 댓글 삭제
+export async function deleteComment(commentId: string) {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.from("comments").delete().eq("comment_id", commentId).eq("user_id", user.id);
+
+  if (error) {
+    throw new Error("댓글 삭제에 실패했습니다.");
+  }
+}
+
+// 댓글 수정
+export async function updateComment(commentId: string, content: string) {
+  const supabase = createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인 해주세요.");
+  }
+  const { error } = await supabase
+    .from("comments")
+    .update({ content })
+    .eq("comment_id", commentId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error("댓글 수정에 실패했습니다.");
+  }
+  revalidatePath("/");
+}
+```
+
+client-action
+
+```tsx
+// 댓글 조회
+export async function fetchComment(postId: string): Promise<Comment[]> {
+  const STORAGE = "profiles";
+
+  const { data: comments, error: commentError } = await supabase
+    .from("comments")
+    .select("comment_id, content, user_id, created_at, update_at")
+    .eq("post_id", postId)
+    .order("created_at", { ascending: false }); // 생성 시간 기준으로 정렬
+
+  if (commentError) {
+    console.error(commentError.message);
+    throw new Error("댓글을 불러오는데 실패했습니다.");
+  }
 ```
 
 <br />
