@@ -52,21 +52,6 @@ export async function signout() {
   redirect("/");
 }
 
-export async function getEmails(email:string) {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("email")
-    .eq('email', email)
-
-  if (error) {
-    console.error(error);
-    return [];
-  }
-
-  return data;
-}
-
 // 현재 사용자 조회
 export async function fetchCurrentUser() {
   const supabase = createClient();

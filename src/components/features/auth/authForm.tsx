@@ -1,6 +1,7 @@
 "use client";
 
-import { getEmails, signin, signup } from "@/utils/supabase/server-actions";
+import { checkEmail } from "@/utils/supabase/client-actions";
+import { signin, signup } from "@/utils/supabase/server-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -46,7 +47,7 @@ const AuthForm = () => {
   });
 
   const onSubmit = async (data: FieldValues) => {
-    const emailData = await getEmails(data.email);
+    const emailData = await checkEmail(data.email);
 
     if (path === SIGN_UP) {
       if (emailData.length !== 0) {
