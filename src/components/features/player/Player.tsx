@@ -25,26 +25,26 @@ const Player = ({ id, token, youtubeURL }: playerProps) => {
     }
   }, [id, token]);
 
-  if (music) {
-    return (
-      <div className="w-[550px] p-4 border-[1px] rounded-md flex flex-row border-gray-300 mb-5">
-        <PlayButton music={music} id={getYoutubeID(youtubeURL)} />
-        <div className="ml-4">
-          <p className="font-bold text-xl overflow-ellipsis overflow-hidden whitespace-nowrap w-[440px]">
-            {music.name}
-          </p>
-          <div className="flex text-sm flex-row justify-between">
-            <div className="flex flex-row gap-x-1 items-center">
-              <p>{music.artists.name}</p>
-              <div className="bg-gray-700 w-2 h-[1px]"></div>
-              <p className="overflow-ellipsis overflow-hidden max-w-[200px] whitespace-nowrap">{music.album.name}</p>
-            </div>
-            <p className="ml-4">{music.album.release_date}</p>
+  if (!music) {
+    return <div>loading...</div>;
+  }
+
+  return (
+    <div className="w-[550px] p-4 border-[1px] rounded-md flex flex-row border-gray-300 mb-5">
+      <PlayButton music={music} id={getYoutubeID(youtubeURL)} />
+      <div className="ml-4">
+        <p className="font-bold text-xl overflow-ellipsis overflow-hidden whitespace-nowrap w-[440px]">{music.name}</p>
+        <div className="flex text-sm flex-row justify-between">
+          <div className="flex flex-row gap-x-1 items-center">
+            <p>{music.artists.name}</p>
+            <div className="bg-gray-700 w-2 h-[1px]"></div>
+            <p className="overflow-ellipsis overflow-hidden max-w-[200px] whitespace-nowrap">{music.album.name}</p>
           </div>
+          <p className="ml-4">{music.album.release_date}</p>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default Player;
