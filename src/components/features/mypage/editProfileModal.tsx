@@ -1,7 +1,13 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { deleteProfileImg, getPublicUrl, updateProfile, updateProfileImg, updateUser } from "@/utils/supabase/client-actions";
+import {
+  deleteProfileImg,
+  getPublicUrl,
+  updateProfile,
+  updateProfileImg,
+  updateUser
+} from "@/utils/supabase/client-actions";
 import { User } from "@supabase/supabase-js";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
@@ -22,42 +28,53 @@ const EditProfileModal = ({
   const [profileImg, setProfileImg] = useState<File | null>(null);
   const [imgPath, setImgPath] = useState<string>("");
 
+  // 현재 사용자 정보
+  const currentUserId = user?.id;
+
   // 사용자 프로필 업데이트 시 정보 바로 갱신되도록
   const queryClient = useQueryClient();
-  const {mutate: handleUpdateUser} = useMutation({
-    mutationFn:() => updateUser(user as User, nickname, profileImg),
+  const { mutate: handleUpdateUser } = useMutation({
+    mutationFn: () => updateUser(user as User, nickname, profileImg),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['user', 'client']
-      })
+        queryKey: ["user", "client"]
+      });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
-  })
-  const {mutate: handleUpdateProfile} = useMutation({
-    mutationFn:() => updateProfile(user as User, nickname, profileImg),
+  });
+  const { mutate: handleUpdateProfile } = useMutation({
+    mutationFn: () => updateProfile(user as User, nickname, profileImg),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['user', 'client']
-      })
+        queryKey: ["user", "client"]
+      });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
-  })
-  const {mutate: handleUpdateProfileImg} = useMutation({
-    mutationFn:() => updateProfileImg(user as User, profileImg),
+  });
+  const { mutate: handleUpdateProfileImg } = useMutation({
+    mutationFn: () => updateProfileImg(user as User, profileImg),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['user', 'client']
-      })
+        queryKey: ["user", "client"]
+      });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
-  })
-  const {mutate: handleDeleteProfileImg} = useMutation({
-    mutationFn:() => deleteProfileImg(user as User),
+  });
+  const { mutate: handleDeleteProfileImg } = useMutation({
+    mutationFn: () => deleteProfileImg(user as User),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['user', 'client']
-      })
+        queryKey: ["user", "client"]
+      });
+      queryClient.invalidateQueries({ queryKey: ["post", currentUserId] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
-  })
+  });
 
-  const userImg = getPublicUrl(STORAGE,user?.user_metadata?.profile_img ?? "default");
+  const userImg = getPublicUrl(STORAGE, user?.user_metadata?.profile_img ?? "default");
   const defaultImg = getPublicUrl(STORAGE, "default");
 
   // 불러온 이미지 미리 보기
@@ -117,7 +134,7 @@ const EditProfileModal = ({
               onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {
-                  await Promise.all([handleUpdateUser(),handleUpdateProfile(),handleUpdateProfileImg()])
+                  await Promise.all([handleUpdateUser(), handleUpdateProfile(), handleUpdateProfileImg()]);
                   setNickname("");
                   setProfileImg(null);
                 }

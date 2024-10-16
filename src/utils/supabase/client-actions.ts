@@ -102,21 +102,6 @@ export const getPublicUrl = (name: string, path: string) => {
   return publicUrl;
 };
 
-// 현재 사용자 조회
-export async function fetchCurrentUser() {
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    console.error(error);
-    return null;
-  }
-
-  return user;
-}
-
 // 게시글 조회
 export async function fetchPosts() {
   // posts 테이블에서 데이터 가져오기
@@ -147,6 +132,22 @@ export async function getPostById(postId: string) {
   if (error || !data) {
     console.error(error);
     return null;
+  }
+
+  return data;
+}
+
+// user_id로 게시글 정보 조회
+export async function getPostByUserId(userId: string) {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*, profiles(nickname, profile_img)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error || !data) {
+    console.error(error);
+    return []; // 에러 발생 시 빈 배열 반환
   }
 
   return data;

@@ -3,12 +3,18 @@
 import { useState } from "react";
 import MyComment from "./MyComment";
 import MyPost from "./MyPost";
+import { User } from "@supabase/supabase-js";
 
-const MyPageTabs = () => {
-  const [activeTab, setActiveTab] = useState(0);
+type Props = {
+  user: User;
+  token: string;
+};
+
+const MyPageTabs = ({ user, token }: Props) => {
+  const [activeTab, setActiveTab] = useState(1);
 
   const tabs = [
-    { id: 1, label: "게시글", component: <MyPost /> },
+    { id: 1, label: "게시글", component: <MyPost user={user} token={token} /> },
     { id: 2, label: "댓글", component: <MyComment /> },
     { id: 3, label: "좋아요" }
   ];

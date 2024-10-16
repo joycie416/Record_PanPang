@@ -38,7 +38,7 @@ const MyComment = () => {
   }, []);
 
   return (
-    <div>
+    <ul>
       {userPosts.map((post) => {
         return (
           <li key={post.post_id}>
@@ -46,7 +46,7 @@ const MyComment = () => {
           </li>
         );
       })}
-    </div>
+    </ul>
   );
 };
 

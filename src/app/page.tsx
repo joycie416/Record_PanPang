@@ -10,7 +10,7 @@ export default async function Home() {
 
   return (
     <>
-      <div className="container items-center justify-items-center min-h-screen font-[family-name:var(--font-geist-sans)] mx-auto">
+      <div className="container mx-auto">
         <PostList user={user} token={token} />
       </div>
       <Link href="/write" className={`fixed bottom-6 right-6 ${buttonVariants({ size: "icon" })}`}>
