@@ -261,6 +261,7 @@ export async function fetchComment(postId: string): Promise<Comment[]> {
   return commentsWithProfile;
 }
 
+<<<<<<< HEAD
 // 댓글 추가
 export async function addComment(content: string, postId: string) {
   const {
@@ -308,3 +309,14 @@ export async function updateComment(commentId: string, content: string) {
     throw new Error("댓글 수정에 실패했습니다.");
   }
 }
+=======
+// 포스트 댓글 개수 조회
+export const fetchPostCommentCount = async (id: string) => {
+  const { data } = await supabase.from("comments").select("*").eq("post_id", id);
+  if (data) {
+    return data.length;
+  } else if (!data) {
+    return;
+  }
+};
+>>>>>>> 97b138e6b87a77ded6f5fb5d75be59075f39a5c6

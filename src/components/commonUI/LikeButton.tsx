@@ -87,7 +87,7 @@ const LikeButton = ({ iconStyle, user, post }: Props) => {
   };
 
   return (
-    <div className="flex flex-row gap-x-2">
+    <div className="flex gap-x-2">
       <button onClick={handleClick} disabled={toggleLikeMutation.isPending}>
         {isLike ? <FillHeart style={iconStyle} /> : <EmptyHeart style={iconStyle} />}
       </button>
