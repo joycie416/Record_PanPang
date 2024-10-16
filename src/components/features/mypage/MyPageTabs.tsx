@@ -28,7 +28,7 @@ const MyPageTabs = () => {
     <div className="max-w-full mx-auto">
       <ul className="flex justify-around border-b border-gray-300 my-4">
         {tabs.map((tab) => (
-          <li
+          <ul
             key={tab.id}
             className={`w-full text-center py-2 cursor-pointer ${
               activeTab === tab.id
@@ -38,7 +38,7 @@ const MyPageTabs = () => {
             onClick={() => setActiveTab(tab.id)}
           >
             {tab.label}
-          </li>
+          </ul>
         ))}
       </ul>
       <div className="p-4">{tabs.find((tab) => tab.id === activeTab)?.component}</div>
