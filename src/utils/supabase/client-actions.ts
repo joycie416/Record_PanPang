@@ -9,7 +9,7 @@ const DEFAULT = "default";
 
 // 이메일 존재 여부 확인용
 export async function checkEmail(email: string) {
-  const { data, error } = await supabase.from("profiles").select("email").eq("email", email);
+  const { data, error } = await supabase.from(PROFILES).select("email").eq("email", email);
 
   if (error) {
     console.error(error);

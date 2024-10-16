@@ -1,4 +1,4 @@
-# 커튼콜 🎭 [outsourcing-project]
+# 레코드팡팡 🎭 [Record PanPang]
 
 [메인페이지] ![스크린샷 2024-09-20 오후 4 45 08](https://github.com/user-attachments/assets/6e929713-6ba0-4e00-b423-bd1f2cec40a2)
 
@@ -27,9 +27,9 @@
 
 ### 👨‍👩‍👧‍👦 팀원 소개
 
-|   송진우   |      이보영      |        정수희        |  조아영  |         조해인         |
-| :--------: | :--------------: | :------------------: | :------: | :--------------------: |
-|  **팀원**  |     **팀원**     |       **팀원**       | **팀원** |        **팀장**        |
+|  송진우   |     이보영     |        정수희         |   조아영    |            조해인            |
+| :-------: | :------------: | :-------------------: | :---------: | :--------------------------: |
+| **팀원**  |    **팀원**    |       **팀원**        |  **팀원**   |           **팀장**           |
 | 댓글 전반 | 음악 검색 기능 | 음악 플레이어, 좋아요 | 게시글 전반 | 회원가입/로그인, 프로필 수정 |
 
 ---
@@ -61,6 +61,8 @@
 - tanstack query 설치 : yarn add @tanstack/react-query
   - tailwind.config.js 파일 생성 : npx tailwindcss init -p
 - zustand 설치 : yarn add zustand
+- zod 설치 : yarn add zod
+- react-hook-form 설치 : yarn add react-hook-form @hookform/resolvers
 - shadcn/ui(캐러셀 라이브러리) : yarn add shadcn/ui
   - gray, cssVariables X
 
@@ -98,125 +100,119 @@
 
 ## 🗂️ 기능 설명
 
-[예시]
+[회원가입/로그인]
 
-- 오늘 진행 중인 공연 중 랜덤으로 8개를 선택해 캐러셀 적용 ([Embla 라이브러리](https://www.embla-carousel.com/get-started/) 사용)
-- 오늘 진행 중인 공연을 캐러셀 하단에 주제별로 보여줌
+Supabase Auth를 사용해 관리했습니다.
 
-1. 오늘 진행 중인 공연 정보 불러오기
+1. 유효성 검사 - 1
 
-```jsx
-// playApi.js
-// 현재 진행중인 공연 정보 등록된 순으로 최대 1000개 불러오는 함수
-const BASE_URL = "http://kopis.or.kr/openApi/restful/pblprfr";
-const KOPIS_KEY = import.meta.env.VITE_KOPIS_KEY;
+유효성 검사를 위해 `zod`와 `react-hook-form`를 사용합니다. 존재하는 이메일은 별도의 유효성 검사를 통해 알려줍니다.
 
-const playApi = axios.create({ baseURL: BASE_URL });
+```tsx
+// ./src/components/auth/Auth
 
-export const getData = async () => {
-  try {
-    const { data } = await playApi.get("/", {
-      params: {
-        service: KOPIS_KEY,
-        stdate: getDateString(), // 오늘 날짜 반환하는 함수
-        eddate: getDateString(),
-        rows: 1000,
-        cpage: 1,
-      },
-    });
-    return parseXMLToJSON(data).dbs.db;
-  } catch (error) {
-    console.error("Error fetching performance details:", error);
-    throw new Error("데이터를 불러오는 중 오류가 발생했습니다.");
-  }
-};
-```
-
-```jsx
-// MainPage.jsx
-// 공연 정보 불러오기
-const {
-  data: mainData,
-  isPending,
-  isError,
-} = useQuery({
-  queryKey: ["main-data"],
-  queryFn: getData,
-});
-```
-
-2. 랜덤으로 8개 선택해 캐러셀로 보여주기
-
-```jsx
-// Embla.jsx
-// MainPage.jsx에서 prop으로 데이터 전달 받음
-const Embla = ({ data }) => {
-  const [emblaRef] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ stopOnMouseEnter: true, stopOnInteraction: false }),
-  ]);
-
-  const indices = []; // 랜덤 인덱스 저장
-  while (indices.length < 8) {
-    let tmp = Math.floor(data.length * Math.random());
-    if (indices.includes(tmp)) {
-      continue;
-    } else {
-      indices.push(tmp);
-    }
-  }
-  const carousel = indices.map((idx) => data[idx]);
-
+const AuthForm = () => {
+  ...
+  const schema =
+    path === SIGN_UP
+      ? z.object({
+          email: z
+            .string()
+            .email({ message: "이메일 형식으로 입력해주세요" })
+            .min(1, { message: "이메일을 입력해주세요" }),
+          password: z.string().min(6, "6자 이상 입력해주세요"),
+          nickname: z.string().min(1, "닉네임을 입력해주세요.").max(10, "최대 10자 입력 가능합니다.")
+        })
+      : z.object({
+          email: z.string().min(1, "이메일을 입력해주세요"),
+          password: z.string().min(1, "비밀번호를 입력해주세요")
+        });
+  ...
+  const { register, handleSubmit, formState } = useForm({
+    mode: "onChange", //'onBlur' : focus가 사라졌을 때
+    defaultValues,
+    resolver: zodResolver(schema)
+  });
+  ...
   return (
-    <div className="embla" ref={emblaRef}>
-      <div className="embla__container">
-        {carousel &&
-          [0, 2, 4, 6].map(
-            (
-              i // 각 슬라이드에 두개씩 보여줌
-            ) => (
-              <Slide play={[carousel[i], carousel[i + 1]]} key={`slide-${i}`} />
-            )
-          )}
-      </div>
+    <div className="container modal">
+      <form onSubmit={handleSubmit(onSubmit)} className="p-4 flex flex-col items-center m-auto">
+        <Input
+          {...register("email")}
+          placeholder="email"
+          className={AUTH_CSS}
+          onChange={() => setEmailMessage("")}
+        />
+        {formState.errors.email && <span className="text-sky-300 leading-tight">{formState.errors.email.message}</span>}
+        {!!emailMessage && <span className="text-sky-300 leading-tight">{emailMessage}</span>}
+        
+        ...
+
+      </form>
     </div>
   );
 };
 ```
 
-3. 장르별로 분류된 공연 보여주기
+2. 유효성 검사 - 2
 
-```jsx
-// Genre.jsx
-// MainPage.jsx에서 prop으로 받은 데이터를 장르에 따라 filter해 GenreDiv에 보여줌
-const Genre = ({data}) => {
-  const [clicked, setClicked] = useState(0);
-  const genreArray = Object.values(genreCodes);
+`profiles` 테이블에 저장된 `email`을 불러와서 해당 이메일이 존재하는 확인합니다.
 
 
-  return (
-      <div>
-        <div>
-          {
-            genreArray..map((item, idx) => (
-              <GenreButton idx={idx} clicked={clicked} setClicked={setClicked} key={item}>
-                {item}
-              </GenreButton>
-            ))
-          }
-        </div>
-        <div>
-          <GenreDiv plays={data.filter(play => play.genrenm === genreArray[clicked]).slice(0,10)} idx={clicked}/>
-        </div>
-      </div>
-  )
-}
+```tsx
+// ./src/components/auth/Auth
+
+const AuthForm = () => {
+  ...
+  const { register, handleSubmit, formState } = useForm({
+    mode: "onChange", //'onBlur' : focus가 사라졌을 때
+    defaultValues,
+    resolver: zodResolver(schema)
+  });
+  ...
+  const onSubmit = async (data: FieldValues) => {
+    const emailData = await checkEmail(data.email);
+
+    if (path === SIGN_UP) {
+      if (emailData.length !== 0) {
+        setEmailMessage("이미 존재하는 계정입니다.");
+      } else {
+        await signup({
+          email: data.email,
+          password: data.password,
+          options: { data: { nickname: data.nickname, email: data.email, profile_img: "default" } }
+        });
+      }
+    } else {
+      if (emailData.length === 0) {
+        setEmailMessage("존재하지 않는 계정입니다.");
+      } else {
+        await signin({ email: data.email, password: data.password });
+      }
+    }
+  };
+  ...
+};
 ```
 
+```tsx
+// ./src/utils/supabase/client-actions.ts
+
+export async function checkEmail(email: string) {
+  const { data, error } = await supabase.from(PROFILES).select("email").eq("email", email);
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
+}
+```
 
 ---
 
 [플레이어]
-
 
 ---
 
@@ -245,7 +241,6 @@ const Genre = ({data}) => {
 ```tsx
 // ./src/components/features/mypage/EditProfileModal.tsx
 
-...
 const EditProfileModal = ({
   user,
   setShowModal
@@ -253,9 +248,7 @@ const EditProfileModal = ({
   user: User | undefined;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-
-...
-
+  ...
   // 사용자 프로필 업데이트 시 정보 바로 갱신되도록
   const queryClient = useQueryClient();
   // 사용자 정보 업데이트 성공 시 invalidateQueries
@@ -269,14 +262,11 @@ const EditProfileModal = ({
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     }
   });
-
-...
-
+  ...
 };
 
 
 ```
-
 
 ---
 
@@ -288,16 +278,11 @@ const EditProfileModal = ({
 
 페이지 정보를 미리 불러와서 이동 시 시간을 줄일 수 있도록 했습니다.
 
-
 ```tsx
 // ./src/components/features/navbar/ProfileImg.tsx
 
-...
-
 const ProfileImg = () => {
-
   ...
-
   const userImg = getPublicUrl("profiles", user?.user_metadata.profile_img);
 
   return (
@@ -314,42 +299,67 @@ const ProfileImg = () => {
 };
 ```
 
-
 ---
-
 
 ---
 
 ## 💥 Trouble Shooting
 
-[예시]
+[회원가입/로그인]
 
-🔥 문제점
+🔥 로그아웃 해도 '로그아웃, 마이페이지' 버튼이 유지됨.
 
-1. 기존에는 장르별 데이터를 불러올 때 api에서 각각 불러왔으나, 데이터를 불러오는 과정이 불필요하게 많아지는 문제점이 있었음. 전체 데이터를 한 번에 많이 불러온 후 prop으로 전달해 사용함.
+서버용/클라이언트용 supabase client를 제대로 숙지하지 못해, supabase client가 제대로 작동하지 않아 사용자 정보가 업데이트 되지 않아 발생한 문제였습니다.
 
-- 아래는 장르별 데이터를 각각 불러올 때 사용한 코드 (현재는 사용하지 않음)
+서버용 supabase client를 사용할 때는 각 함수마다 client를 생성하고, 클라이언트용 supabase client는 하나의 client만 생성해 import하여 사용했습니다.
 
-```jsx
-// playApi.jsx
-// 장르별 데이터를 0번째부터 4번째까지 불러오는 함수
-export const getGenreData = async (genre) => {
-  const { data } = await playApi.get(`?genrenm=${genre}&_start=0&_end=5`);
-  return data;
-};
+```tsx
+// ./src/utils/supabase/server-action.ts
 
-const genreArray = Object.values(genreCodes);
-// Promise.all을 이용해 동시에 여러 장르 데이터 불러오는 함수
-export const getClassifiedData = async () => {
-  const responses = Promise.all(genreArray.map((genre) => getGenreData(genre)));
-  return responses;
-};
+"use server";
+...
+import { createClient } from "./server";
+
+export async function signin(formData: SignInWithPasswordCredentials) {
+  const supabase = createClient();
+  ...
+}
+
+export async function signup(formData: SignUpWithPasswordCredentials) {
+  const supabase = createClient();
+  ...
+}
+
+export async function signout() {
+  const supabase = createClient();
+  ...
+}
+
+...
+
 ```
+
+```tsx
+// ./src/utils/supabase/server.tsx
+
+import { createBrowserClient } from "@supabase/ssr";
+
+export function createClient() {
+  return createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_KEY!);
+}
+
+export const supabase = createClient();
+```
+
+🔥 회원가입/로그인 시 유효성 검사에 사용할 테이블이 없었음.
+
+`email` 컬럼 값을 unique하게 설정하기 위해 모든 사용자를 지우는 과정이 필요했습니다. 덩달아 연결된 정보도 같이 사라지게 되어 결국 모든 데이터를 지울 수 밖에 없었습니다.
+
+좀 더 자세히 생각하고 데이터 베이스를 설계해야 한다는 것을 배웠습니다.
 
 ---
 
 [플레이어]
-
 
 ---
 
@@ -367,9 +377,7 @@ export const getClassifiedData = async () => {
 
 [마이페이지]
 
-🔥 문제점
-
-1. 다른 사용자로 로그인하면 기존 사용자 정보가 마이 페이지 사용자 정보에 적용됨.
+🔥 다른 사용자로 로그인하면 기존 사용자 정보가 마이 페이지 사용자 정보에 적용됨.
 
 TanStack Query를 사용해 데이터를 불러와서 auth state가 변경되면 `invalidateQueries`를 실행함. 이때 클라이언트 컴포넌트에서만 TanStack Query를 사용할 수 있고, 항상 상단에 노출되어있는 client 컴포넌트가 네비게이션 바의 프로필 이미지이므로 해당 컴포넌트에 `onAuthStateChange`를 적용함.
 
@@ -378,14 +386,11 @@ TanStack Query를 사용해 데이터를 불러와서 auth state가 변경되면
 
 const ProfileImg = () => {
   ...
-
   supabase.auth.onAuthStateChange(() => {
     // 모든 auth state 변화에 따라 session 다시 저장
     queryClient.invalidateQueries({ queryKey: ["user", "client"] });
   });
-
   ...
-
 };
 ```
 
@@ -393,16 +398,12 @@ const ProfileImg = () => {
 
 [네비게이션 바]
 
-🔥 문제점
-
-1. 사용자 정보 변경 시 프로필 이미지가 같이 반영되지 않음
+🔥 사용자 정보 변경 시 프로필 이미지가 같이 반영되지 않음
 
 TanStack Query의 Provider 내부에 헤더를 포함시켜 `invalidateQueries`의 영향을 받도록 함.
 
 ```tsx
 // ./src/app/layout.tsx
-
-...
 
 export default async function RootLayout({
   children
@@ -442,9 +443,7 @@ const ProfileImg = () => {
     // 모든 auth state 변화에 따라 session 다시 저장
     queryClient.invalidateQueries({ queryKey: ["user", "client"] });
   });
-
   ...
-
 };
 ```
 
