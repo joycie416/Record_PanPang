@@ -9,8 +9,9 @@ import { createPost, updatePost } from "@/utils/supabase/client-actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Post } from "@/types/post";
 import { usePostById } from "@/hook/usePostById";
+import { fetchToken } from "@/utils/spotify-client";
 import SpotifySearch from "../spotifySearch/SearchForPost";
-import { Track } from "@/types/Spotify";
+import { SpotifyTracks, Track } from "@/types/Spotify";
 
 type Props = {
   postId?: string;
@@ -29,10 +30,34 @@ const PostForm = ({ postId }: Props) => {
 
   // 수정 시 초기 데이터를 세팅하는 useEffect 추가
   useEffect(() => {
-    if (post) {
-      setYoutubeUrl(post.youtube_url);
-      setContent(post.content);
-    }
+    const fetchData = async () => {
+      const getTrack = async () => {
+        const token = await fetchToken();
+        const res = await fetch(`https://api.spotify.com/v1/search?q=${post.keyword}&type=track&limit=50&offset=0`, {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + `${token}`
+          }
+        });
+        if (!res.ok) {
+          throw new Error("Failed to fetch track");
+        }
+
+        const data: SpotifyTracks = await res.json();
+        const tracks: Track[] = data.tracks.items;
+
+        return tracks.filter((track) => track.id === post.music_id);
+      };
+
+      const track = await getTrack();
+
+      if (post) {
+        setYoutubeUrl(post.youtube_url);
+        setContent(post.content);
+        setCard(track[0]);
+      }
+    };
+    if (post) fetchData();
   }, [post]);
 
   // useMutation을 사용하여 포스트 생성 및 업데이트 처리
@@ -94,7 +119,12 @@ const PostForm = ({ postId }: Props) => {
 
     queryClient.invalidateQueries({ queryKey: ["posts"] });
 
-    const postData = { youtube_url: youtubeUrl, content, music_id: card?.id };
+    const postData = {
+      youtube_url: youtubeUrl,
+      content,
+      music_id: card?.id,
+      keyword: `${card?.name}-${card?.artists[0].name}`
+    };
     await mutation.mutateAsync(postData);
   };
 
