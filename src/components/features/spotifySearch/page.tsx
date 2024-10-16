@@ -134,7 +134,6 @@ const SpotifySearch = () => {
                 alt="Project image"
                 width={160}
                 height={260}
-                // layout="fill"
                 objectFit="cover"
                 className="rounded-lg"
               />
@@ -154,7 +153,7 @@ const SpotifySearch = () => {
             </div>
           </Card>
         ) : (
-          <Card className="flex w-[1000px] h-[240px]"></Card>
+          <Card className="flex w-full h-[200px]"></Card>
         )}
       </div>
     </div>
