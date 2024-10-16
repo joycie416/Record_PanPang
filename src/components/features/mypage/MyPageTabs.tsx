@@ -7,7 +7,7 @@ import MyLike from "./MyLike";
 import { fetchToken } from "@/utils/spotify-client";
 
 const MyPageTabs = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const { setToken } = useSpotifyStore();
 
   useEffect(() => {
