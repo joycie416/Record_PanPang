@@ -1,7 +1,9 @@
+"use client";
+
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Post } from "@/types/post";
 import { User } from "@supabase/supabase-js";
-import Player from "../features/player/Player";
+// import Player from "../features/player/Player";
 import LikeButton from "./LikeButton";
 import Link from "next/link";
 import PostButtons from "../features/post/PostButtons";
@@ -15,8 +17,15 @@ type Props = {
 // 아이콘 스타일 지정
 const iconStyle = { width: "17px", cursor: "pointer", padding: "1px" };
 
-const PostCard = ({ post, user, token }: Props) => {
+// const PostCard = ({ post, user, token }: Props) => {
+const PostCard = ({ post, user }: Props) => {
   const currentUserId = user?.id;
+  const PostContent = post.content.split("\n").map((line, index) => (
+    <span key={index}>
+      {line}
+      <br />
+    </span>
+  ));
 
   return (
     <Link href={`/detail/${post.post_id}`}>
@@ -28,8 +37,8 @@ const PostCard = ({ post, user, token }: Props) => {
           </div>
         </CardHeader>
         <CardContent>
-          <div>{post.music_id && <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} />}</div>
-          <div>{post.content}</div>
+          {/* <div>{post.music_id && <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} />}</div> */}
+          <div>{PostContent}</div>
         </CardContent>
         <CardFooter>
           <div className="w-full flex items-center justify-between gap-6">

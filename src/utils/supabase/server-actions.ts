@@ -67,19 +67,6 @@ export async function fetchCurrentUser() {
   return user;
 }
 
-// 게시글 조회
-export async function fetchPosts() {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("posts").select("*");
-
-  if (error || !data) {
-    console.error(error);
-    return []; // 에러 발생 시 빈 배열 반환
-  }
-
-  return data;
-}
-
 // post_id로 게시글 정보 조회
 export async function getPostById(postId: string) {
   const supabase = createClient();

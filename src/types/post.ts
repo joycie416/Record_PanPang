@@ -5,4 +5,8 @@ export type Post = {
   music_id: string;
   youtube_url: string;
   content: string;
+  profile: {
+    nickname: string;
+    profile_img: string;
+  };
 };

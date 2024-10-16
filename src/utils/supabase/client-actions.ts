@@ -96,8 +96,67 @@ export const getPublicUrl = (name: string, path: string) => {
   return publicUrl;
 };
 
+// 현재 사용자 조회
+export async function fetchCurrentUser() {
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    console.error(error);
+    return null;
+  }
+
+  return user;
+}
+
+// 게시글 조회
+export async function fetchPosts() {
+  const { data, error } = await supabase.from("posts").select("*").order("created_at", { ascending: false });
+
+  if (error || !data) {
+    console.error(error);
+    return []; // 에러 발생 시 빈 배열 반환
+  }
+
+  return data;
+}
+
+// post_id로 게시글 정보 조회
+export async function getPostById(postId: string) {
+  const { data: postData, error: postError } = await supabase
+    .from("posts")
+    .select("post_id, user_id, created_at, music_id, youtube_url, content")
+    .eq("post_id", postId)
+    .single();
+
+  if (postError) {
+    console.error(postError);
+    return []; // 에러 발생 시 빈 배열 반환
+  }
+
+  // profile 테이블에서 user_id로 nickname, profile_img 가져오기
+  const { data: profileData, error: profileError } = await supabase
+    .from("profiles")
+    .select("nickname, profile_img")
+    .eq("user_id", postData.user_id)
+    .single();
+
+  if (profileError || !profileData) {
+    console.error(profileError);
+    return null;
+  }
+
+  // 게시글 정보와 프로필 정보 합쳐서 반환
+  return {
+    ...postData,
+    profile: profileData
+  };
+}
+
 // 게시글 추가
-export async function createPost(post: Partial<Post>) {
+export async function createPost(post: Partial<Post>): Promise<void> {
   const {
     data: { user }
   } = await supabase.auth.getUser();
@@ -115,7 +174,7 @@ export async function createPost(post: Partial<Post>) {
 }
 
 // 게시글 수정
-export async function updatePost(postId: string, updatedData: Partial<Post>) {
+export async function updatePost(postId: string, updatedData: Partial<Post>): Promise<void> {
   const {
     data: { user },
     error: userError
@@ -134,7 +193,7 @@ export async function updatePost(postId: string, updatedData: Partial<Post>) {
 }
 
 // 게시글 삭제
-export async function deletePost(postId: string) {
+export async function deletePost(postId: string): Promise<void> {
   const {
     data: { user }
   } = await supabase.auth.getUser();
