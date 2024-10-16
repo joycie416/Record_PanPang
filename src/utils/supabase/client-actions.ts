@@ -7,6 +7,7 @@ const PROFILES = "profiles";
 const STORAGE = "profiles";
 const DEFAULT = "default";
 
+// auth 정보 업데이트
 export const updateUser = async (user: User, nickname: string, profileImg: File | null) => {
   let profile_img = user.user_metadata.profile_img;
   if (profileImg) {
@@ -34,6 +35,7 @@ export const updateUser = async (user: User, nickname: string, profileImg: File 
   }
 };
 
+// profile 테이블 업데이트
 export const updateProfile = async (user: User, nickname: string, profileImg: File | null) => {
   let profile_img = user.user_metadata.profile_img;
   if (profileImg) {
@@ -50,6 +52,7 @@ export const updateProfile = async (user: User, nickname: string, profileImg: Fi
   console.log("update profile error :", error);
 };
 
+// storage 이미지 업데이트
 export const updateProfileImg = async (user: User, profileImg: File | null) => {
   const hasProfileImg = user.user_metadata.profile_img !== DEFAULT;
 
@@ -66,6 +69,7 @@ export const updateProfileImg = async (user: User, profileImg: File | null) => {
   }
 };
 
+// storage 이미지 삭제
 export const deleteProfileImg = async (user: User) => {
   if (user.user_metadata.profile_img !== DEFAULT) {
     const { data, error } = await supabase.storage.from(STORAGE).remove([user.id]);
@@ -79,6 +83,7 @@ export const deleteProfileImg = async (user: User) => {
   }
 };
 
+// 로그인 세션 정보 가져오기
 export const fetchSessionData = async () => {
   const { data, error } = await supabase.auth.getSession();
 
