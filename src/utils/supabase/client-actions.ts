@@ -1,6 +1,7 @@
 import { User } from "@supabase/supabase-js";
 import { supabase } from "./client";
 import { Post } from "@/types/post";
+import { Comment } from "@/types/comment";
 
 const PROFILES = "profiles";
 const STORAGE = "profiles";
@@ -152,14 +153,14 @@ export async function deletePost(postId: string) {
 }
 
 // 댓글 조회
-export async function fetchComment(postId: string) {
+export async function fetchComment(postId: string): Promise<Comment[]> {
   const STORAGE = "profiles";
 
   const { data: comments, error: commentError } = await supabase
     .from("comments")
     .select("comment_id, content, user_id, created_at, update_at")
     .eq("post_id", postId)
-    .order("created_at", { ascending: true }); // 생성 시간 기준으로 정렬
+    .order("created_at", { ascending: false }); // 생성 시간 기준으로 정렬
 
   if (commentError) {
     console.error(commentError.message);
