@@ -27,10 +27,10 @@
 
 ### 👨‍👩‍👧‍👦 팀원 소개
 
-|   송진우   |      이보영      |        정수희        |  조아영  |         조해인         |
-| :--------: | :--------------: | :------------------: | :------: | :--------------------: |
-|  **팀원**  |     **팀원**     |       **팀원**       | **팀원** |        **팀장**        |
-| 댓글 전반 | 음악 검색 기능 | 음악 플레이어, 좋아요 | 게시글 전반 | 회원가입/로그인, 프로필 수정 |
+|  송진우   |             이보영             |        정수희         |   조아영    |            조해인            |
+| :-------: | :----------------------------: | :-------------------: | :---------: | :--------------------------: |
+| **팀원**  |            **팀원**            |       **팀원**        |  **팀원**   |           **팀장**           |
+| 댓글 전반 | 음악 검색 기능, 음악 정보 생성 | 음악 플레이어, 좋아요 | 게시글 전반 | 회원가입/로그인, 프로필 수정 |
 
 ---
 
@@ -121,8 +121,8 @@ export const getData = async () => {
         stdate: getDateString(), // 오늘 날짜 반환하는 함수
         eddate: getDateString(),
         rows: 1000,
-        cpage: 1,
-      },
+        cpage: 1
+      }
     });
     return parseXMLToJSON(data).dbs.db;
   } catch (error) {
@@ -138,10 +138,10 @@ export const getData = async () => {
 const {
   data: mainData,
   isPending,
-  isError,
+  isError
 } = useQuery({
   queryKey: ["main-data"],
-  queryFn: getData,
+  queryFn: getData
 });
 ```
 
@@ -151,9 +151,7 @@ const {
 // Embla.jsx
 // MainPage.jsx에서 prop으로 데이터 전달 받음
 const Embla = ({ data }) => {
-  const [emblaRef] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ stopOnMouseEnter: true, stopOnInteraction: false }),
-  ]);
+  const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay({ stopOnMouseEnter: true, stopOnInteraction: false })]);
 
   const indices = []; // 랜덤 인덱스 저장
   while (indices.length < 8) {
@@ -173,9 +171,7 @@ const Embla = ({ data }) => {
           [0, 2, 4, 6].map(
             (
               i // 각 슬라이드에 두개씩 보여줌
-            ) => (
-              <Slide play={[carousel[i], carousel[i + 1]]} key={`slide-${i}`} />
-            )
+            ) => <Slide play={[carousel[i], carousel[i + 1]]} key={`slide-${i}`} />
           )}
       </div>
     </div>
@@ -212,11 +208,9 @@ const Genre = ({data}) => {
 }
 ```
 
-
 ---
 
 [플레이어]
-
 
 ---
 
@@ -239,7 +233,8 @@ const Genre = ({data}) => {
 [네비게이션 바]
 
 ---
-```
+
+````
 
 ---
 
@@ -267,12 +262,11 @@ export const getClassifiedData = async () => {
   const responses = Promise.all(genreArray.map((genre) => getGenreData(genre)));
   return responses;
 };
-```
+````
 
 ---
 
 [플레이어]
-
 
 ---
 
