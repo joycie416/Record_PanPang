@@ -8,11 +8,8 @@ const STORAGE = "profiles";
 const DEFAULT = "default";
 
 // 이메일 존재 여부 확인용
-export async function checkEmail(email:string) {
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("email")
-    .eq('email', email)
+export async function checkEmail(email: string) {
+  const { data, error } = await supabase.from("profiles").select("email").eq("email", email);
 
   if (error) {
     console.error(error);
@@ -64,7 +61,7 @@ export const updateProfile = async (user: User, nickname: string, profileImg: Fi
     updateData = { nickname, profile_img };
   }
   const { error } = await supabase.from(PROFILES).update(updateData).eq("user_id", user.id);
-  console.log("update profile error :", error);
+  console.error("update profile error :", error);
 };
 
 // storage 이미지 업데이트
@@ -74,13 +71,9 @@ export const updateProfileImg = async (user: User, profileImg: File | null) => {
   if (hasProfileImg && profileImg) {
     // 프로필 이미지 O, 새 이미지 O
     const { data: updateImg, error: updateError } = await supabase.storage.from(STORAGE).update(user.id, profileImg);
-    console.log("change Img :", updateImg, updateError);
   } else if (!hasProfileImg && profileImg) {
     // 프로필 이미지 X, 새 이미지 O
     const { data: uploadImg, error: uploadError } = await supabase.storage.from(STORAGE).upload(user.id, profileImg);
-    console.log("upload Img :", uploadImg, uploadError);
-  } else {
-    console.log("no new profile img or profile img not changed");
   }
 };
 
@@ -88,7 +81,7 @@ export const updateProfileImg = async (user: User, profileImg: File | null) => {
 export const deleteProfileImg = async (user: User) => {
   if (user.user_metadata.profile_img !== DEFAULT) {
     const { data, error } = await supabase.storage.from(STORAGE).remove([user.id]);
-    console.log("delete Img :", data, error);
+    console.error("delete error :", error);
     await supabase.auth.updateUser({
       data: {
         ...user?.user_metadata,
@@ -116,21 +109,6 @@ export const getPublicUrl = (name: string, path: string) => {
 
   return publicUrl;
 };
-
-// 현재 사용자 조회
-export async function fetchCurrentUser() {
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    console.error(error);
-    return null;
-  }
-
-  return user;
-}
 
 // 게시글 조회
 export async function fetchPosts() {
@@ -162,6 +140,22 @@ export async function getPostById(postId: string) {
   if (error || !data) {
     console.error(error);
     return null;
+  }
+
+  return data;
+}
+
+// user_id로 게시글 정보 조회
+export async function getPostByUserId(userId: string) {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*, profiles(nickname, profile_img)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error || !data) {
+    console.error(error);
+    return []; // 에러 발생 시 빈 배열 반환
   }
 
   return data;

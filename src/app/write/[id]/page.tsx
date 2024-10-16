@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPostById } from "@/utils/supabase/server-actions";
 import PostForm from "@/components/features/post/PostForm";
+import SpotifySearch from "@/components/features/spotifySearch/page";
 
 interface Props {
   params: { id: string };
@@ -14,7 +15,8 @@ const WriteIdPage = async ({ params }: Props) => {
   }
 
   return (
-    <div className="container mx-auto my-16">
+    <div className="container mx-auto flex flex-col gap-5">
+      <SpotifySearch />
       <PostForm postId={params.id} />
     </div>
   );

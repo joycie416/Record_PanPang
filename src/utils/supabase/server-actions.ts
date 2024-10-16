@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { SignInWithPasswordCredentials, SignUpWithPasswordCredentials } from "@supabase/supabase-js";
 import { createClient } from "./server";
+import { Post } from "@/types/post";
 
 export async function signin(formData: SignInWithPasswordCredentials) {
   const supabase = createClient();
@@ -17,10 +18,9 @@ export async function signin(formData: SignInWithPasswordCredentials) {
   const { error } = await supabase.auth.signInWithPassword(formData);
 
   if (error) {
-    console.log("Sign Up Error");
-    console.error(error);
+    console.error("Sign Up Error:", error);
 
-    throw new Error('로그인 중 오류가 발생했습니다.')
+    throw new Error("로그인 중 오류가 발생했습니다.");
     // redirect("/error");
   }
 
@@ -35,10 +35,9 @@ export async function signup(formData: SignUpWithPasswordCredentials) {
   const { error } = await supabase.auth.signUp(formData);
 
   if (error) {
-    console.log("Sign Up Error :");
-    console.error(error);
+    console.error("Sign Up Error :", error);
 
-    throw new Error('회원가입 중 오류가 발생했습니다.')
+    throw new Error("회원가입 중 오류가 발생했습니다.");
     // redirect("/error");
   }
 
@@ -140,7 +139,7 @@ export async function updateComment(commentId: string, content: string) {
 }
 
 // MyComment
-export async function fetchUserPostsByComment() {
+export async function fetchUserPostsByComment(): Promise<Post[]> {
   const supabase = createClient();
 
   const {

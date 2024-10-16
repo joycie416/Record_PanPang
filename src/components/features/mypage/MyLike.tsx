@@ -32,7 +32,7 @@ const MyLike = () => {
   }, []);
 
   return (
-    <div>
+    <ul>
       {userPosts.map((post) => {
         return (
           <li key={post.post_id}>
@@ -40,7 +40,7 @@ const MyLike = () => {
           </li>
         );
       })}
-    </div>
+    </ul>
   );
 };
 
