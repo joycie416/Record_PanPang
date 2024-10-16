@@ -51,7 +51,38 @@ export async function signout() {
   redirect("/");
 }
 
-// 댓글 CRUD
+// 현재 사용자 조회
+export async function fetchCurrentUser() {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    console.error(error);
+    return null;
+  }
+
+  return user;
+}
+
+// post_id로 게시글 정보 조회
+export async function getPostById(postId: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("post_id, user_id, created_at, music_id, youtube_url, content")
+    .eq("post_id", postId)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data;
+}
 
 // 댓글 추가
 export async function addComment(content: string, postId: string) {
@@ -80,7 +111,9 @@ export async function deleteComment(commentId: string) {
 
   const { error } = await supabase.from("comments").delete().eq("comment_id", commentId).eq("user_id", user.id);
 
-  if (error) throw new Error("댓글 삭제에 실패했습니다.");
+  if (error) {
+    throw new Error("댓글 삭제에 실패했습니다.");
+  }
 }
 
 // 댓글 수정
@@ -105,54 +138,7 @@ export async function updateComment(commentId: string, content: string) {
   revalidatePath("/");
 }
 
-// 현재 사용자 조회
-export async function fetchCurrentUser() {
-  const supabase = createClient();
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    console.error(error);
-    return null;
-  }
-
-  return user;
-}
-
-// 게시글 조회
-export async function fetchPosts() {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("posts").select("*");
-
-  if (error || !data) {
-    console.error(error);
-    return []; // 에러 발생 시 빈 배열 반환
-  }
-
-  return data;
-}
-
-// post_id로 게시글 정보 조회
-export async function getPostById(postId: string) {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from("posts")
-    .select("post_id, user_id, created_at, music_id, youtube_url, content")
-    .eq("post_id", postId)
-    .single();
-
-  if (error) {
-    console.error(error);
-    return null;
-  }
-
-  return data;
-}
-
 // MyComment
-
 export async function fetchUserPostsByComment() {
   const supabase = createClient();
 
@@ -175,6 +161,19 @@ export async function fetchUserPostsByComment() {
 
   return userPosts;
 }
+
+// 좋아요 목록 조회
+export const fetchLikePosts = async (id: string) => {
+  const supabase = createClient();
+  const { data }: { data: { post_id: string }[] | null } = await supabase
+    .from("likes")
+    .select("post_id")
+    .eq("user_id", id);
+
+  if (data) {
+    return data.map((item) => item.post_id);
+  } else return null;
+};
 
 export const getPublicUrl = (name: string, path: string) => {
   const supabase = createClient();
