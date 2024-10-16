@@ -32,7 +32,7 @@ const PlayButton = ({ music, id }: Props) => {
       setPlayedVideo("");
     };
     return resetState();
-  }, []);
+  }, [setPlayedPlayer, setPlayedVideo]);
 
   const togglePlayVideo = async () => {
     // 맨 처음 노래 틀었을 때
