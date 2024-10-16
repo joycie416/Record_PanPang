@@ -7,7 +7,7 @@ import { fetchCurrentUser } from "@/utils/supabase/server-actions";
 const Header = async ({ className }: { className: string }) => {
   const user = await fetchCurrentUser();
   return (
-    <header className={`bg-gray-700 text-gray-300 h-[56px] sticky top-0 left-0 right-0 `+className}>
+    <header className={`bg-gray-700 text-gray-300 h-[56px] sticky top-0 left-0 right-0 z-[100] `+className}>
       <div className="container h-full flex justify-between items-center py-2 px-4 mx-auto">
         <Link href={"/"}>Home</Link>
         <ul className="flex gap-4 items-center">

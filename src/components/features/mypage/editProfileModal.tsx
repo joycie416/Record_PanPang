@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   deleteProfileImg,
@@ -92,8 +93,22 @@ const EditProfileModal = ({
     }
   };
   return (
-    <div className="w-full min-h-screen fixed top-0 left-0 bg-gray-950/50">
-      <div className="modal w-[30%] min-w-[300px] max-w-[400px] h-[430px] flex flex-col p-10 bg-white rounded-3xl">
+    <div
+      className="w-full min-h-screen fixed top-0 left-0 bg-gray-950/50"
+      onClick={(e) => {
+        e.stopPropagation();
+        setNickname("");
+        setProfileImg(null);
+        setImgPath(userImg);
+        setShowModal((prev) => !prev);
+      }}
+    >
+      <div
+        className="modal w-[30%] min-w-[300px] max-w-[400px] h-[430px] flex flex-col p-10 bg-white rounded-3xl"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <div className="w-full h-full flex flex-col justify-between items-center">
           <img
             src={!imgPath ? userImg : imgPath}
@@ -117,7 +132,7 @@ const EditProfileModal = ({
             }}
           />
           <div className="w-full flex justify-around items-center">
-            <button
+            <Button
               className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
               onClick={(e) => {
                 e.stopPropagation();
@@ -128,8 +143,8 @@ const EditProfileModal = ({
               }}
             >
               닫기
-            </button>
-            <button
+            </Button>
+            <Button
               className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
               onClick={async (e) => {
                 e.stopPropagation();
@@ -143,8 +158,8 @@ const EditProfileModal = ({
               }}
             >
               수정하기
-            </button>
-            <button
+            </Button>
+            <Button
               className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
               onClick={async (e) => {
                 e.stopPropagation();
@@ -158,7 +173,7 @@ const EditProfileModal = ({
               }}
             >
               이미지 삭제
-            </button>
+            </Button>
           </div>
         </div>
       </div>

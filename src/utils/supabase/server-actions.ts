@@ -17,7 +17,11 @@ export async function signin(formData: SignInWithPasswordCredentials) {
   const { error } = await supabase.auth.signInWithPassword(formData);
 
   if (error) {
-    redirect("/error");
+    console.log("Sign Up Error");
+    console.error(error);
+
+    throw new Error('로그인 중 오류가 발생했습니다.')
+    // redirect("/error");
   }
 
   revalidatePath("/", "layout");
@@ -26,11 +30,6 @@ export async function signin(formData: SignInWithPasswordCredentials) {
 
 export async function signup(formData: SignUpWithPasswordCredentials) {
   const supabase = createClient();
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  // const data = {
-  //   email: formData.get('email') as string,
-  //   password: formData.get('password') as string,
   // }
 
   const { error } = await supabase.auth.signUp(formData);
@@ -38,7 +37,9 @@ export async function signup(formData: SignUpWithPasswordCredentials) {
   if (error) {
     console.log("Sign Up Error :");
     console.error(error);
-    redirect("/error");
+
+    throw new Error('회원가입 중 오류가 발생했습니다.')
+    // redirect("/error");
   }
 
   revalidatePath("/", "layout");
@@ -156,23 +157,38 @@ export async function fetchUserPostsByComment() {
   if (commentsError) throw Error("사용자가 작성한 댓글을 불러오는데 실패했습니다.");
 
   const postIds = userComments.map((comment) => comment.post_id);
-  const { data: userPosts, error: postsError } = await supabase.from("posts").select("*").in("post_id", postIds);
+  const { data: userPosts, error: postsError } = await supabase
+    .from("posts")
+    .select("*, profiles(nickname, profile_img)")
+    .in("post_id", postIds);
   if (postsError) throw Error("댓글에 해당한 게시물을 불러오는데 실패했습니다.");
 
   return userPosts;
 }
 
 // 좋아요 목록 조회
-export const fetchLikePosts = async (id: string) => {
+export const fetchLikePosts = async () => {
   const supabase = createClient();
-  const { data }: { data: { post_id: string }[] | null } = await supabase
-    .from("likes")
-    .select("post_id")
-    .eq("user_id", id);
 
-  if (data) {
-    return data.map((item) => item.post_id);
-  } else return null;
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw Error("로그인이 필요합니다.");
+
+  const { data, error: likeListError } = await supabase.from("likes").select("post_id").eq("user_id", user.id);
+
+  if (likeListError) throw Error("사용자의 좋아요 목록을 불러오는데 실패했습니다.");
+
+  const postIds = data.map((comment) => comment.post_id);
+  const { data: likePosts, error: likePostError } = await supabase
+    .from("posts")
+    .select("*, profiles(nickname, profile_img)")
+    .in("post_id", postIds);
+
+  if (likePostError) throw new Error("좋아요한 게시글을 불러오는데 실패했습니다.");
+
+  return likePosts;
 };
 
 export const getPublicUrl = (name: string, path: string) => {

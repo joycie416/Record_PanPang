@@ -1,8 +1,8 @@
 import MyPageTabs from "@/components/features/mypage/MyPageTabs";
 import Profile from "@/components/features/mypage/profile";
-import { getSpotifyToken } from "@/utils/spotify-actions";
 import { Metadata } from "next";
 import { fetchCurrentUser } from "@/utils/supabase/server-actions";
+import { getSpotifyToken } from "@/utils/spotify-server";
 
 export const metadata: Metadata = {
   title: "RPP 마이페이지",
