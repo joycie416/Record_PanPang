@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "@/components/providers/QueryClientProvider";
 import Header from "@/components/features/navbar/Header";
 import Footer from "@/components/features/navbar/Footer";
+import Background from "@/components/commonUI/Background";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,9 +31,9 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         <Providers>
-          <Header className={''}/>
-          <main className="grow py-16">{children}</main>
-          <Footer className={''}/>
+          <Header />
+          <Background>{children}</Background>
+          <Footer />
         </Providers>
       </body>
     </html>
