@@ -23,7 +23,7 @@ const MyPageTabs = ({ user, token }: Props) => {
       setToken(token);
     };
     getToken();
-  }, []);
+  }, [setToken]);
 
   const tabs = [
     { id: 1, label: "게시글", component: <MyPost user={user} token={token} /> },

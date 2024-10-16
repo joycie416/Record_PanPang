@@ -81,7 +81,7 @@ const EditProfileModal = ({
   // 불러온 이미지 미리 보기
   const previewImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = (e.target?.files as FileList)[0];
-    
+
     if (!file) {
       setImgPath(userImg);
     } else {

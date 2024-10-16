@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { fetchCurrentUser } from "@/utils/supabase/server-actions";
-import { getSpotifyToken } from "@/utils/spotify-server";
 import { buttonVariants } from "@/components/ui/button";
 import PostList from "@/components/features/post/PostList";
+import { getSpotifyToken } from "@/utils/spotify-server";
 
 export default async function Home() {
   const user = await fetchCurrentUser();
