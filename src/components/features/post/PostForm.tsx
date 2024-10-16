@@ -9,7 +9,7 @@ import { createPost, updatePost } from "@/utils/supabase/client-actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Post } from "@/types/post";
 import { usePostById } from "@/hook/usePostById";
-import SpotifySearch from "../spotifySearch/page";
+import SpotifySearch from "../spotifySearch/SearchForPost";
 import { Track } from "@/types/Spotify";
 
 type Props = {
