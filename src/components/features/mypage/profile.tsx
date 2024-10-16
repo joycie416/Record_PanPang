@@ -31,7 +31,6 @@ const Profile = () => {
   const {
     data: { publicUrl }
   } = supabase.storage.from(STORAGE).getPublicUrl(user?.user_metadata?.profile_img ?? "default");
-  console.log("publicUrl :", publicUrl);
 
   return (
     <div className="w-full flex">

@@ -20,6 +20,8 @@ const PostForm = ({ postId }: Props) => {
   const { data: post } = usePostById(postId ? postId : "");
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [content, setContent] = useState("");
+  const [youtubeUrlError, setYoutubeUrlError] = useState<string | null>(null);
+  const [contentError, setContentError] = useState<string | null>(null);
 
   // 수정 시 초기 데이터를 세팅하는 useEffect 추가
   useEffect(() => {
@@ -59,6 +61,26 @@ const PostForm = ({ postId }: Props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    let isValid = true;
+
+    if (!youtubeUrl.trim()) {
+      setYoutubeUrlError("유튜브 URL을 입력해 주세요.");
+      isValid = false;
+    } else {
+      setYoutubeUrlError(null);
+    }
+
+    if (!content.trim()) {
+      setContentError("내용을 입력해 주세요.");
+      isValid = false;
+    } else {
+      setContentError(null);
+    }
+
+    if (!isValid) {
+      return;
+    }
+
     queryClient.invalidateQueries({ queryKey: ["posts"] });
 
     const postData = { youtube_url: youtubeUrl, content };
@@ -70,15 +92,19 @@ const PostForm = ({ postId }: Props) => {
       <Input
         placeholder="선택한 노래의 유튜브 URL을 추가해주세요 *"
         value={youtubeUrl}
+        className={youtubeUrlError ? "border-red-500" : ""}
         onChange={(e) => setYoutubeUrl(e.target.value)}
       />
+      {youtubeUrlError && <p className="text-red-500 text-sm mt-1">{youtubeUrlError}</p>}
       <div className="flex flex-col gap-5 items-center">
         <Textarea
-          className="h-32"
-          placeholder="내용을 입력해주세요"
+          className={`h-32 resize-none ${contentError ? "border-red-500" : ""}`}
+          placeholder="내용을 입력해주세요 *"
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
+        {contentError && <p className="text-red-500 text-sm mt-1">{contentError}</p>}
+
         <Button size="lg" className="w-24">
           {postId ? "수정하기" : "작성하기"}
         </Button>
