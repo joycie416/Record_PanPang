@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { getPostById } from "@/utils/supabase/server-actions";
-import PostButtons from "@/components/features/post/PostButtons";
+import { fetchCurrentUser, getPostById } from "@/utils/supabase/server-actions";
 import CommentSection from "@/components/features/comment/CommentSection";
+import PostSection from "@/components/features/post/PostSection";
 
 interface Props {
   params: { id: string };
@@ -9,6 +9,7 @@ interface Props {
 
 const DetailIdPage = async ({ params }: Props) => {
   const post = await getPostById(params.id);
+  const user = await fetchCurrentUser();
 
   if (!post) {
     return notFound(); // 게시글이 없으면 404 처리
@@ -16,14 +17,8 @@ const DetailIdPage = async ({ params }: Props) => {
 
   return (
     <div className="container mx-auto my-16">
-      <div>user_id: {post.user_id}</div>
-      <div>post_id: {post.post_id}</div>
-      <div>youtube_url: {post.youtube_url}</div>
-      <div>content: {post.content}</div>
-      <PostButtons post={post} />
-      <div>
-        <CommentSection postId={post.post_id} />
-      </div>
+      <PostSection postId={params.id} user={user} />
+      <CommentSection postId={post.post_id} />
     </div>
   );
 };

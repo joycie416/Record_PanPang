@@ -62,12 +62,17 @@ const PlayButton = ({ music, id }: Props) => {
     }
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // 이벤트 전파 차단
+    togglePlayVideo(); // 기존 로직
+  };
+
   return (
     <>
       <div className="hidden">
         <YouTube videoId={id} onReady={(e: YouTubeEvent) => onReady(e, playerRef)} />
       </div>
-      <div className="relative cursor-pointer" onClick={() => togglePlayVideo()}>
+      <div className="relative cursor-pointer" onClick={(e: React.MouseEvent) => handleClick(e)}>
         <Image alt={music.name + "앨범커버"} src={music.album.images} width={50} height={50} className="rounded-md" />
         <div className="w-[50px] h-[50px] bg-black/30 rounded-md absolute top-0"></div>
         <PlayIcon
