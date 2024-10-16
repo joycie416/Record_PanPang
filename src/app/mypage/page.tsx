@@ -1,5 +1,5 @@
 import MyPageTabs from "@/components/features/mypage/MyPageTabs";
-import Profile from "@/components/features/mypage/profile";
+import Profile from "@/components/features/mypage/Profile";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
