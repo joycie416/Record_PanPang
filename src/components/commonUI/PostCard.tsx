@@ -9,6 +9,7 @@ import { User } from "@supabase/supabase-js";
 import LikeButton from "./LikeButton";
 import PostButtons from "../features/post/PostButtons";
 import Player from "../features/player/Player";
+import PostCommnetCount from "../features/post/PostCommnetCount";
 
 type Props = {
   post: Post;
@@ -72,16 +73,8 @@ const PostCard = ({ post, user, token }: Props) => {
       <CardFooter className="pr-6 md:px-20 pb-6 pt-0">
         <div className="w-full flex items-center justify-between gap-6 pt-6 border-t border-gray-300">
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div>2</div>
-            </div>
-            <div className="flex items-center gap-2">
-              <LikeButton
-                iconStyle={{ width: "17px", cursor: "pointer", padding: "1px" }}
-                user={user}
-                post={post}
-              />
-            </div>
+            <PostCommnetCount post={post} />
+            <LikeButton iconStyle={{ width: "17px", cursor: "pointer", padding: "1px" }} user={user} post={post} />
           </div>
           {currentUserId === post.user_id ? <PostButtons post={post} /> : <></>}
         </div>
