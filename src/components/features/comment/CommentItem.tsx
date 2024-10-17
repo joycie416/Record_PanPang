@@ -74,7 +74,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             >
               완료
             </Button>
-            <Button size="sm" variant="secondary" onClick={handleCancelEdit}>
+            <Button size="sm" variant="secondary" className="py-2 px-4" onClick={handleCancelEdit}>
               취소
             </Button>
           </div>

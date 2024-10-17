@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { addComment, deleteComment, updateComment } from "@/utils/supabase/server-actions";
+import { addComment, deleteComment, updateComment } from "@/utils/supabase/client-actions";
 import { Comment } from "@/types/comment";
 import { fetchComment } from "@/utils/supabase/client-actions";
 import { createClient } from "@/utils/supabase/client";
@@ -31,21 +31,25 @@ const CommentSection = ({ postId }: { postId: string }) => {
     loadComments();
   }, [postId]);
 
+  // 댓글 업데이트 후 목록 다시 불러오기
+  const refreshComments = async () => {
+    const updatedComments = await fetchComment(postId);
+    setComments(updatedComments);
+  };
+
   // 댓글 작성 핸들러
   const handleAddComment = async () => {
     if (!newComment) return;
 
     await addComment(newComment, postId);
     setNewComment("");
-    const updatedComments = await fetchComment(postId);
-    setComments(updatedComments);
+    await refreshComments();
   };
 
   // 댓글 삭제 핸들러
   const handleDeleteComment = async (commentId: string) => {
     await deleteComment(commentId);
-    const updatedComments = await fetchComment(postId);
-    setComments(updatedComments);
+    await refreshComments();
   };
 
   // 댓글 수정 핸들러
@@ -54,8 +58,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
 
     await updateComment(commentId, editContent);
     setEditingCommentId(null);
-    const updatedComments = await fetchComment(postId);
-    setComments(updatedComments);
+    await refreshComments();
   };
 
   // 수정 모드 시작
