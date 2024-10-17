@@ -33,7 +33,7 @@ const CommandForPost: React.FC<CommandForPostProps> = ({
           className="h-12
     "
         />
-        {cardError && <p className="text-red-500 text-sm mt-1 absolute right-6 top-0 translate-y">{cardError}</p>}
+        {cardError && <p className="text-red-500 text-sm absolute right-6 top-0 mt-3">{cardError}</p>}
       </div>
       <Command className="rounded border">
         {open ? (

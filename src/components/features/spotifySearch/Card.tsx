@@ -14,7 +14,7 @@ const CardForPost: React.FC<CardForPostProps> = ({ card, formatDuration }) => {
   return (
     <>
       {card ? (
-        <Card className="flex w-full min-h-[200px]">
+        <Card className="flex w-full min-h-[210px]">
           <div className="flex flex-col md:flex-row items-center md:items-start p-6 w-full">
             <div className="w-[160px] h-[160px]">
               <Image
@@ -42,7 +42,11 @@ const CardForPost: React.FC<CardForPostProps> = ({ card, formatDuration }) => {
           </div>
         </Card>
       ) : (
-        <Card className="flex w-full min-h-[200px]"></Card>
+        <Card className="flex w-full min-h-[210px]">
+          <div className="flex flex-col md:flex-row items-center md:items-start p-6 w-full">
+            <div className="w-[160px] h-[160px] bg-gray-300 rounded"></div>
+          </div>
+        </Card>
       )}
     </>
   );
