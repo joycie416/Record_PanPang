@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { CommentItemProps } from "@/types/comment";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 const CommentItem: React.FC<CommentItemProps> = ({
   comment,
@@ -37,12 +38,12 @@ const CommentItem: React.FC<CommentItemProps> = ({
 
   return (
     <li className="flex items-start gap-4 p-4 border-b">
-      <div className="flex-shrink-0">
+      <div className="w-[56px] h-[56px]">
         <Image
           src={comment.profile?.profile_img || "/default-profile.png"}
           alt={comment.profile?.nickname || "익명"}
-          width={60}
-          height={60}
+          width={56}
+          height={56}
           style={{
             maxWidth: 200,
             width: "full",
@@ -61,7 +62,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <p className="mb-2">{lineBreaks(comment.content)}</p>
         {editingCommentId === comment.comment_id ? (
           <div className="flex gap-2">
-            <textarea
+            <Textarea
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
               className="flex-1 p-2 border border-gray-300 resize-none focus:outline-none"
@@ -79,7 +80,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           </div>
         ) : (
           userId === comment.user_id && (
-            <div className="flex gap-2 mt-2">
+            <div className="flex justify-end gap-2 mt-2">
               <Button
                 size="sm"
                 onClick={() => startEditing(comment.comment_id, comment.content)}

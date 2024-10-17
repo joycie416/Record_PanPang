@@ -20,4 +20,35 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
+  .container {
+    @apply lg:max-w-[980px] mx-auto px-[12px];
+  }
+
+  .text-ellipsis-3 {
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.card-text, .card-text2 {
+  width: 100%;
+}
+@media (min-width: 576px) {
+}
+@media (min-width: 768px) {
+  .card-text {
+    width: calc(100% - 160px);
+  }
+  .card-text2 {
+    width: calc(100% - 250px);
+  }
+}
+@media (min-width: 1024px) {
 }

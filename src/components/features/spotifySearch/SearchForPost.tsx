@@ -10,8 +10,9 @@ type Props = {
   setCard: Dispatch<SetStateAction<Track | undefined>>;
   card: Track | undefined;
   cardError: string | null;
+  className?: string | null;
 };
-const SpotifySearch = ({ setCard, card, cardError }: Props) => {
+const SpotifySearch = ({ setCard, card, cardError, className }: Props) => {
   const [token, setToken] = useState("");
   const [search, setSearch] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -99,7 +100,7 @@ const SpotifySearch = ({ setCard, card, cardError }: Props) => {
   };
 
   return (
-    <div className="container mx-auto flex flex-col gap-8 justify-center items-center">
+    <div className={`flex flex-col gap-5 justify-center items-center ${className}`}>
       <CommandForPost
         search={search}
         tracks={tracks}

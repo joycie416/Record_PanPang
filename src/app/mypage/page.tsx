@@ -16,10 +16,10 @@ const MyPage = async () => {
   }
 
   return (
-    <div className="container mx-auto">
+    <>
       <Profile />
       <MyPageTabs user={user} />
-    </div>
+    </>
   );
 };
 

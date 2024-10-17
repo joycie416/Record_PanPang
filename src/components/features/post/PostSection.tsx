@@ -55,25 +55,27 @@ const PostSection = ({ postId, user }: Props) => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-16 border-2 border-gray-300 rounded-full overflow-hidden">
-            <Image
-              src={profileImgUrl}
-              alt="프로필 이미지"
-              width={60}
-              height={60}
-              className="w-[60px] h-[60px] object-cover"
-              priority
-            />
+      <div className="flex items-center justify-between border-b border-gray-300 pb-5 mb-8 mt-10">
+        <div className="flex items-center gap-3">
+          <div className="w-[56px] h-[56px] border-2 border-gray-300 rounded-full overflow-hidden">
+            <Image src={profileImgUrl} alt="프로필 이미지" width={56} height={56} className="object-cover" priority />
           </div>
-          <div>{post.profiles.nickname}</div>
+          <div className="font-medium">{post.profiles.nickname}</div>
         </div>
+
         <LikeButton iconStyle={{ width: "20px", height: "20px" }} post={post} user={user} />
       </div>
+
       <DetailPlayer id={post.music_id} youtubeURL={post.youtube_url} token={token} />
-      <div>{PostContent}</div>
-      {currentUserId === post.user_id ? <PostButtons post={post} /> : <></>}
+
+      <div className="py-6 lg:py-12">{PostContent}</div>
+      {currentUserId === post.user_id ? (
+        <div className="flex justify-end mb-6">
+          <PostButtons post={post} />
+        </div>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

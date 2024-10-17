@@ -51,29 +51,27 @@ const PostCard = ({ post, user, token }: Props) => {
 
   return (
     <Card className="cursor-pointer" onClick={handleLinkPost}>
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <div className="w-16 border-2 border-gray-300 rounded-full overflow-hidden">
+      <CardHeader className="pl-6 pr-20 pt-6 pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-[44px] h-[44px] border-2 border-gray-300 rounded-full overflow-hidden">
             <Image
               src={profileImgUrl}
               alt="프로필 이미지"
-              width={60}
-              height={60}
-              className="w-[60px] h-[60px] object-cover"
+              width={40}
+              height={40}
+              className="w-full h-full object-cover"
               priority
             />
           </div>
-          <div>{post.profiles.nickname}</div>
+          <div className="font-semibold text-gray-700">{post.profiles.nickname}</div>
         </div>
       </CardHeader>
-      <CardContent>
-        <div>
-          <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} />
-        </div>
-        <div>{PostContent}</div>
+      <CardContent className="pr-6 md:px-20 pb-6 pt-0">
+        <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} />
+        <div className="text-ellipsis-3">{PostContent}</div>
       </CardContent>
-      <CardFooter>
-        <div className="w-full flex items-center justify-between gap-6">
+      <CardFooter className="pr-6 md:px-20 pb-6 pt-0">
+        <div className="w-full flex items-center justify-between gap-6 pt-6 border-t border-gray-300">
           <div className="flex items-center gap-6">
             <PostCommnetCount post={post} />
             <LikeButton iconStyle={{ width: "17px", cursor: "pointer", padding: "1px" }} user={user} post={post} />

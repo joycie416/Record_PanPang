@@ -74,7 +74,7 @@ const CommentSection = ({ postId }: { postId: string }) => {
   };
 
   return (
-    <div className="p-4 mx-auto rounded-lg shadow-md">
+    <div className="p-6 mx-auto border border-gray-300 rounded shadow">
       <CommentInput newComment={newComment} setNewComment={setNewComment} handleAddComment={handleAddComment} />
       <CommentList
         comments={comments}

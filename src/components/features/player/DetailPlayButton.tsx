@@ -44,7 +44,7 @@ const DetailPlayButton = ({ music, id }: { music: Track; id: string | undefined 
       <div className="hidden">
         <YouTube videoId={id} onReady={(e: YouTubeEvent) => onReady(e, playerRef)} />
       </div>
-      <Card className="flex w-full h-[250px] border-none shadow-none">
+      <Card className="w-full flex flex-col md:flex-row lg:min-h-[250px] justify-center md:justify-start gap-6 border-none shadow-none">
         <Image
           alt={music.name + "앨범커버"}
           src={music.album.images}
@@ -54,16 +54,16 @@ const DetailPlayButton = ({ music, id }: { music: Track; id: string | undefined 
           priority
           style={{ width: "250px", height: "250px" }}
         />
-        <div className="flex flex-col justify-between ml-6">
+        <div className="card-text2 flex flex-col gap-6 justify-between">
           <CardHeader className="gap-y-3 p-0">
             <CardTitle className="text-5xl font-black">{music.name}</CardTitle>
-            <CardDescription className="text-base">
+            <CardDescription className="text-base text-gray-700">
               {music.album.name}
-              <span className="ml-3">{music.album.release_date}</span>
+              <span className="text-gray-700 ml-3">{music.album.release_date}</span>
             </CardDescription>
-            <p className="font-bold text-2xl">{music.artists.name}</p>
+            <p className="font-bold text-2xl text-gray-700">{music.artists.name}</p>
           </CardHeader>
-          <div className="w-96 h-12 relative mt-auto rounded-sm bg-black">
+          <div className="max-w-96 min-h-12 relative mt-auto rounded bg-gray-700">
             <div className="flex flex-row w-48 justify-between absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <button onClick={handlePlay} disabled={isPlaying}>
                 <PlayCon style={{ fill: "white", width: "25px" }} />
