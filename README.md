@@ -21,10 +21,10 @@
 
 ## 👨‍👩‍👧‍👦 팀원 소개
 
-|  송진우   |     이보영     |        정수희         |   조아영    |            조해인            |
-| :-------: | :------------: | :-------------------: | :---------: | :--------------------------: |
-| **팀원**  |    **팀원**    |       **팀원**        |  **팀원**   |           **팀장**           |
-| 댓글 전반 | 음악 검색 기능 | 음악 플레이어, 좋아요 | 게시글 전반 | 회원가입/로그인, 프로필 수정 |
+|  송진우   |             이보영             |        정수희         |   조아영    |            조해인            |
+| :-------: | :----------------------------: | :-------------------: | :---------: | :--------------------------: |
+| **팀원**  |            **팀원**            |       **팀원**        |  **팀원**   |           **팀장**           |
+| 댓글 전반 | 음악 검색 기능, 음악 정보 표시 | 음악 플레이어, 좋아요 | 게시글 전반 | 회원가입/로그인, 프로필 수정 |
 
 ---
 
@@ -348,8 +348,112 @@ export async function checkEmail(email: string) {
 
 ### 검색
 
-```tsx
+spotify에서 track data를 불러와서 search input box에 글자를 입력할 때마다 data 50개씩 dropdown modal 안으로 들어오도록 구현하였습니다. dropdown으로 보여지는 track list들 중 한개를 선택하면 해당하는 track의 사진과 정보가 track info box에 자동으로 입력되어 들어옵니다.
+사용자는 track을 검색하고 본인이 선택한 track의 정보를 track info box에서 확인할 수 있습니다.
 
+```tsx
+//SearchForPost.tsx
+const SpotifySearch = ({ setCard, card, cardError }: Props) => {
+  const [token, setToken] = useState("");
+  const [search, setSearch] = useState<string>("");
+  const [open, setOpen] = useState(false);
+  const [tracks, setTracks] = useState<Track[]>([]);
+
+  //처음 렌더링시에 fetchToke함수를 실행시켜주고 token을 가져와서 상태값 token에 담아줌
+  useEffect(() => {
+    const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+    const clientPW = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
+
+    const fetchToken = async () => {
+      const res = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        cache: "no-store",
+        body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientPW}`
+      });
+      if (!res.ok) {
+        throw new Error("Failed to fetch token");
+      }
+      const data = await res.json();
+
+      const { access_token: token } = data;
+
+      setToken(token);
+    };
+    fetchToken();
+  }, []);
+
+  //사용자가 입력한 검색단어들이 search로 들어감, 입력값이 0보다 길어지면 dropdown됨
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value === "0") {
+      return;
+    }
+    setSearch(e.target.value);
+    setOpen(e.target.value.length > 0);
+  };
+
+  useEffect(() => {
+    if (!search) {
+      return;
+    }
+    // spotify에서 track data를 가져오는 비동기 함수
+    const getTrack = async () => {
+      const res = await fetch(`https://api.spotify.com/v1/search?q=${search}&type=track&limit=50&offset=0`, {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + `${token}`
+        }
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch track");
+      }
+
+      const data: SpotifyTracks = await res.json();
+      const tracks: Track[] = data.tracks.items;
+      setTracks(tracks);
+    };
+    //사용자가 검색 단어를 입력할 때마다 getTrack을 실행시켜줌
+    getTrack();
+  }, [search, token]);
+
+  //검색 리스트 클릭시 불러온 데이터의 목록과 대조하여 해당하는 데이터만 추출해서 상태값card에 넣어주는 함수
+  const shiftTrackToInfocard = (id: string) => {
+    const trackInfo = tracks.find((item) => {
+      return item.id === id;
+    });
+
+    if (trackInfo) {
+      setCard(trackInfo);
+    }
+
+    setOpen(false);
+    setSearch("");
+  };
+
+  //초로 만들어진 시간은 분초로 변경해주는 함수
+  const formatDuration = (durationMs: number) => {
+    const minutes = Math.floor(durationMs / 60000);
+    const seconds = Math.floor((durationMs % 60000) / 1000);
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  };
+
+  return (
+    <div className="container mx-auto flex flex-col gap-8 justify-center items-center">
+      <CommandForPost
+        search={search}
+        tracks={tracks}
+        open={open}
+        handleInputChange={handleInputChange}
+        shiftTrackToInfocard={shiftTrackToInfocard}
+        cardError={cardError}
+      />
+      <CardForPost card={card} formatDuration={formatDuration} />
+    </div>
+  );
+};
 ```
 
 <br />
@@ -559,8 +663,27 @@ export const supabase = createClient();
 
 ### 검색
 
-```tsx
+🔥dropdown search input box를 구현하기위해 shadcn에서 commmand 컴포넌트를 가져와서 data와 연결을 했는데, 해당 input에 검색어를 입력할 때는 문제가 없었는데 input에 들어갔던 글자가 사라지는 동시에 `edirect-boundary.js:57 Uncaught TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))`이러한 에러가 나왔습니다.<br />
 
+삼항연산자를 이용해서 input에 값이 없을 때에도 빈 tag를 그려지도록 하여서 에러처리를 해주었습니다.
+
+```tsx
+        {open ? (
+          <CommandList className="absolute top-full left-0 w-full bg-white rounded-b-lg border-t-0 max-h-[300px] overflow-y-auto shadow-lg">
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandGroup heading="Suggestions">
+              {tracks.map((track) => (
+                <CommandItem key={track.id} onSelect={() => shiftTrackToInfocard(track.id)}>
+                  <Music className="mr-2 h-4 w-4" />
+                  {track.name} - {track.artists[0]?.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        ) : (
+          <CommandList></CommandList>
+        )}
+      </Command>
 ```
 
 <br />
