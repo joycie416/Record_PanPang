@@ -664,7 +664,8 @@ export const supabase = createClient();
 ### 검색
 
 🔥dropdown search input box를 구현하기위해 shadcn에서 commmand 컴포넌트를 가져와서 data와 연결을 했는데, 해당 input에 검색어를 입력할 때는 문제가 없었는데 input에 들어갔던 글자가 사라지는 동시에 `edirect-boundary.js:57 Uncaught TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))`이러한 에러가 나왔습니다.<br />
-solution: 삼항연산자를 이용해서 input에 값이 없을 때에도 빈 tag를 그려지도록 하여서 에러처리를 해주었다.
+
+삼항연산자를 이용해서 input에 값이 없을 때에도 빈 tag를 그려지도록 하여서 에러처리를 해주었습니다.
 
 ```tsx
         {open ? (
