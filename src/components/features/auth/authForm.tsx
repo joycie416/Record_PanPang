@@ -6,7 +6,7 @@ import { checkEmail } from "@/utils/supabase/client-actions";
 import { signin, signup } from "@/utils/supabase/server-actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -20,7 +20,10 @@ const AuthForm = () => {
   const schema =
     path === SIGN_UP
       ? z.object({
-          email: z.string().email("이메일 형식으로 입력해주세요").min(10, "이메일을 입력해주세요"),
+          email: z
+            .string()
+            .email({ message: "이메일 형식으로 입력해주세요" })
+            .min(1, { message: "이메일을 입력해주세요" }),
           password: z.string().min(6, "6자 이상 입력해주세요"),
           nickname: z.string().min(1, "닉네임을 입력해주세요.").max(10, "최대 10자 입력 가능합니다.")
         })
@@ -28,7 +31,6 @@ const AuthForm = () => {
           email: z.string().min(1, "이메일을 입력해주세요"),
           password: z.string().min(1, "비밀번호를 입력해주세요")
         });
-
   const defaultValues =
     path === SIGN_UP
       ? {
@@ -40,16 +42,19 @@ const AuthForm = () => {
           email: "",
           password: ""
         };
-
-  const { register, handleSubmit, formState } = useForm({
-    mode: "onChange", //'onBlur' : focus가 사라졌을 때
+  const { register, handleSubmit, formState, watch } = useForm({
+    mode: "onChange",
     defaultValues,
     resolver: zodResolver(schema)
   });
-
+  const emailValue = watch("email");
+  useEffect(() => {
+    if (emailMessage) {
+      setEmailMessage(""); // 이메일이 변경되면 초기화
+    }
+  }, [emailValue]);
   const onSubmit = async (data: FieldValues) => {
     const emailData = await checkEmail(data.email);
-
     if (path === SIGN_UP) {
       if (emailData.length !== 0) {
         setEmailMessage("이미 존재하는 계정입니다.");
@@ -74,9 +79,7 @@ const AuthForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="max-w-[400px] flex flex-col items-center m-auto">
         <div className="w-full">
           <Input {...register("email")} placeholder="email" className={AUTH_CSS} />
-          {formState.errors.email && (
-            <div className="text-sky-300 text-sm mt-2">{formState.errors.email.message}</div>
-          )}
+          {formState.errors.email && <div className="text-sky-300 text-sm mt-2">{formState.errors.email.message}</div>}
           {!!emailMessage && <div className="text-sky-300 text-sm mt-2">{emailMessage}</div>}
         </div>
         <div className="w-full">
