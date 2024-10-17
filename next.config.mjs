@@ -9,7 +9,7 @@ const nextConfig = {
         pathname: "/**/**"
       },      {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_SUPABASE_URL.slice(8),
+        hostname: 'wmkyemblcmxydwufvgay.supabase.co',
         port: '',
         pathname: '/**',
       },

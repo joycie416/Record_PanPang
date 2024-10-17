@@ -6,8 +6,7 @@ import StopCon from "@/app/(assets)/StopCon";
 import Image from "next/image";
 import YouTube, { YouTubeEvent, YouTubePlayer } from "react-youtube";
 import { Track } from "@/types/track";
-import { onReady } from "./PlayButton";
-import { useRef, useState } from "react";
+import { MutableRefObject, useRef, useState } from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const DetailPlayButton = ({ music, id }: { music: Track; id: string | undefined }) => {
@@ -34,6 +33,10 @@ const DetailPlayButton = ({ music, id }: { music: Track; id: string | undefined 
       playerRef.current.seekTo(0, true);
       setIsPlaying(false);
     }
+  };
+
+  const onReady = (e: YouTubeEvent, playerRef: MutableRefObject<YouTubePlayer | null>) => {
+    playerRef.current = e.target;
   };
 
   return (
