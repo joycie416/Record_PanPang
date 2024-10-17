@@ -27,12 +27,15 @@ const Player = ({ id, token, youtubeURL }: playerProps) => {
 
   if (!music) {
     return (
-      <div>
-        {token}, {id}, {music}
+      <div className="w-[550px] p-4 border-[1px] rounded-md flex flex-row border-gray-300 mb-5 items-center">
+        <div className="ml-4">
+          <div className="bg-gray-300 w-[50px] h-[50px]"></div>
+        </div>
+        <p className="ml-3">음악 정보를 불러오지 못했습니다.</p>
       </div>
     );
   }
-
+  
   return (
     <div className="flex flex-row p-4 mb-5 border border-gray-300 rounded">
       <PlayButton music={music} id={getYoutubeID(youtubeURL)} />
