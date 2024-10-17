@@ -20,10 +20,7 @@ const AuthForm = () => {
   const schema =
     path === SIGN_UP
       ? z.object({
-          email: z
-            .string()
-            .email({ message: "이메일 형식으로 입력해주세요" })
-            .min(1, { message: "이메일을 입력해주세요" }),
+          email: z.string().email("이메일 형식으로 입력해주세요").min(10, "이메일을 입력해주세요"),
           password: z.string().min(6, "6자 이상 입력해주세요"),
           nickname: z.string().min(1, "닉네임을 입력해주세요.").max(10, "최대 10자 입력 가능합니다.")
         })
@@ -74,23 +71,32 @@ const AuthForm = () => {
 
   return (
     <div className="container modal">
-      <form onSubmit={handleSubmit(onSubmit)} className="p-4 flex flex-col items-center m-auto">
-        <Input {...register("email")} placeholder="email" className={AUTH_CSS} onChange={() => setEmailMessage("")} />
-        {formState.errors.email && <span className="text-sky-300 leading-tight">{formState.errors.email.message}</span>}
-        {!!emailMessage && <span className="text-sky-300 leading-tight">{emailMessage}</span>}
-        <Input type="password" {...register("password")} placeholder="password" className={AUTH_CSS + " mt-4"} />
-        {formState.errors.password && (
-          <span className="text-sky-300 leading-tight">{formState.errors.password.message}</span>
-        )}
+      <form onSubmit={handleSubmit(onSubmit)} className="max-w-[400px] flex flex-col items-center m-auto">
+        <div className="w-full">
+          <Input {...register("email")} placeholder="email" className={AUTH_CSS} />
+          {formState.errors.email && (
+            <div className="text-sky-300 text-sm mt-2">{formState.errors.email.message}</div>
+          )}
+          {!!emailMessage && <div className="text-sky-300 text-sm mt-2">{emailMessage}</div>}
+        </div>
+        <div className="w-full">
+          <Input type="password" {...register("password")} placeholder="password" className={AUTH_CSS + " mt-4"} />
+          {formState.errors.password && (
+            <div className="text-sky-300 text-sm mt-2">{formState.errors.password.message}</div>
+          )}
+        </div>
         {path === SIGN_UP && (
-          <>
+          <div className="w-full">
             <Input type="text" {...register("nickname")} placeholder="nickname" className={AUTH_CSS + " mt-4"} />
             {formState.errors.nickname && (
-              <span className="text-sky-300 leading-tight">{formState.errors.nickname.message}</span>
+              <div className="text-sky-300 text-sm mt-2">{formState.errors.nickname.message}</div>
             )}
-          </>
+          </div>
         )}
-        <Button type="submit" className="w-full max-w-[400px] min-w-[200px] h-[45px] text-lg bg-gray-300 hover:bg-gray-400 mt-4 p-2">
+        <Button
+          type="submit"
+          className="w-full max-w-[400px] min-w-[200px] h-[45px] text-lg bg-gray-400 hover:bg-gray-300 mt-4 p-2"
+        >
           {path === SIGN_UP ? "회원가입" : "로그인"}
         </Button>
       </form>
