@@ -11,9 +11,10 @@ type playerProps = {
   id: string;
   token: string;
   youtubeURL: string;
+  post_id: string;
 };
 
-const Player = ({ id, token, youtubeURL }: playerProps) => {
+const Player = ({ id, token, youtubeURL, post_id }: playerProps) => {
   const [music, setMusic] = useState<Track>();
   useEffect(() => {
     if (token) {
@@ -35,10 +36,10 @@ const Player = ({ id, token, youtubeURL }: playerProps) => {
       </div>
     );
   }
-  
+
   return (
     <div className="flex flex-row p-4 mb-5 border border-gray-300 rounded">
-      <PlayButton music={music} id={getYoutubeID(youtubeURL)} />
+      <PlayButton music={music} id={getYoutubeID(youtubeURL)} post_id={post_id} />
       <div style={{ width: "calc(100% - 50px)" }} className="grow pl-4">
         <p className="font-bold text-xl overflow-ellipsis overflow-hidden whitespace-nowrap">{music.name}</p>
         <div className="flex text-sm flex-col lg:flex-row gap-x-4 gap-y-2 lg:justify-between">
