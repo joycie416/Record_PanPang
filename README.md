@@ -340,11 +340,74 @@ export async function checkEmail(email: string) {
 
 ### 플레이어
 
-```tsx
+메인 페이지에서 동작하는 플레이어입니다.<br/>
+1. useRef 사용
 
+```tsx
+  // youtube iframe과 앨범 커버를 연결하여 영상은 노출되지 않고 노래만 재생됩니다.
+  // 성능 최적화를 위해 재생을 클릭한 영상의 iframe만 렌더링 되도록 구현했습니다.
+  
+  const { playedVideo, setIsPlay, setPlayedVideo, playedPlayer, setPlayedPlayer } = useYoutubnStore();
+  const playerRef = useRef<YouTubePlayer | null>(null);
+  const [showYouTube, setShowYouTube] = useState(false);
+
+      {showYouTube && (
+        <div className="hidden">
+          <YouTube videoId={id} onReady={(e: YouTubeEvent) => onReady(e, playerRef)} />
+        </div>
+      )}
+```
+2. 실제 동작하는 함수
+```tsx
+  // 영상을 처음 클릭하면 showYouTube를 통해 프레임이 생성되고 로딩이 완료될 때 onReady 함수가 실행됩니다.
+  const togglePlayVideo = async () => {
+    if (!showYouTube) {
+      setShowYouTube(true);
+    }
+
+  // 한 번 틀었던 노래를 재생, 일시정지 할 때 실행되는 부분
+    if (playerRef.current && playedVideo.id === music.id) {
+      if (playedVideo.isPlay) {
+        playerRef.current.pauseVideo();
+        setIsPlay();
+      } else {
+        playerRef.current.playVideo();
+        setIsPlay();
+      }
+    }
+
+    // 노래를 듣다가 다른 노래를 틀었을 때 실행되는 부분
+    if (playedVideo.id !== music.id && playerRef.current) {
+      if (playedVideo.isPlay && playedPlayer) {
+        // 만약 다른 노래가 재생 중이라면 일시정지 함
+        playedPlayer.pauseVideo();
+      }
+      // 모든 플레이어 정보를 방금 선택한 영상으로 변경하고 재생시킴
+      setPlayedVideo(music.id);
+      setPlayedPlayer(playerRef.current);
+      playerRef.current.playVideo();
+    }
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    togglePlayVideo();
+  };
+
+  // 프레임이 로딩되었을 때 추가 조작 없이 바로 재생될 수 있도록 설정
+  const onReady = (e: YouTubeEvent, playerRef: MutableRefObject<YouTubePlayer | null>) => {
+    playerRef.current = e.target;
+    if (playedPlayer) {
+      playedPlayer.pauseVideo();
+    }
+    setPlayedVideo(music.id);
+    playerRef.current.playVideo();
+    setPlayedPlayer(playerRef.current);
+  };
 ```
 
 <br />
+
 
 ### 검색
 
@@ -654,10 +717,46 @@ export const supabase = createClient();
 <br />
 
 ### 플레이어
+🔥 배포 후, 특별한 오류코드 없이 메인 페이지에서 플레이어가 노출되지 않는 문제 발생<br/>
+player 내부에서 음악 정보가 없으면 return되지 않도록 설정한 부분이 문제라고 생각함.
 
 ```tsx
-
+  if (!music) {
+    return (
+      <div>
+        Loading...
+      </div>
+    );
+  }
 ```
+코드를 변경하여 테스트 진행하니 Loading이 출력됨<br/>
+음악 정보를 불러오는 데에 필요한 token, id가 props로 제대로 전달되지 않는 것 같아 2차 테스트
+
+```tsx
+  if (!music) {
+    return (
+      <div>
+        {token}, {id}, {music}
+      </div>
+    );
+  }
+```
+해당 코드로 token 값이 들어오지 않는다는 걸 확인함.<br/>
+token은 가장 상위 컴포넌트인 메인 페이지의 page.tsx에서 서버 액션을 사용해서 얻어 내려주고 있었음.<br/>
+현재 postList 컴포넌트를 클라이언트 컴포넌트로 변경했기 때문에 해당 컴포넌트에서 useEffect 훅을 사용하여 발급받는 것으로 변경
+```tsx
+  const { setToken, token } = useSpotifyStore();
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await fetchToken();
+      setToken(token);
+    };
+    getToken();
+  }, [setToken]);
+```
+
+
 
 <br />
 
