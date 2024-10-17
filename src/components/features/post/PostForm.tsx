@@ -130,16 +130,18 @@ const PostForm = ({ postId }: Props) => {
 
   return (
     <>
-      <SpotifySearch setCard={setCard} card={card} cardError={cardError} />
+      <SpotifySearch className="mb-8" setCard={setCard} card={card} cardError={cardError} />
       <form onSubmit={handleSubmit} className=" flex flex-col gap-5">
-        <Input
-          placeholder="선택한 노래의 유튜브 URL을 추가해주세요 *"
-          value={youtubeUrl}
-          className={youtubeUrlError ? "border-red-500" : ""}
-          onChange={(e) => setYoutubeUrl(e.target.value)}
-        />
-        {youtubeUrlError && <p className="text-red-500 text-sm mt-1">{youtubeUrlError}</p>}
-        <div className="flex flex-col gap-5 items-center">
+        <div className="flex flex-col">
+          <Input
+            placeholder="선택한 노래의 유튜브 URL을 추가해주세요 *"
+            value={youtubeUrl}
+            className={youtubeUrlError ? "border-red-500" : ""}
+            onChange={(e) => setYoutubeUrl(e.target.value)}
+          />
+          {youtubeUrlError && <p className="text-red-500 text-sm mt-1">{youtubeUrlError}</p>}
+        </div>
+        <div className="flex flex-col">
           <Textarea
             className={`h-32 resize-none ${contentError ? "border-red-500" : ""}`}
             placeholder="내용을 입력해주세요 *"
@@ -147,10 +149,9 @@ const PostForm = ({ postId }: Props) => {
             onChange={(e) => setContent(e.target.value)}
           />
           {contentError && <p className="text-red-500 text-sm mt-1">{contentError}</p>}
-
-          <Button size="lg" className="w-24">
-            {postId ? "수정하기" : "작성하기"}
-          </Button>
+        </div>
+        <div className="mt-6 text-center">
+          <Button size="lg">{postId ? "수정하기" : "작성하기"}</Button>
         </div>
       </form>
     </>

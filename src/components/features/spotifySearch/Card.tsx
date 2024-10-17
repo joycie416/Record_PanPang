@@ -12,37 +12,39 @@ interface CardForPostProps {
 
 const CardForPost: React.FC<CardForPostProps> = ({ card, formatDuration }) => {
   return (
-    <div className="w-full">
+    <>
       {card ? (
-        <Card className="flex w-full h-[200px]">
-          <div className="p-[18px]">
-            <Image
-              src={card?.album.images[1]?.url || ""}
-              alt="Project image"
-              width={160}
-              height={260}
-              objectFit="cover"
-              className="rounded-lg"
-            />
-          </div>
-          <div className="flex flex-col gap-3">
-            <CardHeader>
-              <CardTitle className="text-3xl font-extrabold">{card?.name}</CardTitle>
-              <CardDescription className="text-lg">{card?.artists[0].name}</CardDescription>
-            </CardHeader>
+        <Card className="flex w-full min-h-[200px]">
+          <div className="flex flex-col md:flex-row items-center md:items-start p-6 w-full">
+            <div className="w-[160px] h-[160px]">
+              <Image
+                src={card?.album.images[1]?.url || ""}
+                alt="Project image"
+                width={160}
+                height={260}
+                objectFit="cover"
+                className="rounded"
+              />
+            </div>
+            <div className="card-text flex flex-col item-align gap-3 pt-6 md:py-2">
+              <CardHeader className="pt-0">
+                <CardTitle className="text-3xl font-extrabold">{card?.name}</CardTitle>
+                <CardDescription className="text-lg">{card?.artists[0].name}</CardDescription>
+              </CardHeader>
 
-            <CardFooter className=" flex flex-col items-start">
-              <CardDescription>{formatDuration(card?.duration_ms || 0)}</CardDescription>
-              <CardDescription>
-                {card?.album.name} - {card?.album.type} / {card?.album.release_date}
-              </CardDescription>
-            </CardFooter>
+              <CardFooter className="flex flex-col items-start pb-0 mt-auto">
+                <CardDescription>{formatDuration(card?.duration_ms || 0)}</CardDescription>
+                <CardDescription>
+                  {card?.album.name} - {card?.album.type} / {card?.album.release_date}
+                </CardDescription>
+              </CardFooter>
+            </div>
           </div>
         </Card>
       ) : (
-        <Card className="flex h-[200px]"></Card>
+        <Card className="flex w-full min-h-[200px]"></Card>
       )}
-    </div>
+    </>
   );
 };
 

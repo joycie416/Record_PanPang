@@ -16,10 +16,12 @@ const DetailIdPage = async ({ params }: Props) => {
   }
 
   return (
-    <div className="container mx-auto my-16">
+    <>
       <PostSection postId={params.id} user={user} />
-      <CommentSection postId={post.post_id} />
-    </div>
+      <div className="mt-6">
+        <CommentSection postId={post.post_id} />
+      </div>
+    </>
   );
 };
 

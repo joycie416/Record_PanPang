@@ -25,17 +25,19 @@ const CommandForPost: React.FC<CommandForPostProps> = ({
 }) => {
   return (
     <div className="relative w-full max-w-lg">
-      <Input
-        value={search}
-        onChange={handleInputChange}
-        placeholder="노래를 입력해주세요."
-        className="h-12
+      <div>
+        <Input
+          value={search}
+          onChange={handleInputChange}
+          placeholder="노래를 입력해주세요."
+          className="h-12
     "
-      />
-      {cardError && <p className="text-red-500 text-sm mt-1 absolute right-6 top-0 translate-y-1/2 ">{cardError}</p>}
-      <Command className="rounded-lg border shadow-md">
+        />
+        {cardError && <p className="text-red-500 text-sm mt-1 absolute right-6 top-0 translate-y">{cardError}</p>}
+      </div>
+      <Command className="rounded border">
         {open ? (
-          <CommandList className="absolute top-full left-0 w-full bg-white rounded-b-lg border-t-0 max-h-[300px] overflow-y-auto shadow-lg">
+          <CommandList className="absolute top-full left-0 w-full bg-white rounded-b border-t-0 max-h-[300px] overflow-y-auto shadow-lg">
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup heading="Suggestions">
               {tracks.map((track) => (

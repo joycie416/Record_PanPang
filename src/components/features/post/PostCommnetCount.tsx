@@ -18,7 +18,7 @@ const PostCommnetCount = ({ post }: { post: Post }) => {
   }, [post.post_id]);
 
   return (
-    <div className="flex gap-x-2">
+    <div className="flex items-center gap-2">
       <CommentCon style={{ width: "17px", cursor: "pointer", padding: "1px" }} />
       <p>{commnetCount}</p>
     </div>

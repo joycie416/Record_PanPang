@@ -76,16 +76,16 @@ const PlayButton = ({ music, id }: Props) => {
           <YouTube videoId={id} onReady={(e: YouTubeEvent) => onReady(e, playerRef)} />
         </div>
       )}
-      <div className="relative cursor-pointer" onClick={(e: React.MouseEvent) => handleClick(e)}>
+      <div className="relative w-[50px] h-[50px] cursor-pointer" onClick={(e: React.MouseEvent) => handleClick(e)}>
         <Image
           alt={music.name + "앨범커버"}
           src={music.album.images}
           width={50}
           height={50}
-          className="rounded-md"
-          style={{ width: "50px", height: "50px" }}
+          className="rounded object-cover"
+          style={{ width: "100%", height: "100%" }}
         />
-        <div className="w-[50px] h-[50px] bg-black/30 rounded-md absolute top-0"></div>
+        <div className="w-[50px] h-[50px] bg-black/30 rounded absolute top-0"></div>
         <PlayIcon
           style={{
             width: "15px",

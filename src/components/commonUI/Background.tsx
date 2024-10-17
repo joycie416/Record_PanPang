@@ -11,7 +11,11 @@ const Background = ({ children }: { children: ReactNode }) => {
     backgroundColor = "bg-gray-700";
   }
 
-  return <main className={`grow py-14 ${backgroundColor}`}>{children}</main>;
+  return (
+    <main className={`grow py-14 ${backgroundColor}`}>
+      <div className="container">{children}</div>
+    </main>
+  );
 };
 
 export default Background;

@@ -6,15 +6,11 @@ import Header from "@/components/features/navbar/Header";
 import Footer from "@/components/features/navbar/Footer";
 import Background from "@/components/commonUI/Background";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900"
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900"
+const pretendard = localFont({
+  src: "./fonts/PretendardVariable.woff2",
+  display: "swap",
+  weight: "45 920",
+  variable: "--font-pretendard"
 });
 
 export const metadata: Metadata = {
@@ -29,7 +25,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+      <body className={`${pretendard.className} antialiased flex flex-col min-h-screen`}>
         <Providers>
           <Header />
           <Background>{children}</Background>
