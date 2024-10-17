@@ -34,7 +34,7 @@ const Profile = () => {
 
   return (
     <div className="w-full flex">
-      <div className="flex items-center">
+      <div className="flex">
         <div className="w-[160px] h-[160px] box-decoration-clone">
           <Image
             src={publicUrl}
@@ -51,14 +51,15 @@ const Profile = () => {
             className="border-2 border-gray-300 rounded-full"
           />
         </div>
-        <div className="flex gap-1 font-medium">
-          <span className="ml-6">{user?.user_metadata?.nickname}</span> / <span>{user?.email}</span>
+        <div className="flex flex-col gap-1 font-medium pt-2 ml-6">
+          <span className="text-2xl font-bold">{user?.user_metadata?.nickname}</span>
+          <span className="text-gray-700 mt-1">{user?.email}</span>
+          <div className="mt-7">
+            <EditProfileButton user={user} />
+          </div>
         </div>
       </div>
       <div className="w-full"></div>
-      <div className="w-full flex justify-end items-start">
-        <EditProfileButton user={user} />
-      </div>
     </div>
   );
 };
