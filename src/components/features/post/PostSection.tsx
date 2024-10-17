@@ -58,7 +58,7 @@ const PostSection = ({ postId, user }: Props) => {
       <div className="flex items-center justify-between border-b border-gray-300 pb-5 mb-8 mt-10">
         <div className="flex items-center gap-3">
           <div className="w-[56px] h-[56px] border-2 border-gray-300 rounded-full overflow-hidden">
-            <Image src={profileImgUrl} alt="프로필 이미지" width={56} height={56} className="object-cover" priority />
+            <Image src={profileImgUrl} alt="프로필 이미지" width={56} height={56} className="w-full h-full object-cover" priority />
           </div>
           <div className="font-medium">{post.profiles.nickname}</div>
         </div>

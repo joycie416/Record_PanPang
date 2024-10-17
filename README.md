@@ -268,6 +268,20 @@ const AuthForm = () => {
   });
   ...
   return (
+    <div className="container modal">
+      <form onSubmit={handleSubmit(onSubmit)} className="p-4 flex flex-col items-center m-auto">
+        <Input
+          {...register("email")}
+          placeholder="email"
+          className={AUTH_CSS}
+          onChange={() => setEmailMessage("")}
+        />
+        {formState.errors.email && <span className="text-sky-300 leading-tight">{formState.errors.email.message}</span>}
+        {!!emailMessage && <span className="text-sky-300 leading-tight">{emailMessage}</span>}
+
+        ...
+
+      </form>
     <div className="embla" ref={emblaRef}>
       <div className="embla__container">
         {carousel &&
@@ -587,8 +601,105 @@ export async function fetchPosts() {
 
 ### 댓글
 
-```tsx
+사용자가 댓글을 작성할 수 있습니다.
+정렬을 통해 댓글을 작성하면 댓글 목록 맨 위에서 확인할 수 있고, 댓글 작성,수정 시간을 확인할 수 있습니다.
 
+클라이언트 액션 - 댓글 조회를 처리하여 사용자가 빠르게 댓글을 확인할 수 있습니다.
+
+client-action
+
+```tsx
+// 댓글 조회
+export async function fetchComment(postId: string): Promise<Comment[]> {
+  const STORAGE = "profiles";
+
+  const { data: comments, error: commentError } = await supabase
+    .from("comments")
+    .select("comment_id, content, user_id, created_at, update_at")
+    .eq("post_id", postId)
+    .order("created_at", { ascending: false }); // 생성 시간 기준으로 정렬
+
+  if (commentError) {
+    console.error(commentError.message);
+    throw new Error("댓글을 불러오는데 실패했습니다.");
+  }
+
+  const commentsWithProfile = await Promise.all(
+    comments.map(async (comment) => {
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("nickname, profile_img")
+        .eq("user_id", comment.user_id)
+        .single();
+
+      if (profileError) {
+        throw new Error("프로필 정보를 불러오는데 실패했습니다.");
+      }
+
+      // `profile_img`를 가져와 절대 경로 생성
+      const { data: { publicUrl: profileImgUrl } = {} } = supabase.storage
+        .from(STORAGE)
+        .getPublicUrl(profile.profile_img ?? "default");
+
+      return {
+        ...comment,
+        profile: {
+          nickname: profile.nickname,
+          profile_img: profileImgUrl || "/default-profile.png"
+        }
+      };
+    })
+  );
+
+  return commentsWithProfile;
+}
+// 댓글 추가
+export async function addComment(content: string, postId: string) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.from("comments").insert([{ content, post_id: postId, user_id: user.id }]);
+
+  if (error) throw new Error("댓글 추가에 실패했습니다.");
+}
+
+// 댓글 삭제
+export async function deleteComment(commentId: string) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.from("comments").delete().eq("comment_id", commentId).eq("user_id", user.id);
+
+  if (error) {
+    throw new Error("댓글 삭제에 실패했습니다.");
+  }
+}
+
+// 댓글 수정
+export async function updateComment(commentId: string, content: string) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인 해주세요.");
+  }
+  const { error } = await supabase
+    .from("comments")
+    .update({ content })
+    .eq("comment_id", commentId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error("댓글 수정에 실패했습니다.");
+  }
+}
 ```
 
 <br />
@@ -626,6 +737,52 @@ const EditProfileModal = ({
     }
   });
   ...
+};
+```
+
+액티브 탭
+
+1. 액티브 탭 기능을 사용하여 사용자 경험을 개선하였습니다.
+
+```tsx
+const MyPageTabs = ({ user, token }: Props) => {
+  const [activeTab, setActiveTab] = useState(1);
+  const { setToken } = useSpotifyStore();
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await fetchToken();
+      setToken(token);
+    };
+    getToken();
+  }, [setToken]);
+
+  const tabs = [
+    { id: 1, label: "게시글", component: <MyPost user={user} token={token} /> },
+    { id: 2, label: "댓글", component: <MyComment /> },
+    { id: 3, label: "좋아요", component: <MyLike /> }
+  ];
+
+  return (
+    <div className="max-w-full mx-auto">
+      <ul className="flex justify-around border-b border-gray-300 my-4">
+        {tabs.map((tab) => (
+          <ul
+            key={tab.id}
+            className={`w-full text-center py-2 cursor-pointer ${
+              activeTab === tab.id
+                ? "border-b-2 border-sky-400 text-sky-400 font-semibold"
+                : "text-gray-400 active:text-gray-300"
+            }`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </ul>
+        ))}
+      </ul>
+      <div className="p-4">{tabs.find((tab) => tab.id === activeTab)?.component}</div>
+    </div>
+  );
 };
 ```
 
@@ -816,8 +973,18 @@ export async function getPostById(postId: string) {
 
 ### 댓글
 
-```tsx
+- **문제 발생:**
+  댓글에 create_at이라는 타임스탬프가 있는데 처음에는 댓글 작성 시간만 기록하면 충분하다고 생각했지만, 댓글을 수정할 때마다 시간과 댓글 위치가 변경되는 문제가 발생했습니다.
+- **해결 방법:** update_at 컬럼 추가<br>
+  create_at: 댓글의 작성 시간을 유지하고, 댓글 정렬을 위한 기준값으로 사용했습니다.<br>
+  update_at: supabase 트리거를 이용해 댓글이 수정될 때의 시간을 저장하고, 댓글에 표현했습니다.
 
+```tsx
+const { data: comments, error: commentError } = await supabase
+  .from("comments")
+  .select("comment_id, content, user_id, created_at, update_at")
+  .eq("post_id", postId)
+  .order("created_at", { ascending: false }); // 생성 시간 기준으로 정렬
 ```
 
 <br />

@@ -260,6 +260,53 @@ export async function fetchComment(postId: string): Promise<Comment[]> {
 
   return commentsWithProfile;
 }
+// 댓글 추가
+export async function addComment(content: string, postId: string) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.from("comments").insert([{ content, post_id: postId, user_id: user.id }]);
+
+  if (error) throw new Error("댓글 추가에 실패했습니다.");
+}
+
+// 댓글 삭제
+export async function deleteComment(commentId: string) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw Error("로그인이 필요합니다.");
+
+  const { error } = await supabase.from("comments").delete().eq("comment_id", commentId).eq("user_id", user.id);
+
+  if (error) {
+    throw new Error("댓글 삭제에 실패했습니다.");
+  }
+}
+
+// 댓글 수정
+export async function updateComment(commentId: string, content: string) {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("로그인 해주세요.");
+  }
+  const { error } = await supabase
+    .from("comments")
+    .update({ content })
+    .eq("comment_id", commentId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error("댓글 수정에 실패했습니다.");
+  }
+}
 
 // 포스트 댓글 개수 조회
 export const fetchPostCommentCount = async (id: string) => {
