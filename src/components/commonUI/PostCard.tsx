@@ -67,7 +67,7 @@ const PostCard = ({ post, user, token }: Props) => {
         </div>
       </CardHeader>
       <CardContent className="pr-6 md:px-20 pb-6 pt-0">
-        <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} />
+        <Player id={post.music_id} youtubeURL={post.youtube_url} token={token} post_id={post.post_id} />
         <div className="text-ellipsis-3">{PostContent}</div>
       </CardContent>
       <CardFooter className="pr-6 md:px-20 pb-6 pt-0">

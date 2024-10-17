@@ -11,9 +11,10 @@ import { MutableRefObject, useEffect, useRef, useState } from "react";
 type Props = {
   music: Track;
   id: string | undefined;
+  post_id: string;
 };
 
-const PlayButton = ({ music, id }: Props) => {
+const PlayButton = ({ music, id, post_id }: Props) => {
   const { playedVideo, setIsPlay, setPlayedVideo, playedPlayer, setPlayedPlayer } = useYoutubnStore();
   const playerRef = useRef<YouTubePlayer | null>(null);
   const [showYouTube, setShowYouTube] = useState(false);
@@ -22,7 +23,7 @@ const PlayButton = ({ music, id }: Props) => {
   useEffect(() => {
     const resetState = () => {
       setPlayedPlayer(null);
-      setPlayedVideo("");
+      setPlayedVideo("", "");
     };
     return resetState;
   }, [setPlayedPlayer, setPlayedVideo]);
@@ -32,7 +33,7 @@ const PlayButton = ({ music, id }: Props) => {
     if (playedPlayer) {
       playedPlayer.pauseVideo();
     }
-    setPlayedVideo(music.id);
+    setPlayedVideo(music.id, post_id);
     playerRef.current.playVideo();
     setPlayedPlayer(playerRef.current);
   };
@@ -43,7 +44,7 @@ const PlayButton = ({ music, id }: Props) => {
     }
 
     // 틀었던 노래를 정지하거나 다시 재생할 때
-    if (playerRef.current && playedVideo.id === music.id) {
+    if (playerRef.current && playedVideo.id === music.id && post_id === playedVideo.post_id) {
       if (playedVideo.isPlay) {
         playerRef.current.pauseVideo();
         setIsPlay();
@@ -54,11 +55,11 @@ const PlayButton = ({ music, id }: Props) => {
     }
 
     // 처음 아니고 듣다가 다른 노래 틀었을 때
-    if (playedVideo.id !== music.id && playerRef.current) {
+    if (playedVideo.id !== music.id && playerRef.current && post_id !== playedVideo.post_id) {
       if (playedVideo.isPlay && playedPlayer) {
         playedPlayer.pauseVideo();
       }
-      setPlayedVideo(music.id);
+      setPlayedVideo(music.id, post_id);
       setPlayedPlayer(playerRef.current);
       playerRef.current.playVideo();
     }
@@ -96,6 +97,7 @@ const PlayButton = ({ music, id }: Props) => {
             fill: "white"
           }}
           id={music.id}
+          post_id={post_id}
         />
       </div>
     </>
