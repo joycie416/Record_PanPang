@@ -94,7 +94,7 @@ const EditProfileModal = ({
   };
   return (
     <div
-      className="w-full min-h-screen fixed top-0 left-0 bg-gray-950/50"
+      className="w-full min-h-screen fixed top-0 left-0 z-20 bg-gray-950/50"
       onClick={(e) => {
         e.stopPropagation();
         setNickname("");
@@ -104,36 +104,41 @@ const EditProfileModal = ({
       }}
     >
       <div
-        className="modal w-[30%] min-w-[300px] max-w-[400px] h-[430px] flex flex-col p-10 bg-white rounded-3xl"
+        className="modal w-[30%] min-w-[300px] max-w-[400px] min-h-[430px] flex flex-col p-10 bg-white rounded"
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
         <div className="w-full h-full flex flex-col justify-between items-center">
-          <img
-            src={!imgPath ? userImg : imgPath}
-            className="h-[200px] aspect-square object-cover border-2 border-gray-300 rounded-full mx-auto"
-          />
-          <Input
-            type="file"
-            className="cursor-pointer"
-            accept="image/*" // image 파일만 받을 수 있도록
-            onChange={(e) => {
-              setProfileImg(!e.target.files ? null : e.target.files[0]);
-              previewImg(e);
-            }}
-            alt="프로필 이미지"
-          />
-          <Input
-            type="text"
-            placeholder="변경할 닉네임을 입력해주세요"
-            onChange={(e) => {
-              setNickname(e.target.value);
-            }}
-          />
-          <div className="w-full flex justify-around items-center">
+          <div className="mb-4">
+            <img
+              src={!imgPath ? userImg : imgPath}
+              className="h-[200px] aspect-square object-cover border-2 border-gray-300 rounded-full mx-auto"
+            />
+          </div>
+          <div className="flex flex-col gap-2 mt-2">
+            <Input
+              type="file"
+              className="cursor-pointer"
+              accept="image/*" // image 파일만 받을 수 있도록
+              onChange={(e) => {
+                setProfileImg(!e.target.files ? null : e.target.files[0]);
+                previewImg(e);
+              }}
+              alt="프로필 이미지"
+            />
+            <Input
+              type="text"
+              placeholder="변경할 닉네임을 입력해주세요"
+              onChange={(e) => {
+                setNickname(e.target.value);
+              }}
+            />
+          </div>
+          <div className="w-full flex gap-2 justify-around items-center mt-4">
             <Button
-              className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
+              className="w-full"
+              variant="secondary"
               onClick={(e) => {
                 e.stopPropagation();
                 setNickname("");
@@ -145,7 +150,8 @@ const EditProfileModal = ({
               닫기
             </Button>
             <Button
-              className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
+              className="w-full"
+              variant="secondary"
               onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {
@@ -160,7 +166,8 @@ const EditProfileModal = ({
               수정하기
             </Button>
             <Button
-              className="w-[30%] min-w-[80px] py-1 bg-gray-300 rounded-lg hover:bg-gray-400"
+              className="w-full"
+              variant="secondary"
               onClick={async (e) => {
                 e.stopPropagation();
                 if (!!user) {

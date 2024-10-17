@@ -30,7 +30,7 @@ const DetailPlayer = ({ token, id, youtubeURL }: Props) => {
 
   if (music)
     return (
-      <div className=" container justify-between">
+      <div className="justify-between">
         <DetailPlayButton id={youtubeId} music={music} />
       </div>
     );

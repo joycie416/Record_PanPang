@@ -87,12 +87,14 @@ const LikeButton = ({ iconStyle, user, post }: Props) => {
   };
 
   return (
-    <div className="flex gap-x-2">
-      <button onClick={handleClick} disabled={toggleLikeMutation.isPending}>
-        {isLike ? <FillHeart style={iconStyle} /> : <EmptyHeart style={iconStyle} />}
-      </button>
+    <button
+      className="flex flex-row items-center gap-x-2 px-2 py-1 rounded hover:bg-gray-300/40"
+      onClick={handleClick}
+      disabled={toggleLikeMutation.isPending}
+    >
+      {isLike ? <FillHeart style={iconStyle} /> : <EmptyHeart style={iconStyle} />}
       <p>{likes?.length || 0}</p>
-    </div>
+    </button>
   );
 };
 
